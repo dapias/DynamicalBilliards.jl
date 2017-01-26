@@ -474,7 +474,8 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, ray_splitter)..., dt = 0.
 <p><a id='Visualizing-1'></a></p>
 <h2 id="visualizing">Visualizing</h2>
 <hr />
-<p><em>(all plotting in</em> <code>DynamicalBilliards</code> <em>is currently done through the</em> <code>PyPlot</code> <em>package. In a future update a switch will happen towards</em> <code>Plots.jl</code> <em>)</em></p>
+<p>!!! note
+    Plotting in <code>DynamicalBilliards</code> is currently done through the <code>PyPlot</code> package. However the development has now  switched to using <code>Plots</code> in conjuction with <code>RecipesBase</code>. Until those changes are final, the plotting features  of this package are summarized in the following paragraphs.</p>
 <p>The functions <code>plot_obstacle(o::Obstacle; kwargs...)</code>, <code>plot_billiard(bt::Vector{Obstacle}; kwargs...)</code> and <code>plot_particle(p::AbstractParticle; kwargs...)</code> are provided in order to plot the respective elements <strong>on the current PyPlot figure</strong>. In order to animate the evolution of a particle in a billiard table, use the function:</p>
 <pre class="codehilite"><code class="language-julia">plot_evolution(p::AbstractParticle, bt::Vector{Obstacle}, colnumber = 50;
                sleeptime = 0.5, col_to_plot = 5, color = (0,0,1), savefigs = false, savename = &quot;&quot;)</code></pre>
@@ -483,7 +484,7 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, ray_splitter)..., dt = 0.
 <p>which propagates the particle from collision to collision up to a total of <code>colnumber</code> collisions. Then, it draws the collisions, drawing always only the last <code>col_to_plot</code> collisions with orbit color <code>color</code>.  <code>sleeptime</code> signals the waiting time between each plot update.</p>
 <p>Direct animation saving is not supported yet. However, optionally, you could save each figure of the animation using <code>savefigs = true</code> and <code>savename = "path/to/your/folder/figurename"</code>. A total of <code>colnumber</code> figures will be created, ending with <code>_#.png</code>.</p>
 <p>Be sure to first call <code>plot_billiard</code> before calling <code>plot_evolution</code>.</p>
-<p>The example .gif shown in the beginning of this README, was generated simply with the code:</p>
+<p>The example .gif shown in the introduction, was generated simply with the code:</p>
 <pre class="codehilite"><code class="language-julia">using DynamicalBilliards
 using PyPlot
 

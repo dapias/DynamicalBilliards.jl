@@ -361,18 +361,20 @@
                 <p><a id='Dynamical-Billiards-1'></a></p>
 <h1 id="dynamical-billiards">Dynamical Billiards</h1>
 <p><code>DynamicalBilliards.jl</code> is an easy-to-use, modular and extendable Julia package for Dynamical Billiard systems in two dimensions.</p>
-<p>The core of <code>DynamicalBilliards.jl</code> is separated in simple and cohesive modular structures:</p>
-<ul>
-<li><strong>Straight propagation</strong> : The standard billiard dynamical system. A particle is propagating in a straight line, until a specular reflection is performed at a boundary.</li>
-<li><strong>Magnetic propagation</strong> : Instead of a straight line, the orbit of the particle is a circle, like electrons in a perpendicular magnetic field. The particle still undergoes specular reflections at the boundaries of the billiard.</li>
-<li><strong>Ray-Splitting billiards</strong> : A semiclassical implementation of the dynamical billiard. After a collision of a particle with a boundary, the particle may propagate <em>through</em> the boundary given some arbitrary probability and transmission law.</li>
-<li><strong>Standard billiards</strong> : A library of pre-constructed billiard systems that have already been used in Physics/Mathematics (e.g. Sinai, periodic Sinai, Buminovich etc.)</li>
-<li><strong>Visualization</strong> : functions for plotting and visualizing aspects of a billiard system, such as obstacles, orbits and more. Also includes animation related content.</li>
-</ul>
+<p><img alt="Example of a dynamical billiard with magnetic field" src="https://github.com/Datseris/DynamicalBilliardsFigures/blob/master/gifs/plot_example.gif" title="Evolution of particle in a magnetic field." /></p>
+<p>A dynamical billiard is a system where a particle is propagating as a straight line from obstacle-to-obstacle, performing specular reflection at the boundary of the obstacles. Billiard systems have been used extensively in chaos and nonlinear dynamics and played an important role in the development of nonlinear science. </p>
+<p>The "standard" billiard described above can be extended in many ways. The <a href="https://en.wikipedia.org/wiki/Dynamical_billiards">wikipedia page</a> has many examples of different types of billiards. The types that are currently offered by this package, besides the standard one, are magnetic and ray-splitting billiards. In a magnetic billiard the particle's orbit is a circle (like electrons in a perpendicular magnetic field). In ray-splitting (aka semiclassical) billiards the particle may propagate <em>through</em> an obstacle, given some arbitrary transmission and refraction law.</p>
 <p><a id='Installation-1'></a></p>
 <h2 id="installation">Installation</h2>
 <hr />
-<p>Since this package is not yet registered, use <code>Pkg.clone</code> until the registration is complete.</p>
+<p>This package is currently under the registration process. When this process is over, you can install the package using <code>Pkg.add("DynamicalBilliards")</code>.</p>
+<p>After first installation, it is advised to run the short tests to be sure that everything works as expected. This will only take 2 minutes:</p>
+<pre class="codehilite"><code class="language-julia">using DynamicalBilliards
+test_options(print_info = false)
+Pkg.test(&quot;DynamicalBilliards&quot;)</code></pre>
+
+
+<p>If you want to see what tests are done, use <code>print_info = true</code> (<code>false</code> is actually the default value). If you use this package for research purposes, you should run the long tests at least one. To do this, pass the keyword argument <code>long_tests = true</code> to the <code>test_options</code> function. These tests take on average 20 minutes to complete.</p>
 <p><a id='Usage-1'></a></p>
 <h2 id="usage">Usage</h2>
 <hr />
