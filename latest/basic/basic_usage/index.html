@@ -476,7 +476,7 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, ray_splitter)..., dt = 0.
 <hr />
 <div class="admonition failure">
 <p class="admonition-title">Currently offline!</p>
-<p>Plotting in <code>DynamicalBilliards</code> is was done through the <code>PyPlot</code> package. However the development has now  switched to using <code>Plots</code> in conjuction with <code>RecipesBase</code>. This happened for increased ease-of-use and  decrease of the package total size. Until the transition from <code>PyPlot</code> to <code>RecipesBase</code> is final, the plotting  features of this package are offline, since the dependency on <code>PyPlot</code> had to be taken off.</p>
+<p>Plotting in <code>DynamicalBilliards</code> was done through the <code>PyPlot</code> package. However the development has now  switched to using <code>Plots</code> in conjuction with <code>RecipesBase</code>. This happened for increased ease-of-use and  decrease of the package total size. Until the transition from <code>PyPlot</code> to <code>RecipesBase</code> is final, the plotting  features of this package are offline, since the dependency on <code>PyPlot</code> had to be taken off.</p>
 </div>
 <p>The functions <code>plot_obstacle(o::Obstacle; kwargs...)</code>, <code>plot_billiard(bt::Vector{Obstacle}; kwargs...)</code> and <code>plot_particle(p::AbstractParticle; kwargs...)</code> are provided in order to plot the respective elements <strong>on the current PyPlot figure</strong>. In order to animate the evolution of a particle in a billiard table, use the function:</p>
 <pre class="codehilite"><code class="language-julia">plot_evolution(p::AbstractParticle, bt::Vector{Obstacle}, colnumber = 50;
