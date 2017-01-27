@@ -467,7 +467,7 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 1000.0)..., dt)</code></pre>
 <p>Assuming you have defined a billiard table and a ray-splitter dictionary, the implementation is exactly the same as in the two previous cases: the ray-splitting dictionary is passed to <code>evolve!()</code> as a fourth argument.</p>
 <pre class="codehilite"><code class="language-julia">ray_splitter = Dict(5 =&gt; [foo, bar, baz])
 p = randominside(bt, 4.0)
-xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, ray_splitter)..., 0.01)</code></pre>
+xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, ray_splitter)..., dt = 0.01)</code></pre>
 
 
 <p>For more information and instructions on defining the "ray_splitter" dictionary visit the <a href="../../tutorials/ray-splitting">Ray-Splitting tutorial here</a>.</p>
