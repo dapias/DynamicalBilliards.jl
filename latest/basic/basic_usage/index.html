@@ -467,18 +467,19 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 1000.0)..., dt)</code></pre>
 <p>Assuming you have defined a billiard table and a ray-splitter dictionary, the implementation is exactly the same as in the two previous cases: the ray-splitting dictionary is passed to <code>evolve!()</code> as a fourth argument.</p>
 <pre class="codehilite"><code class="language-julia">ray_splitter = Dict(5 =&gt; [foo, bar, baz])
 p = randominside(bt, 4.0)
-xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, ray_splitter)..., dt = 0.01)</code></pre>
+xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, ray_splitter)..., 0.01)</code></pre>
 
 
 <p>For more information and instructions on defining the "ray_splitter" dictionary visit the <a href="../../tutorials/ray-splitting">Ray-Splitting tutorial here</a>.</p>
 <p><a id='Visualizing-1'></a></p>
 <h2 id="visualizing">Visualizing</h2>
 <hr />
-<div class="admonition failure">
-<p class="admonition-title">Currently offline!</p>
-<p>Plotting in <code>DynamicalBilliards</code> was done through the <code>PyPlot</code> package. However the development has now  switched to using <code>Plots</code> in conjuction with <code>RecipesBase</code>. This happened for increased ease-of-use and  decrease of the package total size. Until the transition from <code>PyPlot</code> to <code>RecipesBase</code> is final, the plotting  features of this package are offline, since the dependency on <code>PyPlot</code> had to be taken off.</p>
+<div class="admonition warning">
+<p class="admonition-title">Under development!</p>
+<p>Plotting in <code>DynamicalBilliards</code> is done through <code>PyPlot</code> package, due to its maturity and detailed documentation. The plotting section is under development and daily improvements. Soon there will be a dedicated tutorial on how to fully utilize the plotting features of <code>DynamicalBilliards</code>.</p>
 </div>
-<p>The functions <code>plot_obstacle(o::Obstacle; kwargs...)</code>, <code>plot_billiard(bt::Vector{Obstacle}; kwargs...)</code> and <code>plot_particle(p::AbstractParticle; kwargs...)</code> are provided in order to plot the respective elements <strong>on the current PyPlot figure</strong>. In order to animate the evolution of a particle in a billiard table, use the function:</p>
+<p>The functions <code>plot_obstacle(obst::Obstacle; kwargs...)</code>, <code>plot_billiard(bt::Vector{Obstacle})</code> and <code>plot_particle(p::AbstractParticle; kwargs...)</code> are provided in order to plot the respective elements <strong>on the current PyPlot figure</strong>. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>. Be careful to only pass keywords that actually make sense. For example the <code>Particle</code> type is plotted through <code>scatter</code>. Using <code>linewidth = 2.0</code> with <code>plot_particle</code> will result in an error.</p>
+<p>In order to currently animate the evolution of a particle in a billiard table, use the function:</p>
 <pre class="codehilite"><code class="language-julia">plot_evolution(p::AbstractParticle, bt::Vector{Obstacle}, colnumber = 50;
                sleeptime = 0.5, col_to_plot = 5, color = (0,0,1), savefigs = false, savename = &quot;&quot;)</code></pre>
 
