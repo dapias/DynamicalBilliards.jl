@@ -378,8 +378,8 @@
 <p><a id='Installation-1'></a></p>
 <h2 id="installation">Installation</h2>
 <hr />
-<p>This package is currently under the registration process. When this process is over, you can install the package using <code>Pkg.add("DynamicalBilliards")</code>.</p>
-<p>After first installation, it is advised to run the short tests to be sure that everything works as expected. This will only take 2 minutes:</p>
+<p>This package is registered, simply use <code>Pkg.add("DynamicalBilliards")</code> to install it. <strong>WARNING:</strong> this package has a dependency on <code>PyPlot</code> for its plotting features. If you want to use the latest features, compatible with the latest documentation, use <code>Pkg.checkout("DynamicalBilliards")</code>.</p>
+<p>After the first installation, it is advised to run the short tests to be sure that everything works as expected. This will only take about 2-3 minutes:</p>
 <pre class="codehilite"><code class="language-julia">using DynamicalBilliards
 test_options(print_info = false)
 Pkg.test(&quot;DynamicalBilliards&quot;)</code></pre>
