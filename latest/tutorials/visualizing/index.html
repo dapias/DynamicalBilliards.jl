@@ -460,30 +460,7 @@ plot_particle(p2; color=(0.5, 0, 0.8), marker=&quot;p&quot;, s=60.0)</code></pre
 </ul>
 <p><a id='Animating-the-motion-of-a-particle-1'></a></p>
 <h2 id="animating-the-motion-of-a-particle">Animating the motion of a particle</h2>
-<p>The function <code>animate_evolution</code> is provided to animate the evolution of a particle from collision to collision, using the default arguments. Its documentation string contains all the information necessary for its usage:</p>
-<p><a id='DynamicalBilliards.animate_evolution' href='#DynamicalBilliards.animate_evolution'>#</a>
-<strong><code>DynamicalBilliards.animate_evolution</code></strong> &mdash; <em>Function</em>.</p>
-<pre class="codehilite"><code class="language-julia">animate_evolution(p, bt, colnumber[, ray-splitter];
-sleeptime = 0.1, col_to_plot = 5, orbit_color = (0,0,1), savefigs = false, savename = &quot;&quot;)</code></pre>
-
-
-<p>Animate the evolution of the particle, plotting the orbit from collision to collision.</p>
-<p>Notice the difference with <code>evolve!()</code>: No time is given here; instead a number of collisions is passed.</p>
-<p><strong>Arguments</strong></p>
-<ul>
-<li><code>p::AbstractParticle</code> : Either standard or magnetic.</li>
-<li><code>bt::Vector{Obstacle}</code> : The billiard table.</li>
-<li><code>colnumber::Int</code> : Number of collisions to evolve the particle for.</li>
-<li><code>ray-splitter::Dict{Int, Vector{Function}}</code> : (Optional) Ray-splitting dictionary that enables ray-splitting processes during evolution.</li>
-</ul>
-<p><strong>Keyword Arguments</strong></p>
-<ul>
-<li><code>sleeptime</code> : Time passed to <code>sleep()</code> between each collision.</li>
-<li><code>col_to_plot</code> : How many previous collisions are shown during the animation.</li>
-<li><code>savefigs</code> : Save .png figures to enable the creation of animation afterwards. <strong>WARNING:</strong> currently the .gif production has to be made by the user!</li>
-<li><code>savename</code> : Name (<em>including path!</em>) of the figures to be produced. The ending "_ i.png" will be attached to all.</li>
-</ul>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/f3e35857af758442dddd9e2f6c1079dd7e0fc9ef/src/PlotBilliards.jl#L130-L154' class='documenter-source'>source</a><br></p>
+<p>The function <code>animate_evolution</code> is provided to animate the evolution of a particle from collision to collision, using the default arguments. Its <a href="../../latest/basic/library/#DynamicalBilliards.animate_evolution">documentation string</a> contains all the information necessary for its usage.</p>
 <p>Automatic output into an animated image (e.g. ".gif" format) is not yet supported. However, <code>animate_evolution</code> gives users the possibility to save each produce figure in order to merge as an animation using an external tool.</p>
 <p>Let's animate a particle inside a simple pentagon:</p>
 <pre class="codehilite"><code class="language-julia">bt = billiard_polygon(5, 1)
