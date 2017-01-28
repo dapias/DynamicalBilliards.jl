@@ -238,6 +238,17 @@
           
   <li class="md-nav__item">
     
+      <a href="../../tutorials/visualizing/" title="Visualizing" class="md-nav__link">
+        Visualizing
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
       <a href="../../tutorials/own_obstacle/" title="Creating your own Obstacle" class="md-nav__link">
         Creating your own Obstacle
       </a>
@@ -417,7 +428,7 @@ Particle(x::Real, y::Real, φ::Real)
 Particle() = Particle(rand(), rand(), rand()*2π)</code></pre>
 
 
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L16-L30' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L16-L30' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.MagneticParticle' href='#DynamicalBilliards.MagneticParticle'>#</a>
 <strong><code>DynamicalBilliards.MagneticParticle</code></strong> &mdash; <em>Type</em>.</p>
 <pre class="codehilite"><code>MagneticParticle &lt;: AbstractParticle</code></pre>
@@ -437,28 +448,28 @@ MagneticParticle(x0::Real, y0::Real, φ0::Real, ω::Real)
 MagneticParticle() = MagneticParticle([rand(), rand(), rand()*2π], 1.0)</code></pre>
 
 
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L49-L65' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L49-L65' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.magnetic2standard' href='#DynamicalBilliards.magnetic2standard'>#</a>
 <strong><code>DynamicalBilliards.magnetic2standard</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">magnetic2standard(p::MagneticParticle, use_cell = true)</code></pre>
 
 
 <p>Create a standard <code>Particle</code> from a <code>MagneticParticle</code>.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L93-L98' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L93-L98' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.standard2magnetic' href='#DynamicalBilliards.standard2magnetic'>#</a>
 <strong><code>DynamicalBilliards.standard2magnetic</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">standard2magnetic(omega, p::Particle, use_cell = true)</code></pre>
 
 
 <p>Create a <code>MagneticParticle</code> from a <code>Particle</code>.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L105-L110' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L105-L110' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.cyclotron' href='#DynamicalBilliards.cyclotron'>#</a>
 <strong><code>DynamicalBilliards.cyclotron</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">cyclotron(p::MagneticParticle, use_cell = false)</code></pre>
 
 
 <p>Return center and radius of circular motion performed by the particle based on <code>p.pos</code> (or <code>p.pos + p.current_cell</code>) and <code>p.vel</code>.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L118-L124' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L118-L124' class='documenter-source'>source</a><br></p>
 <p><a id='Obstacles-1'></a></p>
 <h2 id="obstacles">Obstacles</h2>
 <p><a id='DynamicalBilliards.Obstacle' href='#DynamicalBilliards.Obstacle'>#</a>
@@ -467,7 +478,7 @@ MagneticParticle() = MagneticParticle([rand(), rand(), rand()*2π], 1.0)</code><
 
 
 <p>Obstacle supertype.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L136-L139' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L136-L139' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.Disk' href='#DynamicalBilliards.Disk'>#</a>
 <strong><code>DynamicalBilliards.Disk</code></strong> &mdash; <em>Type</em>.</p>
 <pre class="codehilite"><code>Disk &lt;: Circular</code></pre>
@@ -481,7 +492,7 @@ MagneticParticle() = MagneticParticle([rand(), rand(), rand()*2π], 1.0)</code><
 <li><code>name::String</code> : Some name given for user convenience.</li>
 </ul>
 <p>Constructors accept any vectors convertible to SVector{2,Float64}.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L147-L155' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L147-L155' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.Antidot' href='#DynamicalBilliards.Antidot'>#</a>
 <strong><code>DynamicalBilliards.Antidot</code></strong> &mdash; <em>Type</em>.</p>
 <pre class="codehilite"><code>Antidot &lt;: Circular</code></pre>
@@ -496,7 +507,7 @@ MagneticParticle() = MagneticParticle([rand(), rand(), rand()*2π], 1.0)</code><
 <li><code>name::String</code> : Name of the obstacle given for user convenience.</li>
 </ul>
 <p>Constructors accept any vectors convertible to SVector{2,Float64}.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L165-L176' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L165-L176' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.FiniteWall' href='#DynamicalBilliards.FiniteWall'>#</a>
 <strong><code>DynamicalBilliards.FiniteWall</code></strong> &mdash; <em>Type</em>.</p>
 <pre class="codehilite"><code>FiniteWall &lt;: Wall</code></pre>
@@ -511,7 +522,7 @@ MagneticParticle() = MagneticParticle([rand(), rand(), rand()*2π], 1.0)</code><
 <li><code>name::String</code> : Name of the obstacle, e.g. "left wall", given for user convenience.</li>
 </ul>
 <p>Constructors accept any vectors convertible to SVector{2,Float64}.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L201-L212' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L201-L212' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.PeriodicWall' href='#DynamicalBilliards.PeriodicWall'>#</a>
 <strong><code>DynamicalBilliards.PeriodicWall</code></strong> &mdash; <em>Type</em>.</p>
 <pre class="codehilite"><code>PeriodicWall &lt;: Wall</code></pre>
@@ -526,7 +537,7 @@ MagneticParticle() = MagneticParticle([rand(), rand(), rand()*2π], 1.0)</code><
 <li><code>name::String</code> : Name of the obstacle, e.g. "left boundary", given for user convenience.</li>
 </ul>
 <p>Constructors accept any vectors convertible to SVector{2,Float64}.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L240-L255' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L240-L255' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.SplitterWall' href='#DynamicalBilliards.SplitterWall'>#</a>
 <strong><code>DynamicalBilliards.SplitterWall</code></strong> &mdash; <em>Type</em>.</p>
 <pre class="codehilite"><code>SplitterWall &lt;: Wall</code></pre>
@@ -542,14 +553,14 @@ MagneticParticle() = MagneticParticle([rand(), rand(), rand()*2π], 1.0)</code><
 <li><code>name::String</code> : Name of the obstacle, e.g. "ray-splitting wall 1", given for user convenience.</li>
 </ul>
 <p>Constructors accept any vectors convertible to SVector{2,Float64}.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L280-L295' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L280-L295' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.normalvec' href='#DynamicalBilliards.normalvec'>#</a>
 <strong><code>DynamicalBilliards.normalvec</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">normalvec(obst::Obstacle, position)</code></pre>
 
 
 <p>Return the vector normal to the obstacle at the given position (which is assumed to be very close to the obstacle's boundary). The normal vector of any Obstacle must be looking towards the direction a particle is expected to come from.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L325-L333' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L325-L333' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.distance' href='#DynamicalBilliards.distance'>#</a>
 <strong><code>DynamicalBilliards.distance</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">distance(p::AbstractParticle, o::Obstacle)</code></pre>
@@ -560,14 +571,14 @@ MagneticParticle() = MagneticParticle([rand(), rand(), rand()*2π], 1.0)</code><
 
 
 <p>Return minimum <code>distance(p, obst)</code> for all <code>obst</code> in <code>bt</code>, which can be negative.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L343-L355' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L343-L355' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.randominside' href='#DynamicalBilliards.randominside'>#</a>
 <strong><code>DynamicalBilliards.randominside</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">randominside(bt::Vector{Obstacle}[, omega])</code></pre>
 
 
 <p>Return a particle with correct (allowed) initial conditions inside the given billiard table defined by the vector <code>bt</code>. If supplied with a second argument the type of the returned particle is <code>MagneticParticle</code>, with angular velocity <code>omega</code>. Else, it is <code>Particle</code>.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/ParticlesObstacles.jl#L446-L454' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/ParticlesObstacles.jl#L446-L454' class='documenter-source'>source</a><br></p>
 <p><a id='Propagation-1'></a></p>
 <h2 id="propagation">Propagation</h2>
 <p><a id='DynamicalBilliards.resolvecollision!' href='#DynamicalBilliards.resolvecollision!'>#</a>
@@ -581,7 +592,7 @@ MagneticParticle() = MagneticParticle([rand(), rand(), rand()*2π], 1.0)</code><
 
 
 <p>This is the ray-splitting implementation. The three functions given are drawn from the ray-splitting dictionary that is passed directly to <code>evolve!()</code>. For a calculated incidence angle φ, if T(φ) &gt; rand(), ray-splitting occurs. (See the section "Ray-Splitting" of the official documentation for more info.)</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/Propagation.jl#L93-L110' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/Propagation.jl#L93-L110' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.collisiontime' href='#DynamicalBilliards.collisiontime'>#</a>
 <strong><code>DynamicalBilliards.collisiontime</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">collisiontime(p::AbstractParticle, o::Obstacle)</code></pre>
@@ -590,7 +601,7 @@ MagneticParticle() = MagneticParticle([rand(), rand(), rand()*2π], 1.0)</code><
 <p>Calculate the collision time between given particle and obstacle.</p>
 <p>The funtion chooses the appropriate method depending on the type of particle (magnetic or not) as well as the type of the obstacle. Returns the time that the particle, given its current position and Type, must be propagated to reach the collision point. This time can be given directly to <code>propagate!(p, time)</code> which brings the particle to the collision point.</p>
 <p>In the case of magnetic propagation, there are always two possible collisions. The function internally decides which of the two will occur first, based on the sign of the angular velocity of the magnetic particle.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/Propagation.jl#L139-L154' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/Propagation.jl#L139-L154' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.propagate!' href='#DynamicalBilliards.propagate!'>#</a>
 <strong><code>DynamicalBilliards.propagate!</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">propagate!(p::AbstractParticle, t)</code></pre>
@@ -599,7 +610,7 @@ MagneticParticle() = MagneticParticle([rand(), rand(), rand()*2π], 1.0)</code><
 <p>Propagate the particle <code>p</code> for given time <code>t</code>, changing appropriately the the <code>p.pos</code> and <code>p.vel</code> fields.</p>
 <p>For a <code>Particle</code> the propagation is a straight line (i.e. velocity vector is constant).</p>
 <p>For a <code>MagneticParticle</code> the propagation is circular motion with cyclic frequency <code>p.omega</code> and radius <code>1/p.omega</code>.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/Propagation.jl#L220-L232' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/Propagation.jl#L220-L232' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.evolve!' href='#DynamicalBilliards.evolve!'>#</a>
 <strong><code>DynamicalBilliards.evolve!</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code>evolve!(p::AbstractParticle, bt::Vector{Obstacle}, ttotal)</code></pre>
@@ -634,7 +645,7 @@ MagneticParticle() = MagneticParticle([rand(), rand(), rand()*2π], 1.0)</code><
 <li>ω_new(ω, where) : Angular velocity after transmission.</li>
 </ul>
 <p>For more information and instructions on defining these functions please visit the official documentation.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/Propagation.jl#L241-L299' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/Propagation.jl#L241-L299' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.construct' href='#DynamicalBilliards.construct'>#</a>
 <strong><code>DynamicalBilliards.construct</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">construct(ct, poss, vels[, ω][, dt=0.01])</code></pre>
@@ -663,7 +674,7 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, ttotal[, ray_splitter])..., dt)<
 <li>vyt::Vector{Float64} : y velocity time-series</li>
 <li>ts::Vector{Float64} : Continuous time vector</li>
 </ul>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/Propagation.jl#L348-L382' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/Propagation.jl#L348-L382' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.isphysical' href='#DynamicalBilliards.isphysical'>#</a>
 <strong><code>DynamicalBilliards.isphysical</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code>isphysical(raysplitter::Dict{Int, Vector{Function}}; only_mandatory = false)</code></pre>
@@ -678,7 +689,7 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, ttotal[, ray_splitter])..., dt)<
 <li>Magnetic conservation is true: (ω_new(ω_new(ω, where), !where) ≈ ω</li>
 </ul>
 <p>The first property is mandatory and must hold for correct propagation. They keyword <code>only_mandatory</code> notes whether the rest of the properties should be tested or not.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/RaySplitting.jl#L323-L335' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/RaySplitting.jl#L323-L335' class='documenter-source'>source</a><br></p>
 <p><a id='Visualization-1'></a></p>
 <h2 id="visualization">Visualization</h2>
 <pre class="codehilite"><code>plot_obstacle
@@ -696,7 +707,7 @@ animate_evolution</code></pre>
 
 
 <p>Return a vector of obstacles that defines a rectangle billiard of size (<code>x</code>, <code>y</code>).</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/StandardBilliards.jl#L6-L9' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/StandardBilliards.jl#L6-L9' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.billiard_sinai' href='#DynamicalBilliards.billiard_sinai'>#</a>
 <strong><code>DynamicalBilliards.billiard_sinai</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code>billiard_sinai(r, x=1.0, y=1.0; periodic = false)</code></pre>
@@ -704,7 +715,7 @@ animate_evolution</code></pre>
 
 <p>Return a vector of obstacles that defines a Sinai billiard of size (<code>x</code>, <code>y</code>) with a disk in its center, of radius <code>r</code>.</p>
 <p>In the periodic case, the system is also known as "Lorentz Gas".</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/StandardBilliards.jl#L39-L45' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/StandardBilliards.jl#L39-L45' class='documenter-source'>source</a><br></p>
 <p><a id='DynamicalBilliards.billiard_polygon' href='#DynamicalBilliards.billiard_polygon'>#</a>
 <strong><code>DynamicalBilliards.billiard_polygon</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code>billiard_polygon(n::Int, R, center = [0,0]; periodic = true)</code></pre>
@@ -712,7 +723,7 @@ animate_evolution</code></pre>
 
 <p>Return a vector of obstacles that defines a regular-polygonal billiard table with <code>n</code> sides, radius <code>r</code> and given <code>center</code>. If <code>n</code> is even, you may choose a periodic version of the billiard.</p>
 <p>Note: <code>R</code> denotes the so-called outer radius, not the inner one.</p>
-<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/5b1c6b0bc8bb3b9047d6c98733eb3f027c11ca74/src/StandardBilliards.jl#L58-L65' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/StandardBilliards.jl#L58-L65' class='documenter-source'>source</a><br></p>
               
             </article>
           </div>

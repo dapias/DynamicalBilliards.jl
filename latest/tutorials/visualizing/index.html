@@ -19,7 +19,7 @@
     
     
       
-        <title>Defining a Billiard Table - DynamicalBilliards</title>
+        <title>Visualizing - DynamicalBilliards</title>
       
     
     
@@ -85,7 +85,7 @@
                 </span>
               
             
-            Defining a Billiard Table
+            Visualizing
           
         </span>
       </div>
@@ -220,19 +220,9 @@
           
   <li class="md-nav__item">
     
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-    
-    <a href="./" title="Defining a Billiard Table" class="md-nav__link md-nav__link--active">
-      Defining a Billiard Table
-    </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-  
-</nav>
+      <a href="../billiard_table/" title="Defining a Billiard Table" class="md-nav__link">
+        Defining a Billiard Table
+      </a>
     
   </li>
 
@@ -252,9 +242,62 @@
           
   <li class="md-nav__item">
     
-      <a href="../visualizing/" title="Visualizing" class="md-nav__link">
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
         Visualizing
-      </a>
+      </label>
+    
+    <a href="./" title="Visualizing" class="md-nav__link md-nav__link--active">
+      Visualizing
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#plotting-the-billiard-table" title="Plotting the Billiard Table" class="md-nav__link">
+    Plotting the Billiard Table
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotting-particles" title="Plotting particles" class="md-nav__link">
+    Plotting particles
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#color-conventions" title="Color conventions" class="md-nav__link">
+    Color conventions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#animating-the-motion-of-a-particle" title="Animating the motion of a particle" class="md-nav__link">
+    Animating the motion of a particle
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -312,6 +355,45 @@
   
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#plotting-the-billiard-table" title="Plotting the Billiard Table" class="md-nav__link">
+    Plotting the Billiard Table
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotting-particles" title="Plotting particles" class="md-nav__link">
+    Plotting particles
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#color-conventions" title="Color conventions" class="md-nav__link">
+    Color conventions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#animating-the-motion-of-a-particle" title="Animating the motion of a particle" class="md-nav__link">
+    Animating the motion of a particle
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -321,53 +403,101 @@
           <div class="md-content">
             <article class="md-content__inner md-typeset">
                
-                 <a href="https://github.com/Datseris/DynamicalBilliards.jl/edit/master/docs/tutorials/billiard_table.md" title="Edit this page" class="md-icon md-content__edit">edit</a>
+                 <a href="https://github.com/Datseris/DynamicalBilliards.jl/edit/master/docs/tutorials/visualizing.md" title="Edit this page" class="md-icon md-content__edit">edit</a>
                
               
                 
-                  <h1>Defining a Billiard Table</h1>
+                  <h1>Visualizing</h1>
                 
-                <p>A billiard table <code>bt</code> is a vector of Obstacles: <code>bt::Vector{Obstacle}</code>.  The abstract Type <code>Obstacle</code> is the supertype of all objects that a particle may collide with.</p>
-<p>There are many premade functions that construct well-known billiards, like the periodic Sinai billiard. You can find all of them at the <a href="../../basic/library/#standard-billiards">Standard Billiards page</a>.</p>
-<p>To create a custom billiard, you start with an empty Vector:</p>
-<pre class="codehilite"><code>bt = Obstacle[]</code></pre>
+                <p>All plotting functionality of <code>DynamicalBilliards</code> lies within a few well-defined functions that use the <code>PyPlot</code> package to plot aspects of the system on the current PyPlot figure. These functions are nicely grouped in the library section(link).</p>
+<p><a id='Plotting-the-Billiard-Table-1'></a></p>
+<h2 id="plotting-the-billiard-table">Plotting the Billiard Table</h2>
+<p>The function <code>plot_obstacle(obst::Obstacle; kwargs...)</code> plots the obstacle on the current PyPlot figure. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>).  For example:</p>
+<pre class="codehilite"><code class="language-julia">using DynamicalBilliards, PyPlot
+bt = billiard_sinai(0.3)
+# Plot disk:
+plot_obstacle(bt[5])
+# Plot left wall:
+plot_obstacle(bt[1])
+# Plot right wall with different settings:
+plot_obstacle(bt[2]; linewidth = 3.0, linestyle = &quot;dashed&quot;, color = (1.0, 0.5, 0.5))
+# Set limits for the purpose of the tutorial
+xlim(-0.1, 1.1); ylim(-0.1, 1.1)</code></pre>
 
 
-<p>and then you create your obstacles one by one and add them to it. All obstacles that are already defined in the package can be found at the <a href="../../basic/library/#obstacles">Obstacles page</a> of the library. The function <code>billiard_polygon</code> creates a polygonal billiard table.  However, for the example of this page, we will create a hexagonal billiard with a disk in the middle step-by-step.</p>
-<p>The first step is to define the six walls of the billiard table. A <code>FiniteWall</code> object needs to be supplemented with a start point, an end point, a normal vector and, optionally, a name. The vertex points of a regular hexagon of radius <code>r</code> are given by the formula:</p>
-<p>$$
-(x,y) = \left( r\cos\left(\frac{2\pi i}{6}\right), r\cos\left(\frac{2\pi i}{6}\right) \right)\,, \quad \text{for i $\in$ {1,...,6}}
-$$</p>
-<p>To create each wall object, we will implement the following loop, choosing a size of 2.0:</p>
-<pre class="codehilite"><code class="language-julia">using DynamicalBilliards
-hexagon_vertex = (r) -&gt; [ [r*cos(2π*i/6), r*sin(2π*i/6)] for i in 1:6]
-hexver = hexagon_vertex(2.0)
-
-for i in eachindex(hexver)
-  starting = hexver[i]
-  ending = hexver[mod1(i+1, length(hexver))]
-  w = ending - starting
-  normal = [-w[2], w[1]]
-  wall = FiniteWall(starting, ending, normal, &quot;wall $i&quot;)
-  push!(bt, wall)
-end</code></pre>
+<p>will plot something like this:</p>
+<p><img alt="Visualizing tutorial 1" src="http://i.imgur.com/lrDStnP.png" /></p>
+<p>If you want to quickly plot the entire billiard table without changing the settings, simply use the function  <code>plot_billiard(bt)</code>:</p>
+<pre class="codehilite"><code class="language-julia">bt = billiard_polygon(6, 1)
+a = Antidot([0.0,0.0], 0.5)
+push!(bt, a)
+plot_billiard(bt)</code></pre>
 
 
-<p>The <code>normal</code> vector of a <code>Wall</code> obstacle is necessary to be supplemented by the user because it must point towards where the particle is expected to come from. If <code>w</code> is the vector (wall) pointing from start- to end-point then the vector <code>[-w[2], w[1]]</code> is pointing to the left of <code>w</code> and the vector <code>[w[2], -[w1]]</code> is pointing to the right. Both are normal to <code>w</code>, but you have to know which one to pick. In this case this is very easy, since the normal has to simply point towards the origin.</p>
-<p>We add a disk by specifying a center and radius (and optionally a name): </p>
-<pre class="codehilite"><code class="language-julia">d = Disk([0,0], 0.8)
-push!(bt, d)</code></pre>
+<p>which will plot something like this:</p>
+<p><img alt="Visualizing tutorial 2" src="http://i.imgur.com/46AomXm.png" /></p>
+<p><code>plot_billiard()</code> also sets up the axis to have equal aspect ration and sets up the axis limits to be large enough to contain the entire billiard.</p>
+<p><a id='Plotting-particles-1'></a></p>
+<h2 id="plotting-particles">Plotting particles</h2>
+<p>Following the above example, we create and plot a particle using the function <code>plot_particle</code>:</p>
+<pre class="codehilite"><code class="language-julia">p = randominside(bt)
+plot_particle(p)
+# Plot one more particle with purple color. pentagon shape and bigger size (default is s=30):
+p2 = randominside(bt)
+plot_particle(p2; color=(0.5, 0, 0.8), marker=&quot;p&quot;, s=60.0)</code></pre>
 
 
-<p>To make sure the billiard looks as you would expect, use the function <code>plot_billiard(bt)</code>. Create a particle inside that billiard and evolve it:</p>
-<pre class="codehilite"><code class="language-julia">plot_billiard(bt)
-ω = 0.5
-p = randominside(p, ω)
-xt, yt, vxt, vyt, t = construct(evolve!(p, bt, 100)...)</code></pre>
+<p>which should give you something like this (notice that the particle position and direction are random):</p>
+<p><img alt="Visualizing tutorial 2" src="http://i.imgur.com/8a4ajfA.png" /></p>
+<p><a id='Color-conventions-1'></a></p>
+<h3 id="color-conventions">Color conventions</h3>
+<p>The default plotting settings have been chosen for maximum clarity and consistency. The color conventions followed are:</p>
+<ul>
+<li>Particles are black.</li>
+<li>Particle orbits/trajectories are blue.</li>
+<li>Reflecting obstacles (e.g. <code>Disk</code> or <code>FiniteWall</code>) are green.</li>
+<li>Ray-splitting obstacles are red.</li>
+</ul>
+<p><a id='Animating-the-motion-of-a-particle-1'></a></p>
+<h2 id="animating-the-motion-of-a-particle">Animating the motion of a particle</h2>
+<p>The function <code>animate_evolution</code> is provided to animate the evolution of a particle from collision to collision, using the default arguments. Its documentation string contains all the information necessary for its usage:</p>
+<p><a id='DynamicalBilliards.animate_evolution' href='#DynamicalBilliards.animate_evolution'>#</a>
+<strong><code>DynamicalBilliards.animate_evolution</code></strong> &mdash; <em>Function</em>.</p>
+<pre class="codehilite"><code class="language-julia">animate_evolution(p, bt, colnumber[, ray-splitter];
+sleeptime = 0.1, col_to_plot = 5, orbit_color = (0,0,1), savefigs = false, savename = &quot;&quot;)</code></pre>
 
 
-<p>The billiard table now works for straight or magnetic propagation.  To expand this to ray-splitting you have to use ray-splitting Obstacles (<a href="../../tutorials/ray-splitting">see the tutorial on Ray-Splitting</a>).  Additional information on how to define your own <code>Obstacle</code> sub-type is given in the tutorial on <a href="../../tutorials/own_obstacle">Cefining your own Obstacles</a>.</p>
-<p>If you make any billiard system that you think is common and missing from this package, you are more than welcome to submit a PR extending the <code>StandardBilliards.jl</code> library with your contribution!</p>
+<p>Animate the evolution of the particle, plotting the orbit from collision to collision.</p>
+<p>Notice the difference with <code>evolve!()</code>: No time is given here; instead a number of collisions is passed.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>p::AbstractParticle</code> : Either standard or magnetic.</li>
+<li><code>bt::Vector{Obstacle}</code> : The billiard table.</li>
+<li><code>colnumber::Int</code> : Number of collisions to evolve the particle for.</li>
+<li><code>ray-splitter::Dict{Int, Vector{Function}}</code> : (Optional) Ray-splitting dictionary that enables ray-splitting processes during evolution.</li>
+</ul>
+<p><strong>Keyword Arguments</strong></p>
+<ul>
+<li><code>sleeptime</code> : Time passed to <code>sleep()</code> between each collision.</li>
+<li><code>col_to_plot</code> : How many previous collisions are shown during the animation.</li>
+<li><code>savefigs</code> : Save .png figures to enable the creation of animation afterwards. <strong>WARNING:</strong> currently the .gif production has to be made by the user!</li>
+<li><code>savename</code> : Name (<em>including path!</em>) of the figures to be produced. The ending "_ i.png" will be attached to all.</li>
+</ul>
+<p><a target='_blank' href='https://github.com/Datseris/DynamicalBilliards.jl/tree/7cc39f26612a1f5166c82a54ba219347cab443e3/src/PlotBilliards.jl#L123-L147' class='documenter-source'>source</a><br></p>
+<p>Automatic output into an animated image (e.g. ".gif" format) is not yet supported. However, <code>animate_evolution</code> gives users the possibility to save each produce figure in order to merge as an animation using an external tool.</p>
+<p>Let's animate a particle inside a simple pentagon:</p>
+<pre class="codehilite"><code class="language-julia">bt = billiard_polygon(5, 1)
+a = Disk([0.0,0.0], 0.4)
+push!(bt, a)
+plot_billiard(bt)
+
+p = randominside(bt, 1.0)
+savedir = &quot;C:\\some_path\\anim1&quot;
+animate_evolution(p, bt, 50; savefigs = true, savename = savedir)</code></pre>
+
+
+<p>This code produced 50 ".png" images which were later mixed (using e.g. www.gifmaker.me) into a single ".gif" animation.  The output figures have a dpi=60 and therefore take only a dozen kb of space. The animation produced should look like:</p>
+<p><img alt="Visualizing Animation 1" src="http://i.imgur.com/UyiW2N2.gifv" /></p>
               
             </article>
           </div>
@@ -380,7 +510,7 @@ xt, yt, vxt, vyt, t = construct(evolve!(p, bt, 100)...)</code></pre>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../../basic/basic_usage/" title="Basic Usage" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../ray-splitting/" title="Ray-Splitting" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -389,19 +519,19 @@ xt, yt, vxt, vyt, t = construct(evolve!(p, bt, 100)...)</code></pre>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Basic Usage
+                Ray-Splitting
               </span>
             </div>
           </a>
         
         
-          <a href="../ray-splitting/" title="Ray-Splitting" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../own_obstacle/" title="Creating your own Obstacle" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Ray-Splitting
+                Creating your own Obstacle
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

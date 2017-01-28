@@ -32,6 +32,12 @@
     </url>
         
     <url>
+     <loc>/tutorials/visualizing/</loc>
+     <lastmod>2017-01-28</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
      <loc>/tutorials/own_obstacle/</loc>
      <lastmod>2017-01-28</lastmod>
      <changefreq>daily</changefreq>

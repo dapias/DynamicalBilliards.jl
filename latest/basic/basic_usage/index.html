@@ -238,6 +238,19 @@
     Visualizing
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction-animation" title="Introduction animation" class="md-nav__link">
+    Introduction animation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -280,6 +293,17 @@
     
       <a href="../../tutorials/ray-splitting/" title="Ray-Splitting" class="md-nav__link">
         Ray-Splitting
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../tutorials/visualizing/" title="Visualizing" class="md-nav__link">
+        Visualizing
       </a>
     
   </li>
@@ -368,6 +392,19 @@
   <a href="#visualizing" title="Visualizing" class="md-nav__link">
     Visualizing
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction-animation" title="Introduction animation" class="md-nav__link">
+    Introduction animation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -475,21 +512,15 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, ray_splitter)..., 0.01)</
 <h2 id="visualizing">Visualizing</h2>
 <hr />
 <div class="admonition warning">
-<p class="admonition-title">Under development!</p>
-<p>Plotting in <code>DynamicalBilliards</code> is done through <code>PyPlot</code> package, due to its maturity and detailed documentation. The plotting section is under development and daily improvements. Soon there will be a dedicated tutorial on how to fully utilize the plotting features of <code>DynamicalBilliards</code>.</p>
+<p class="admonition-title">Uses PyPlot!</p>
+<p>Plotting in <code>DynamicalBilliards</code> is done through <code>PyPlot</code> package, due to its maturity, huge library and detailed documentation.</p>
 </div>
-<p>The functions <code>plot_obstacle(obst::Obstacle; kwargs...)</code>, <code>plot_billiard(bt::Vector{Obstacle})</code> and <code>plot_particle(p::AbstractParticle; kwargs...)</code> are provided in order to plot the respective elements <strong>on the current PyPlot figure</strong>. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>). Be careful to only pass keywords that actually make sense. For example the <code>Particle</code> type is plotted through <code>scatter</code>. Using <code>linewidth = 2.0</code> with <code>plot_particle</code> will result in an error.</p>
-<p>In order to currently animate the evolution of a particle in a billiard table, use the function:</p>
-<pre class="codehilite"><code class="language-julia">plot_evolution(p::AbstractParticle, bt::Vector{Obstacle}, colnumber = 50;
-               sleeptime = 0.5, col_to_plot = 5, color = (0,0,1), savefigs = false, savename = &quot;&quot;)</code></pre>
-
-
-<p>which propagates the particle from collision to collision up to a total of <code>colnumber</code> collisions. Then, it draws the collisions, drawing always only the last <code>col_to_plot</code> collisions with orbit color <code>color</code>.  <code>sleeptime</code> signals the waiting time between each plot update.</p>
-<p>Direct animation saving is not supported yet. However, optionally, you could save each figure of the animation using <code>savefigs = true</code> and <code>savename = "path/to/your/folder/figurename"</code>. A total of <code>colnumber</code> figures will be created, ending with <code>_#.png</code>.</p>
-<p>Be sure to first call <code>plot_billiard</code> before calling <code>plot_evolution</code>.</p>
+<p>The functions <code>plot_obstacle(obst::Obstacle; kwargs...)</code>, <code>plot_billiard(bt::Vector{Obstacle})</code> and <code>plot_particle(p::AbstractParticle; kwargs...)</code> are provided in order to plot the respective elements <strong>on the current PyPlot figure</strong>. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>). </p>
+<p><a href="../../tutorials/visualizing">The tutorial on visualizing</a>) has step-by-step description on how to handle all plotting offered by <code>DynamicalBilliards</code>.</p>
+<p><a id='Introduction-animation-1'></a></p>
+<h3 id="introduction-animation">Introduction animation</h3>
 <p>The example .gif shown in the introduction, was generated simply with the code:</p>
-<pre class="codehilite"><code class="language-julia">using DynamicalBilliards
-using PyPlot
+<pre class="codehilite"><code class="language-julia">using DynamicalBilliards, PyPlot
 
 bt = billiard_rectangle(1.5, 1.0)
 d1 = Disk([0.45, 0.6], 0.3, &quot;Upper-left Disk&quot;)
@@ -503,16 +534,13 @@ p = randominside(bt, ω)
 plot_billiard(bt)
 axis(&quot;off&quot;)
 tight_layout()
-xlim(0,1.5)
-ylim(0,1.0)
 
 sname = &quot;C:\\***\\example&quot;
 plot_evolution(p, bt, 200;
-sleeptime = 0.1, col_to_plot = 4, savefigs = true, savename = sname)</code></pre>
+col_to_plot = 4, savefigs = true, savename = sname)</code></pre>
 
 
-<p>Afterwards the outputed .png files where merged into a single .gif externally.</p>
-<p>A full overview of all plotting procedures offered by this package is coming soon.</p>
+<p>Afterwards the outputed .png files where merged into a single .gif externally using for example the website gifmaker.me.</p>
               
             </article>
           </div>
