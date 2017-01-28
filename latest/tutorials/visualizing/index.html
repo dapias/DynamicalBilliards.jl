@@ -409,7 +409,7 @@
                 
                   <h1>Visualizing</h1>
                 
-                <p>All plotting functionality of <code>DynamicalBilliards</code> lies within a few well-defined functions that use the <code>PyPlot</code> package to plot aspects of the system on the current PyPlot figure. These functions are nicely grouped in this <a href="../../latest/basic/library/#visualization">library section</a>.</p>
+                <p>All plotting functionality of <code>DynamicalBilliards</code> lies within a few well-defined functions that use the <code>PyPlot</code> package to plot aspects of the system on the current PyPlot figure. These functions are nicely grouped in this <a href="../../basic/library/#visualization">library section</a>.</p>
 <p><a id='Plotting-the-Billiard-Table-1'></a></p>
 <h2 id="plotting-the-billiard-table">Plotting the Billiard Table</h2>
 <p>The function <code>plot_obstacle(obst::Obstacle; kwargs...)</code> plots the obstacle on the current PyPlot figure. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>).  For example:</p>
@@ -460,7 +460,7 @@ plot_particle(p2; color=(0.5, 0, 0.8), marker=&quot;p&quot;, s=60.0)</code></pre
 </ul>
 <p><a id='Animating-the-motion-of-a-particle-1'></a></p>
 <h2 id="animating-the-motion-of-a-particle">Animating the motion of a particle</h2>
-<p>The function <code>animate_evolution</code> is provided to animate the evolution of a particle from collision to collision, using the default arguments. Its <a href="../../latest/basic/library/#DynamicalBilliards.animate_evolution">documentation string</a> contains all the information necessary for its usage.</p>
+<p>The function <code>animate_evolution</code> is provided to animate the evolution of a particle from collision to collision, using the default arguments. Its <a href="../../basic/library/#DynamicalBilliards.animate_evolution">documentation string</a> contains all the information necessary for its usage.</p>
 <p>Automatic output into an animated image (e.g. ".gif" format) is not yet supported. However, <code>animate_evolution</code> gives users the possibility to save each produce figure in order to merge as an animation using an external tool.</p>
 <p>Let's animate a particle inside a simple pentagon:</p>
 <pre class="codehilite"><code class="language-julia">bt = billiard_polygon(5, 1)
