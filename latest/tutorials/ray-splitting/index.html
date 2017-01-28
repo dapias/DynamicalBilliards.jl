@@ -273,6 +273,19 @@
     Ray-Splitter Dictionary
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#no-field-where-error" title="No field "where" error" class="md-nav__link">
+    No field "where" error
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -390,6 +403,19 @@
     Ray-Splitter Dictionary
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#no-field-where-error" title="No field "where" error" class="md-nav__link">
+    No field "where" error
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -477,6 +503,14 @@ plot(xt, yt)</code></pre>
 
 
 <p>and everything works like a charm! A final difference to be noted is that in the case of ray-splitting with magnetic fields, the fourth value returned by <code>evolve!()</code> is not a number, but a vector of angular velocities <code>omegas</code>. The value <code>omegas[i]</code> is the angular velocity the particle has while propagating from state <code>pos[i], vel[i]</code> to state <code>pos[i+1], vel[i+1]</code>. The <code>construct()</code> function takes this into account.</p>
+<p><a id='No-field-"where"-error-1'></a></p>
+<h3 id="no-field-where-error">No field "where" error</h3>
+<p>If you ever encounter the error <code>ERROR: type SomeObstacleType has no field where</code> this means that the index provided by your ray-splitting dictionary points to an object that does not support ray-splitting. Use the functions:</p>
+<pre class="codehilite"><code class="language-julia">acceptable_raysplitter(raysplitter, bt)
+supports_raysplitting(obst::Obstacle)</code></pre>
+
+
+<p>to find out what you did wrong. Most likely, the index you supported was incorrect, i.e. the index could be <code>5</code> instead of <code>4</code>.</p>
 <p><a id='Physics-1'></a></p>
 <h2 id="physics">Physics</h2>
 <p>The condition for transmission is simply: <code>T(φ, where, ω) &gt; rand()</code>. If it returns <code>true</code>, transmission (i.e. ray-splitting) will happen. Otherwise just specular reflection will take place.</p>
