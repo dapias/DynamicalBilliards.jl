@@ -456,9 +456,9 @@ bt = billiard_sinai(0.3, 2.0, 1.0; periodic=true)</code></pre>
 
 <p>The return values of the <code>evolve!()</code> function need some brief explaining: As noted by the "!" at the end of the function,  it changes its argument <code>p</code>. Most importantly however, this function also returns the main output expected by a billiard system. This output is a tuple of three vectors:</p>
 <ul>
-<li><code>ct::Vector</code> : Collision times.</li>
+<li><code>ct::Vector{Float64}</code> : Collision times.</li>
 <li><code>poss::Vector{SVector{2}}</code> : Positions during collisions.</li>
-<li><code>vels:: Vector{SVector{2}})</code> : Velocities <strong>exactly after</strong> the collisions (i.e. reflections).</li>
+<li><code>vels:: Vector{SVector{2}})</code> : Velocities <strong>exactly after</strong> the collisions (e.g. after reflection).</li>
 </ul>
 <p>The time <code>t[i]</code> is the time necessary to reach state <code>poss[i], vels[i]</code> starting from the state <code>poss[i-1], vels[i-1]</code>. That is why <code>t[1]</code> is always 0 since <code>poss[1], vels[1]</code> are the initial conditions.</p>
 <p>If this output is not convenient for you, the function <code>construct(ct, poss, vels)</code> is provided,  which constructs the (continuous) timeseries of the position and velocity, as well as the time-vector, when given the main output of <code>evolve!()</code>:</p>
@@ -511,12 +511,8 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, ray_splitter)..., 0.01)</
 <p><a id='Visualizing-1'></a></p>
 <h2 id="visualizing">Visualizing</h2>
 <hr />
-<div class="admonition warning">
-<p class="admonition-title">Uses PyPlot!</p>
-<p>Plotting in <code>DynamicalBilliards</code> is done through <code>PyPlot</code> package, due to its maturity, huge library and detailed documentation.</p>
-</div>
 <p>The functions <code>plot_obstacle(obst::Obstacle; kwargs...)</code>, <code>plot_billiard(bt::Vector{Obstacle})</code> and <code>plot_particle(p::AbstractParticle; kwargs...)</code> are provided in order to plot the respective elements <strong>on the current PyPlot figure</strong>. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>). </p>
-<p><a href="../../tutorials/visualizing">The tutorial on visualizing</a>) has step-by-step description on how to handle all plotting offered by <code>DynamicalBilliards</code>.</p>
+<p><a href="../../tutorials/visualizing">The tutorial on visualizing</a> has step-by-step descriptions on how to handle all plotting offered by <code>DynamicalBilliards.jl</code>.</p>
 <p><a id='Introduction-animation-1'></a></p>
 <h3 id="introduction-animation">Introduction animation</h3>
 <p>The example .gif shown in the introduction, was generated simply with the code:</p>
