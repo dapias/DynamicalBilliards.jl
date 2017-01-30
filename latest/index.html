@@ -381,7 +381,7 @@
 <p>This package is registered, simply use <code>Pkg.add("DynamicalBilliards")</code> to install it. </p>
 <div class="admonition warning">
 <p class="admonition-title">PyPlot dependency</p>
-<p>this package has a dependency on <code>PyPlot</code> for its plotting features, because of its maturity, detailed documentation and vast library of features.</p>
+<p>this package has a dependency on <code>PyPlot</code> for its plotting features, because of its maturity, detailed documentation and vast library of features. if you are sure about how to install PyPlot, simply run the commands:  <code>ENV["PYTHON"]=""; Pkg.add("PyCall"); Pkg.add("PyPlot"); using PyPlot;</code></p>
 </div>
 <p>If you want to use the  latest features, compatible with the latest documentation, use <code>Pkg.checkout("DynamicalBilliards")</code>.</p>
 <p>After the first installation, it is advised to run the short tests to be sure that everything works as expected. This will only take about 2-3 minutes:</p>
