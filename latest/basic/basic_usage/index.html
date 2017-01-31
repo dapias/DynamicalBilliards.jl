@@ -424,29 +424,29 @@
               
                 
                 <h1 id="basic-usage">Basic Usage</h1>
-<p><code>DynamicalBilliards.jl</code> was created with easy-of-use as its main cornerstone.  With 3 simple steps, the user can fully initalize, evolve, and get the output of the propagation of a particle in a billiard system.</p>
+<p><code>DynamicalBilliards.jl</code> was created with easy-of-use as its main cornerstone. With 3 simple steps, the user can fully initalize, evolve, and get the output of the propagation of a particle in a billiard system.</p>
 <p>In general, the workflow of <code>DynamicalBilliards.jl</code> follows these simple steps:</p>
 <ol>
 <li>Create a billiard table, a <code>Vector{Obstacle}</code>.</li>
 <li>Create a particle inside that billiard table.</li>
 <li>Get the output by evolving the particle.</li>
 </ol>
-<p>Adding more complexity in your billiard table does not add complexity in your code. For example, to implement a ray-splitting billiard you only need to define one additional variable, a dictionary <code>Dict{Int, Vector{Function}}</code>. After reading through this basic usage page,  you will be able to use all aspects of <code>DynamicalBilliards.jl</code> with minimal effort.</p>
+<p>Adding more complexity in your billiard table does not add complexity in your code. For example, to implement a ray-splitting billiard you only need to define one additional variable, a dictionary <code>Dict{Int, Vector{Function}}</code>. After reading through this basic usage page, you will be able to use all aspects of <code>DynamicalBilliards.jl</code> with minimal effort.</p>
 <p><a id='Straight-Propagation-1'></a></p>
 <h2 id="straight-propagation">Straight Propagation</h2>
 <hr />
-<p>The usage of this package revolves around a single function: </p>
+<p>The usage of this package revolves around a single function:</p>
 <pre class="codehilite"><code class="language-julia">evolve!(p::AbstractParticle, bt::Vector{Obstacle}, total_time)</code></pre>
 
 
-<p>which evolves a particle <code>p</code> inside a billiard table <code>bt</code> for a given amount of time <code>total_time</code>,  while taking care of all the details internally. </p>
-<p>The first step is to define the billiard table <code>bt</code>, which is the system the particle <code>p</code> will propagate in.  A billiard table is simply a collection (<code>Vector</code>) of <code>Obstacle</code>s. The most convenient way is to use  one of the pre-defined billiard tables offered by the package. For example, let's create a periodic Sinai  billiard with disk radius of 0.3 and with one side of length 2 and one of length 1:</p>
+<p>which evolves a particle <code>p</code> inside a billiard table <code>bt</code> for a given amount of time <code>total_time</code>, while taking care of all the details internally.</p>
+<p>The first step is to define the billiard table <code>bt</code>, which is the system the particle <code>p</code> will propagate in. A billiard table is simply a collection (<code>Vector</code>) of <code>Obstacle</code>s. The most convenient way is to use one of the pre-defined billiard tables offered by the package. For example, let's create a periodic Sinai billiard with disk radius of 0.3 and with one side of length 2 and one of length 1:</p>
 <pre class="codehilite"><code class="language-julia">using DynamicalBilliards
-bt = billiard_sinai(0.3, 2.0, 1.0; periodic=true)</code></pre>
+bt = billiard_sinai(0.3, 2.0, 1.0; setting = &quot;periodic&quot;)</code></pre>
 
 
 <p><em>(for more information about defining billiard tables visit the <a href="../../tutorials/billiard_table">tutorial on defining your own billiard table</a>)</em></p>
-<p>Afterwards, you want to create a particle inside that billiard system.  For that, the function <code>randominside(bt::Vector{Obstacle})</code> is provided.  This function returns a particle with random initial conditions inside the billiard table,  while making sure that it is always in the allowed region of the billiard table.</p>
+<p>Afterwards, you want to create a particle inside that billiard system. For that, the function <code>randominside(bt::Vector{Obstacle})</code> is provided, which returns a particle with random initial conditions inside the billiard table.</p>
 <pre class="codehilite"><code class="language-julia">p = randominside(bt)</code></pre>
 
 
@@ -454,14 +454,14 @@ bt = billiard_sinai(0.3, 2.0, 1.0; periodic=true)</code></pre>
 <pre class="codehilite"><code class="language-julia">ct, poss, vels = evolve!(p, bt, 1000.0)</code></pre>
 
 
-<p>The return values of the <code>evolve!()</code> function need some brief explaining: As noted by the "!" at the end of the function,  it changes its argument <code>p</code>. Most importantly however, this function also returns the main output expected by a billiard system. This output is a tuple of three vectors:</p>
+<p>The return values of the <code>evolve!()</code> function need some brief explaining: As noted by the "!" at the end of the function, it changes its argument <code>p</code>. Most importantly however, this function also returns the main output expected by a billiard system. This output is a tuple of three vectors:</p>
 <ul>
 <li><code>ct::Vector{Float64}</code> : Collision times.</li>
 <li><code>poss::Vector{SVector{2}}</code> : Positions during collisions.</li>
 <li><code>vels:: Vector{SVector{2}})</code> : Velocities <strong>exactly after</strong> the collisions (e.g. after reflection).</li>
 </ul>
 <p>The time <code>t[i]</code> is the time necessary to reach state <code>poss[i], vels[i]</code> starting from the state <code>poss[i-1], vels[i-1]</code>. That is why <code>t[1]</code> is always 0 since <code>poss[1], vels[1]</code> are the initial conditions.</p>
-<p>If this output is not convenient for you, the function <code>construct(ct, poss, vels)</code> is provided,  which constructs the (continuous) timeseries of the position and velocity, as well as the time-vector, when given the main output of <code>evolve!()</code>:</p>
+<p>If this output is not convenient for you, the function <code>construct(ct, poss, vels)</code> is provided, which constructs the (continuous) timeseries of the position and velocity, as well as the time-vector, when given the main output of <code>evolve!()</code>:</p>
 <pre class="codehilite"><code class="language-julia">xt, yt, vxt, vyt, ts = construct(ct, poss, vels)</code></pre>
 
 
@@ -472,7 +472,7 @@ bt = billiard_sinai(0.3, 2.0, 1.0; periodic=true)</code></pre>
 <p><a id='Magnetic-Propagation-1'></a></p>
 <h2 id="magnetic-propagation">Magnetic Propagation</h2>
 <hr />
-<p>The are only two differences between magnetic and straight propagation.  Firstly, the particle type is not <code>Particle</code> anymore, but <code>MagneticParticle</code>.  The latter has an extra field called <code>omega</code> which is the cyclic frequency of rotation  (equivalently, the angular velocity). In order to create a <code>MagneticParticle</code> (without using the constructors),  you simply provide this extra information to the <code>randominside()</code> function:</p>
+<p>The are only two differences between magnetic and straight propagation. Firstly, the particle type is not <code>Particle</code> anymore, but <code>MagneticParticle</code>. The latter has an extra field called <code>omega</code> which is the cyclic frequency of rotation (equivalently, the angular velocity). In order to create a <code>MagneticParticle</code> (without using the constructors), you simply provide this extra information to the <code>randominside()</code> function:</p>
 <pre class="codehilite"><code class="language-julia">ω = 0.5
 p = randominside(bt, ω)
 typeof(p) # MagneticParticle
@@ -482,12 +482,12 @@ p.omega   # 0.5</code></pre>
 <p>To propagate the particle you use the same functions:</p>
 <pre class="codehilite"><code class="language-julia">ct, poss, vels, ω = evolve!(p, bt, 1000.0)  #evolve for magnetic also returns ω
 xt, yt, vxt, vyt, ts = construct(ct, poss, vels, ω, dt)
-# or equivalently: 
+# or equivalently:
 xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 1000.0)..., dt)</code></pre>
 
 
-<p>As you can see, the second difference is that the additional argument of the angular velocity must also be provided  to the <code>construct()</code> function, in order for it to construct circular motion instead of straight motion between collisions.  (Note: <code>evolve!()</code> returns 4 arguments for magnetic propagation, making the ellipsis syntax extremely useful!).</p>
-<p>The final optional argument <code>dt</code> is the time-step at which the timeseries are constructed  (since they are made up of sines and cosines).</p>
+<p>As you can see, the second difference is that the additional argument of the angular velocity must also be provided to the <code>construct()</code> function, in order for it to construct circular motion instead of straight motion between collisions. (Note: <code>evolve!()</code> returns 4 arguments for magnetic propagation, making the ellipsis syntax extremely useful!).</p>
+<p>The final optional argument <code>dt</code> is the time-step at which the timeseries are constructed (since they are made up of sines and cosines).</p>
 <p><a id='Ray-Splitting-1'></a></p>
 <h2 id="ray-splitting">Ray-Splitting</h2>
 <hr />
@@ -511,7 +511,7 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, ray_splitter)..., 0.01)</
 <p><a id='Visualizing-1'></a></p>
 <h2 id="visualizing">Visualizing</h2>
 <hr />
-<p>The functions <code>plot_obstacle(obst::Obstacle; kwargs...)</code>, <code>plot_billiard(bt::Vector{Obstacle})</code> and <code>plot_particle(p::AbstractParticle; kwargs...)</code> are provided in order to plot the respective elements <strong>on the current PyPlot figure</strong>. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>). </p>
+<p>The functions <code>plot_obstacle(obst::Obstacle; kwargs...)</code>, <code>plot_billiard(bt::Vector{Obstacle})</code> and <code>plot_particle(p::AbstractParticle; kwargs...)</code> are provided in order to plot the respective elements <strong>on the current PyPlot figure</strong>. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>).</p>
 <p><a href="../../tutorials/visualizing">The tutorial on visualizing</a> has step-by-step descriptions on how to handle all plotting offered by <code>DynamicalBilliards.jl</code>.</p>
 <p><a id='Introduction-animation-1'></a></p>
 <h3 id="introduction-animation">Introduction animation</h3>

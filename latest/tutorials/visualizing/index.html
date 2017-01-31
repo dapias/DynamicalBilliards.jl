@@ -412,7 +412,7 @@
                 <p>All plotting functionality of <code>DynamicalBilliards</code> lies within a few well-defined functions that use the <code>PyPlot</code> package to plot aspects of the system on the current PyPlot figure. These functions are nicely grouped in this <a href="../../basic/library/#visualization">library section</a>.</p>
 <p><a id='Plotting-the-Billiard-Table-1'></a></p>
 <h2 id="plotting-the-billiard-table">Plotting the Billiard Table</h2>
-<p>The function <code>plot_obstacle(obst::Obstacle; kwargs...)</code> plots the obstacle on the current PyPlot figure. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>).  For example:</p>
+<p>The function <code>plot_obstacle(obst::Obstacle; kwargs...)</code> plots the obstacle on the current PyPlot figure. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>). For example:</p>
 <pre class="codehilite"><code class="language-julia">using DynamicalBilliards, PyPlot
 bt = billiard_sinai(0.3)
 # Plot disk:
@@ -456,7 +456,8 @@ plot_particle(p2; color=(0.5, 0, 0.8), marker=&quot;p&quot;, s=60.0)</code></pre
 <li>Particles are black.</li>
 <li>Particle orbits/trajectories are blue.</li>
 <li>Reflecting obstacles (e.g. <code>Disk</code> or <code>FiniteWall</code>) are green.</li>
-<li>Ray-splitting obstacles are red.</li>
+<li>Randomly reflecting obstacles (e.g. <code>RandomDisk</code> or <code>RandomWall</code>) are yellow.</li>
+<li>Ray-splitting obstacles are red with dashed linestyle.</li>
 </ul>
 <p><a id='Animating-the-motion-of-a-particle-1'></a></p>
 <h2 id="animating-the-motion-of-a-particle">Animating the motion of a particle</h2>
@@ -473,7 +474,7 @@ savedir = &quot;C:\\some_path\\anim1&quot;
 animate_evolution(p, bt, 50; savefigs = true, savename = savedir)</code></pre>
 
 
-<p>This code produced 50 ".png" images which were later mixed (using e.g. www.gifmaker.me) into a single ".gif" animation.  The output figures have a dpi=60 and therefore take only a dozen kb of space. The animation produced should look like:</p>
+<p>This code produced 50 ".png" images which were later mixed (using e.g. www.gifmaker.me) into a single ".gif" animation. The output figures have a dpi=60 and therefore take only a dozen kb of space. The animation produced should look like:</p>
 <p><img alt="Visualizing Animation 1" src="http://i.imgur.com/UyiW2N2.gif" /></p>
               
             </article>
