@@ -68,7 +68,9 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="." title="DynamicalBilliards" class=" md-icon md-icon--home  md-header-nav__button">
+        <a href="." title="DynamicalBilliards" class=" md-logo  md-header-nav__button">
+          
+            <img src="./images/logo.png" width="24" height="24">
           
         </a>
       </div>
@@ -144,7 +146,9 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary">
   <label class="md-nav__title md-nav__title--site" for="drawer">
-    <i class=" md-icon md-icon--home  md-nav__button">
+    <i class=" md-logo  md-nav__button">
+      
+        <img src="./images/logo.png">
       
     </i>
     DynamicalBilliards
@@ -180,8 +184,6 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
-      
-    
     
       <label class="md-nav__link md-nav__link--active" for="toc">
         Introduction
@@ -194,8 +196,6 @@
       
 <nav class="md-nav md-nav--secondary">
   
-  
-    
   
   
     <label class="md-nav__title" for="toc">Table of contents</label>
@@ -211,6 +211,13 @@
         <li class="md-nav__item">
   <a href="#usage" title="Usage" class="md-nav__link">
     Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-animation" title="Example Animation" class="md-nav__link">
+    Example Animation
   </a>
   
 </li>
@@ -334,8 +341,6 @@
 <nav class="md-nav md-nav--secondary">
   
   
-    
-  
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
@@ -350,6 +355,13 @@
         <li class="md-nav__item">
   <a href="#usage" title="Usage" class="md-nav__link">
     Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-animation" title="Example Animation" class="md-nav__link">
+    Example Animation
   </a>
   
 </li>
@@ -369,28 +381,29 @@
                
               
                 
-                <p><a id='Dynamical-Billiards-1'></a></p>
-<h1 id="dynamical-billiards">Dynamical Billiards</h1>
+                  <h1>Introduction</h1>
+                
+                <p><img alt="DynamicalBilliards Logo: The Julia billiard" src="http://i.imgur.com/NKgzYrt.gif" /></p>
 <p><code>DynamicalBilliards.jl</code> is an easy-to-use, modular and extendable Julia package for Dynamical Billiard systems in two dimensions.</p>
-<p><img alt="Example of a dynamical billiard with magnetic field" src="http://i.imgur.com/OasQRyQ.gif" /></p>
 <p>A dynamical billiard is a system where a particle is propagating as a straight line from obstacle-to-obstacle, performing specular reflection at the boundary of the obstacles. Billiard systems have been used extensively in chaos and nonlinear dynamics and played an important role in the development of nonlinear science.</p>
 <p>The "standard" billiard described above can be extended in many ways. The <a href="https://en.wikipedia.org/wiki/Dynamical_billiards">wikipedia page</a> has many examples of different types of billiards. The types that are currently offered by this package, besides the standard one, are magnetic and ray-splitting billiards. In a magnetic billiard the particle's orbit is a circle (like electrons in a perpendicular magnetic field). In ray-splitting (aka semiclassical) billiards the particle may propagate <em>through</em> an obstacle, given some arbitrary transmission and refraction law.</p>
+<p>This package does not support finite-sized particles and, as a result, there is also no support for collision between particles.</p>
 <p><a id='Installation-1'></a></p>
 <h2 id="installation">Installation</h2>
 <hr />
-<p>This package is registered, simply use <code>Pkg.add("DynamicalBilliards")</code> to install it.</p>
+<p>This package is registered, simply use <code>Pkg.add("DynamicalBilliards")</code> to install it. The <a href="https://datseris.github.io/DynamicalBilliards.jl/stable/">stable documentation</a> accompanies the version installed with <code>Pkg.add()</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">PyPlot dependency</p>
-<p>this package has a dependency on <code>PyPlot</code> for its plotting features, because of its maturity, detailed documentation and vast library of features. If you are not sure about how to install PyPlot, simply run the commands: <code>ENV["PYTHON"]=""; Pkg.add("PyCall"); Pkg.add("PyPlot"); using PyPlot;</code></p>
+<p>This package has a dependency on <code>PyPlot</code> for its plotting features, because of its maturity, detailed documentation and vast library of features. If you are not sure about how to install PyPlot, simply run the commands: <code>ENV["PYTHON"]=""; Pkg.add("PyCall"); Pkg.add("PyPlot"); using PyPlot;</code></p>
 </div>
-<p>If you want to use the latest features, compatible with the latest documentation, use <code>Pkg.checkout("DynamicalBilliards")</code>.</p>
-<p>After the first installation, it is advised to run the short tests to be sure that everything works as expected. This will only take about 2-3 minutes:</p>
+<p>If you want to use the latest features, compatible with the <a href="https://datseris.github.io/DynamicalBilliards.jl/latest/">latest documentation</a>, use <code>Pkg.checkout("DynamicalBilliards")</code>.</p>
+<p>After the first installation, it is advised to run the short tests to be sure that everything works as expected. This will only take about 2 minutes:</p>
 <pre class="codehilite"><code class="language-julia">using DynamicalBilliards
-test_options(print_info = false)
+test_options(print_info = true)
 Pkg.test(&quot;DynamicalBilliards&quot;)</code></pre>
 
 
-<p>If you want to see what tests are done, use <code>print_info = true</code> (<code>false</code> is actually the default value). If you use this package for research purposes, you should run the long tests at least one. To do this, pass the keyword argument <code>long_tests = true</code> to the <code>test_options</code> function. These tests take on average 20 minutes to complete.</p>
+<p>If you do not want to see what tests are done, do not use any keywords. If you use this package for scientific research, you should run the long tests at least once. To do this, pass the keyword argument <code>long_tests = true</code> to the <code>test_options</code> function. These tests take on average 20 minutes to complete.</p>
 <p><a id='Usage-1'></a></p>
 <h2 id="usage">Usage</h2>
 <hr />
@@ -404,6 +417,24 @@ Pkg.test(&quot;DynamicalBilliards&quot;)</code></pre>
 <li><a href="./tutorials/examples">Examples page</a></li>
 </ul>
 <p>The <a href="./basic/library">Library</a> section has the docstrings of all exported names in convenient groups.</p>
+<p><a id='Example-Animation-1'></a></p>
+<h2 id="example-animation">Example Animation</h2>
+<p>The animation of a particle inside a "Julia" billiard was generated with the code:</p>
+<pre class="codehilite"><code>using DynamicalBilliards
+
+jbt = billiard_julia()
+p = randominside(bt)
+
+darkblue = (64/255, 99/255, 216/255)
+lightblue = (102/255, 130/255, 223/255)
+okwargs = Dict(:linewidth =&gt; 2.0, :color =&gt; lightblue)
+pkwargs = Dict(:color =&gt; darkblue, :s =&gt; 150.0)
+
+sname = &quot;C:\\****\\anim&quot;
+
+animate_evolution(p, bt, 200; col_to_plot = 7,
+particle_kwargs = pkwargs, orbit_kwargs = okwargs,
+savefigs = true, savename = sname)</code></pre>
               
             </article>
           </div>
