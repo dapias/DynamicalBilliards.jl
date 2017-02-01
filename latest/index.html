@@ -416,9 +416,9 @@ Pkg.test(&quot;DynamicalBilliards&quot;)</code></pre>
 <p><a id='Example-Animation-1'></a></p>
 <h2 id="example-animation">Example Animation</h2>
 <p>The animation of a particle inside a "Julia" billiard was generated with the code:</p>
-<pre class="codehilite"><code>using DynamicalBilliards
+<pre class="codehilite"><code class="language-julia">using DynamicalBilliards
 
-jbt = billiard_julia()
+bt = billiard_julia()
 p = randominside(bt)
 
 darkblue = (64/255, 99/255, 216/255)
@@ -430,7 +430,9 @@ sname = &quot;C:\\****\\anim&quot;
 
 animate_evolution(p, bt, 200; col_to_plot = 7,
 particle_kwargs = pkwargs, orbit_kwargs = okwargs,
-savefigs = true, savename = sname)</code></pre>
+savefigs = true, savename = sname)
+
+#use gifmaker.me to merge all figures into one .gif</code></pre>
               
             </article>
           </div>
