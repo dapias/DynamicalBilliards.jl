@@ -436,22 +436,26 @@
 <h2 id="straight-propagation">Straight Propagation</h2>
 <hr />
 <p>The usage of this package revolves around a single function:</p>
-<pre class="codehilite"><code class="language-julia">evolve!(p::AbstractParticle, bt::Vector{Obstacle}, total_time)</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="o">::</span><span class="n">AbstractParticle</span><span class="p">,</span> <span class="n">bt</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="n">Obstacle</span><span class="p">},</span> <span class="n">total_time</span><span class="p">)</span>
+</pre></div>
 
 
 <p>which evolves a particle <code>p</code> inside a billiard table <code>bt</code> for a given amount of time <code>total_time</code>, while taking care of all the details internally.</p>
 <p>The first step is to define the billiard table <code>bt</code>, which is the system the particle <code>p</code> will propagate in. A billiard table is simply a collection (<code>Vector</code>) of <code>Obstacle</code>s. The most convenient way is to use one of the pre-defined billiard tables offered by the package. For example, let's create a periodic Sinai billiard with disk radius of 0.3 and with one side of length 2 and one of length 1:</p>
-<pre class="codehilite"><code class="language-julia">using DynamicalBilliards
-bt = billiard_sinai(0.3, 2.0, 1.0; setting = &quot;periodic&quot;)</code></pre>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
+<span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_sinai</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">;</span> <span class="n">setting</span> <span class="o">=</span> <span class="s">&quot;periodic&quot;</span><span class="p">)</span>
+</pre></div>
 
 
 <p><em>(for more information about defining billiard tables visit the <a href="../../tutorials/billiard_table">tutorial on defining your own billiard table</a>)</em></p>
 <p>Afterwards, you want to create a particle inside that billiard system. For that, the function <code>randominside(bt::Vector{Obstacle})</code> is provided, which returns a particle with random initial conditions inside the billiard table.</p>
-<pre class="codehilite"><code class="language-julia">p = randominside(bt)</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
+</pre></div>
 
 
 <p>If you want to specify the initial conditions yourself, simply pass them to the <code>Particle</code> constructor, like <code>p = Particle(x0, y0, φ0)</code>. Now you are ready to evolve this particle:</p>
-<pre class="codehilite"><code class="language-julia">ct, poss, vels = evolve!(p, bt, 1000.0)</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">ct</span><span class="p">,</span> <span class="n">poss</span><span class="p">,</span> <span class="n">vels</span> <span class="o">=</span> <span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">)</span>
+</pre></div>
 
 
 <p>The return values of the <code>evolve!()</code> function need some brief explaining: As noted by the "!" at the end of the function, it changes its argument <code>p</code>. Most importantly however, this function also returns the main output expected by a billiard system. This output is a tuple of three vectors:</p>
@@ -462,28 +466,32 @@ bt = billiard_sinai(0.3, 2.0, 1.0; setting = &quot;periodic&quot;)</code></pre>
 </ul>
 <p>The time <code>t[i]</code> is the time necessary to reach state <code>poss[i], vels[i]</code> starting from the state <code>poss[i-1], vels[i-1]</code>. That is why <code>t[1]</code> is always 0 since <code>poss[1], vels[1]</code> are the initial conditions.</p>
 <p>If this output is not convenient for you, the function <code>construct(ct, poss, vels)</code> is provided, which constructs the (continuous) timeseries of the position and velocity, as well as the time-vector, when given the main output of <code>evolve!()</code>:</p>
-<pre class="codehilite"><code class="language-julia">xt, yt, vxt, vyt, ts = construct(ct, poss, vels)</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span> <span class="n">poss</span><span class="p">,</span> <span class="n">vels</span><span class="p">)</span>
+</pre></div>
 
 
 <p>or, by taking advantage of the awesome ellipsis operator, you can do:</p>
-<pre class="codehilite"><code class="language-julia">xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 1000.0)...)</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">)</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
 
 
 <p><a id='Magnetic-Propagation-1'></a></p>
 <h2 id="magnetic-propagation">Magnetic Propagation</h2>
 <hr />
 <p>The are only two differences between magnetic and straight propagation. Firstly, the particle type is not <code>Particle</code> anymore, but <code>MagneticParticle</code>. The latter has an extra field called <code>omega</code> which is the cyclic frequency of rotation (equivalently, the angular velocity). In order to create a <code>MagneticParticle</code> (without using the constructors), you simply provide this extra information to the <code>randominside()</code> function:</p>
-<pre class="codehilite"><code class="language-julia">ω = 0.5
-p = randominside(bt, ω)
-typeof(p) # MagneticParticle
-p.omega   # 0.5</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">ω</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span>
+<span class="n">typeof</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="c"># MagneticParticle</span>
+<span class="n">p</span><span class="o">.</span><span class="n">omega</span>   <span class="c"># 0.5</span>
+</pre></div>
 
 
 <p>To propagate the particle you use the same functions:</p>
-<pre class="codehilite"><code class="language-julia">ct, poss, vels, ω = evolve!(p, bt, 1000.0)  #evolve for magnetic also returns ω
-xt, yt, vxt, vyt, ts = construct(ct, poss, vels, ω, dt)
-# or equivalently:
-xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 1000.0)..., dt)</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">ct</span><span class="p">,</span> <span class="n">poss</span><span class="p">,</span> <span class="n">vels</span><span class="p">,</span> <span class="n">ω</span> <span class="o">=</span> <span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">)</span>  <span class="c">#evolve for magnetic also returns ω</span>
+<span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span> <span class="n">poss</span><span class="p">,</span> <span class="n">vels</span><span class="p">,</span> <span class="n">ω</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+<span class="c"># or equivalently:</span>
+<span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">)</span><span class="o">...</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+</pre></div>
 
 
 <p>As you can see, the second difference is that the additional argument of the angular velocity must also be provided to the <code>construct()</code> function, in order for it to construct circular motion instead of straight motion between collisions. (Note: <code>evolve!()</code> returns 4 arguments for magnetic propagation, making the ellipsis syntax extremely useful!).</p>
@@ -492,7 +500,8 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 1000.0)..., dt)</code></pre>
 <h2 id="ray-splitting">Ray-Splitting</h2>
 <hr />
 <p>No matter how complex ray-splitting processes you want, and irrespectively of how many obstacles in the billiard table can perform ray-splitting, there is only a single difference on the main function call: The <code>evolve!()</code> function is supplemented with a fourth argument, called "ray_splitter":</p>
-<pre class="codehilite"><code class="language-julia">ray_splitter::Dict{Int, Vector{Function}}</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">ray_splitter</span><span class="o">::</span><span class="kt">Dict</span><span class="p">{</span><span class="kt">Int</span><span class="p">,</span> <span class="kt">Vector</span><span class="p">{</span><span class="kt">Function</span><span class="p">}}</span>
+</pre></div>
 
 
 <p>This argument is simply a dictionary which handles all ray-splitting processes in the billiard system. It is a map of the Obstacle index within the billiard table to the ray-splitting functions: (φ is the angle of incidence)</p>
@@ -502,9 +511,10 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 1000.0)..., dt)</code></pre>
 <li>new_ω(ω, where) : Angular velocity after transmission.</li>
 </ul>
 <p>Assuming you have defined a billiard table and a ray-splitter dictionary, the implementation is exactly the same as in the two previous cases: the ray-splitting dictionary is passed to <code>evolve!()</code> as a fourth argument.</p>
-<pre class="codehilite"><code class="language-julia">ray_splitter = Dict(5 =&gt; [foo, bar, baz])
-p = randominside(bt, 4.0)
-xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, ray_splitter)..., 0.01)</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">ray_splitter</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span><span class="mi">5</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">baz</span><span class="p">])</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
+<span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="n">ray_splitter</span><span class="p">)</span><span class="o">...</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+</pre></div>
 
 
 <p>For more information and instructions on defining the "ray_splitter" dictionary visit the <a href="../../tutorials/ray-splitting">Ray-Splitting tutorial here</a>.</p>
@@ -516,24 +526,25 @@ xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, ray_splitter)..., 0.01)</
 <p><a id='Introduction-animation-1'></a></p>
 <h3 id="introduction-animation">Introduction animation</h3>
 <p>The example .gif shown in the introduction, was generated simply with the code:</p>
-<pre class="codehilite"><code class="language-julia">using DynamicalBilliards, PyPlot
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span><span class="p">,</span> <span class="n">PyPlot</span>
 
-bt = billiard_rectangle(1.5, 1.0)
-d1 = Disk([0.45, 0.6], 0.3, &quot;Upper-left Disk&quot;)
-d2 = Disk([1.1, 0.3], 0.15, &quot;Lower-right Disk&quot;)
-d3 = Disk([1.2, 0.8], 0.1, &quot;Small Disk&quot;)
-w1 = FiniteWall([0.0, 0.4], [0.6,0.0], [0.4,0.6], &quot;Diagonal&quot;)
-push!(bt, d1, d2, d3, w1)
-ω = 2.0
-p = randominside(bt, ω)
+<span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_rectangle</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">d1</span> <span class="o">=</span> <span class="n">Disk</span><span class="p">([</span><span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">],</span> <span class="mf">0.3</span><span class="p">,</span> <span class="s">&quot;Upper-left Disk&quot;</span><span class="p">)</span>
+<span class="n">d2</span> <span class="o">=</span> <span class="n">Disk</span><span class="p">([</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="mf">0.15</span><span class="p">,</span> <span class="s">&quot;Lower-right Disk&quot;</span><span class="p">)</span>
+<span class="n">d3</span> <span class="o">=</span> <span class="n">Disk</span><span class="p">([</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s">&quot;Small Disk&quot;</span><span class="p">)</span>
+<span class="n">w1</span> <span class="o">=</span> <span class="n">FiniteWall</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.6</span><span class="p">],</span> <span class="s">&quot;Diagonal&quot;</span><span class="p">)</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">,</span> <span class="n">w1</span><span class="p">)</span>
+<span class="n">ω</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span>
 
-plot_billiard(bt)
-axis(&quot;off&quot;)
-tight_layout()
+<span class="n">plot_billiard</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s">&quot;off&quot;</span><span class="p">)</span>
+<span class="n">tight_layout</span><span class="p">()</span>
 
-sname = &quot;C:\\***\\example&quot;
-plot_evolution(p, bt, 200;
-col_to_plot = 4, savefigs = true, savename = sname)</code></pre>
+<span class="n">sname</span> <span class="o">=</span> <span class="s">&quot;C:</span><span class="se">\\</span><span class="s">***</span><span class="se">\\</span><span class="s">example&quot;</span>
+<span class="n">plot_evolution</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mi">200</span><span class="p">;</span>
+<span class="n">col_to_plot</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">savefigs</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="n">savename</span> <span class="o">=</span> <span class="n">sname</span><span class="p">)</span>
+</pre></div>
 
 
 <p>Afterwards the outputed .png files where merged into a single .gif externally using for example the website gifmaker.me.</p>

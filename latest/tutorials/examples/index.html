@@ -267,6 +267,10 @@
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
     
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Examples
+      </label>
+    
     <a href="./" title="Examples" class="md-nav__link md-nav__link--active">
       Examples
     </a>
@@ -275,6 +279,25 @@
 <nav class="md-nav md-nav--secondary">
   
   
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#julia-logo-billiard" title="Julia-logo Billiard" class="md-nav__link">
+    Julia-logo Billiard
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mean-free-path-of-the-lorentz-gas" title="Mean Free Path of the Lorentz Gas" class="md-nav__link">
+    Mean Free Path of the Lorentz Gas
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
     
@@ -312,6 +335,25 @@
   
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#julia-logo-billiard" title="Julia-logo Billiard" class="md-nav__link">
+    Julia-logo Billiard
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mean-free-path-of-the-lorentz-gas" title="Mean Free Path of the Lorentz Gas" class="md-nav__link">
+    Mean Free Path of the Lorentz Gas
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -327,7 +369,72 @@
                 
                   <h1>Examples</h1>
                 
-                <p>Here there will be examples in the format: Code followed by some animated gif.</p>
+                <p><a id='Julia-logo-Billiard-1'></a></p>
+<h2 id="julia-logo-billiard">Julia-logo Billiard</h2>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span><span class="p">,</span> <span class="n">PyPlot</span>
+
+<span class="n">bt</span> <span class="o">=</span> <span class="n">Obstacle</span><span class="p">[]</span>
+<span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_rectangle</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">w</span> <span class="kp">in</span> <span class="n">bt</span>
+  <span class="n">plot_obstacle</span><span class="p">(</span><span class="n">w</span><span class="p">;</span> <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="mf">0.165</span>
+<span class="n">ewidth</span> <span class="o">=</span> <span class="mf">6.0</span>
+<span class="n">redcent</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.28</span><span class="p">,</span> <span class="mf">0.32</span><span class="p">]</span>
+<span class="n">red</span> <span class="o">=</span> <span class="n">Disk</span><span class="p">(</span><span class="n">redcent</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="s">&quot;red&quot;</span><span class="p">)</span>
+<span class="n">plot_obstacle</span><span class="p">(</span><span class="n">red</span><span class="p">;</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">203</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">60</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">51</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span>
+<span class="n">facecolor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">213</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">99</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">92</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="n">ewidth</span><span class="p">)</span>
+
+<span class="n">purple</span> <span class="o">=</span> <span class="n">Disk</span><span class="p">([</span><span class="mi">1</span> <span class="o">-</span> <span class="n">redcent</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">redcent</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">r</span><span class="p">,</span> <span class="s">&quot;purple&quot;</span><span class="p">)</span>
+<span class="n">plot_obstacle</span><span class="p">(</span><span class="n">purple</span><span class="p">;</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">149</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">88</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">178</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span>
+<span class="n">facecolor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">170</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">121</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">193</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="n">ewidth</span><span class="p">)</span>
+
+<span class="n">green</span> <span class="o">=</span> <span class="n">Disk</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">redcent</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">r</span><span class="p">,</span> <span class="s">&quot;green&quot;</span><span class="p">)</span>
+<span class="n">plot_obstacle</span><span class="p">(</span><span class="n">green</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">56</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">152</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">38</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span>
+<span class="n">facecolor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">96</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">173</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">81</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="n">ewidth</span><span class="p">)</span>
+
+<span class="n">push!</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">red</span><span class="p">,</span> <span class="n">purple</span><span class="p">,</span> <span class="n">green</span><span class="p">)</span>
+<span class="c"># particle colors</span>
+<span class="n">darkblue</span> <span class="o">=</span> <span class="p">(</span><span class="mi">64</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">99</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">216</span><span class="o">/</span><span class="mi">255</span><span class="p">)</span>
+<span class="n">lightblue</span> <span class="o">=</span> <span class="p">(</span><span class="mi">102</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">130</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">223</span><span class="o">/</span><span class="mi">255</span><span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
+
+<span class="n">PyPlot</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&quot;off&quot;</span><span class="p">)</span>
+<span class="n">PyPlot</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">PyPlot</span><span class="o">.</span><span class="n">gca</span><span class="p">()[</span><span class="o">:</span><span class="n">set_aspect</span><span class="p">](</span><span class="s">&quot;equal&quot;</span><span class="p">)</span>
+<span class="n">PyPlot</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="n">PyPlot</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">)</span>
+
+<span class="n">okwargs</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span><span class="o">:</span><span class="n">linewidth</span> <span class="o">=&gt;</span> <span class="mf">2.0</span><span class="p">,</span> <span class="o">:</span><span class="n">color</span> <span class="o">=&gt;</span> <span class="n">lightblue</span><span class="p">)</span>
+<span class="n">pkwargs</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span><span class="o">:</span><span class="n">color</span> <span class="o">=&gt;</span> <span class="n">darkblue</span><span class="p">,</span> <span class="o">:</span><span class="n">s</span> <span class="o">=&gt;</span> <span class="mf">150.0</span><span class="p">)</span>
+
+<span class="c"># create and save the animation:</span>
+<span class="n">sname</span> <span class="o">=</span> <span class="s">&quot;C:</span><span class="se">\\</span><span class="s">***</span><span class="se">\\</span><span class="s">anim&quot;</span>
+<span class="n">animate_evolution</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mi">200</span><span class="p">;</span> <span class="n">col_to_plot</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span>
+<span class="n">particle_kwargs</span> <span class="o">=</span> <span class="n">pkwargs</span><span class="p">,</span> <span class="n">orbit_kwargs</span> <span class="o">=</span> <span class="n">okwargs</span><span class="p">,</span>
+<span class="n">savefigs</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="n">savename</span> <span class="o">=</span> <span class="n">sname</span><span class="p">)</span>
+</pre></div>
+
+
+<p>produces:</p>
+<p><img alt="Julia-logo billiard animation" src="http://i.imgur.com/EtKof48.gif" /></p>
+<p><a id='Mean-Free-Path-of-the-Lorentz-Gas-1'></a></p>
+<h2 id="mean-free-path-of-the-lorentz-gas">Mean Free Path of the Lorentz Gas</h2>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
+<span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_lorentz</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span> <span class="c">#alias for billiard_sinai(setting = &quot;periodic&quot;)</span>
+<span class="n">mfp</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="kp">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">100</span>
+  <span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
+  <span class="n">ct</span><span class="p">,</span> <span class="n">poss</span><span class="p">,</span> <span class="n">vels</span> <span class="o">=</span> <span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">)</span>
+  <span class="n">mfp</span> <span class="o">+=</span> <span class="n">mean</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">3</span><span class="o">:</span><span class="k">end</span><span class="p">])</span> <span class="c">#skip first two entries because they are not &quot;full&quot; collisions</span>
+<span class="k">end</span>
+<span class="n">mfp</span> <span class="o">/=</span> <span class="mi">100</span>
+</pre></div>
+
+
+<p>gives the value of </p>
               
             </article>
           </div>

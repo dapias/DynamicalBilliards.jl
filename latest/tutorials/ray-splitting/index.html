@@ -463,10 +463,11 @@
 <p>There is a simple reason for having extra Types to support ray-splitting: non ray-splitting Types  always perform 2 less operations in their innermost loops, saving a bit of time. Also, ray-splitting obstacles are defined as <code>type</code> instead of as <code>immutable</code>.</p>
 </blockquote>
 <p>Let's add an <code>Antidot</code> to a billiard table:</p>
-<pre class="codehilite"><code class="language-julia">using DynamicalBilliards
-bt = billiard_rectangle()
-a = Antidot([0.5,0.5], 0.3)
-push!(bt, a)</code></pre>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
+<span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_rectangle</span><span class="p">()</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">Antidot</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="mf">0.3</span><span class="p">)</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</pre></div>
 
 
 <p><a id='Ray-Splitting-Functions-1'></a></p>
@@ -481,33 +482,36 @@ push!(bt, a)</code></pre>
 <p><a id='Ray-Splitter-Dictionary-1'></a></p>
 <h2 id="ray-splitter-dictionary">Ray-Splitter Dictionary</h2>
 <p>To pass the information of the aforementioned functions into the main API (<code>evolve!()</code>) a dictionary is required, which we will call "raysplitter": <code>raysplitter::Dict{Int, Vector{Function}}</code>. The keys are integers and the values are vectors of functions.  This dictionary is a map of the obstacle index within the billiard table to the ray-splitting functions. For example, if we wanted to allocate ray-splitting functions for the 5th obstacle in our billiard table, which could be e.g. an <code>Antidot</code>, we would write something like:</p>
-<pre class="codehilite"><code class="language-julia">sa = (θ, where, ω) -&gt; where ? 2θ : 0.5θ
-T = (θ, where, ω) -&gt; begin
-  if where
-    abs(θ) &lt; π/4 ? 0.5exp(-(θ)^2/2(π/8)^2) : 0.0
-  else
-    0.75*exp(-(θ)^2/2(π/4)^2)
-  end
-end
-newo = (ω, bool) -&gt; bool ? -0.5ω : -2ω
-raysplitter = Dict(5 =&gt; [T, sa, newo])</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">sa</span> <span class="o">=</span> <span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">where</span> <span class="o">?</span> <span class="mi">2</span><span class="n">θ</span> <span class="o">:</span> <span class="mf">0.5</span><span class="n">θ</span>
+<span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">begin</span>
+  <span class="k">if</span> <span class="n">where</span>
+    <span class="n">abs</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">π</span><span class="o">/</span><span class="mi">4</span> <span class="o">?</span> <span class="mf">0.5</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">(</span><span class="nb">π</span><span class="o">/</span><span class="mi">8</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span> <span class="o">:</span> <span class="mf">0.0</span>
+  <span class="k">else</span>
+    <span class="mf">0.75</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">(</span><span class="nb">π</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+<span class="n">newo</span> <span class="o">=</span> <span class="p">(</span><span class="n">ω</span><span class="p">,</span> <span class="n">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bool</span> <span class="o">?</span> <span class="o">-</span><span class="mf">0.5</span><span class="n">ω</span> <span class="o">:</span> <span class="o">-</span><span class="mi">2</span><span class="n">ω</span>
+<span class="n">raysplitter</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span><span class="mi">5</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">sa</span><span class="p">,</span> <span class="n">newo</span><span class="p">])</span>
+</pre></div>
 
 
 <p>Notice the following two very important points: The functions <strong>must accept the specific number of arguments shown in the previous section</strong> even if some are not used. Also, the functions must be given <strong>in the specific order: 1. transmission probability, 2. refraction angle, 3. new ω</strong> in the vector passed to the dictionary.</p>
 <p>The next step is very simple: the <code>raysplitter</code> dictionary is directly passed into <code>evolve!()</code> as a fourth argument.  Using the billiard table we defined previously, where its 5th element is a ray-splitting <code>Antidot</code>, we now do:</p>
-<pre class="codehilite"><code class="language-julia">ω = 4.0
-p = randominside(bt, ω)
-xt, yt, vxt, vyt, ts = construct(evolve!(p, bt, 100.0, raysplitter)..., dt = 0.05)
-plot_billiard(bt)
-plot(xt, yt)</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">ω</span> <span class="o">=</span> <span class="mf">4.0</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span>
+<span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="n">raysplitter</span><span class="p">)</span><span class="o">...</span><span class="p">,</span> <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="n">plot_billiard</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">)</span>
+</pre></div>
 
 
 <p>and everything works like a charm! A final difference to be noted is that in the case of ray-splitting with magnetic fields, the fourth value returned by <code>evolve!()</code> is not a number, but a vector of angular velocities <code>omegas</code>. The value <code>omegas[i]</code> is the angular velocity the particle has while propagating from state <code>pos[i], vel[i]</code> to state <code>pos[i+1], vel[i+1]</code>. The <code>construct()</code> function takes this into account.</p>
 <p><a id='No-field-"where"-error-1'></a></p>
 <h3 id="no-field-where-error">No field "where" error</h3>
 <p>If you ever encounter the error <code>ERROR: type SomeObstacleType has no field where</code> this means that the index provided by your ray-splitting dictionary points to an object that does not support ray-splitting. Use the functions:</p>
-<pre class="codehilite"><code class="language-julia">acceptable_raysplitter(raysplitter, bt)
-supports_raysplitting(obst::Obstacle)</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">acceptable_raysplitter</span><span class="p">(</span><span class="n">raysplitter</span><span class="p">,</span> <span class="n">bt</span><span class="p">)</span>
+<span class="n">supports_raysplitting</span><span class="p">(</span><span class="n">obst</span><span class="o">::</span><span class="n">Obstacle</span><span class="p">)</span>
+</pre></div>
 
 
 <p>to find out what you did wrong. Most likely, the index you supported was incorrect, i.e. the index could be <code>5</code> instead of <code>4</code>.</p>

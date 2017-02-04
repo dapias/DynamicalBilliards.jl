@@ -413,38 +413,42 @@
 <p><a id='Plotting-the-Billiard-Table-1'></a></p>
 <h2 id="plotting-the-billiard-table">Plotting the Billiard Table</h2>
 <p>The function <code>plot_obstacle(obst::Obstacle; kwargs...)</code> plots the obstacle on the current PyPlot figure. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>). For example:</p>
-<pre class="codehilite"><code class="language-julia">using DynamicalBilliards, PyPlot
-bt = billiard_sinai(0.3)
-# Plot disk:
-plot_obstacle(bt[5])
-# Plot left wall:
-plot_obstacle(bt[1])
-# Plot right wall with different settings:
-plot_obstacle(bt[2]; linewidth = 3.0, linestyle = &quot;dashed&quot;, color = (1.0, 0.5, 0.5))
-# Set limits for the purpose of the tutorial
-xlim(-0.1, 1.1); ylim(-0.1, 1.1)</code></pre>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span><span class="p">,</span> <span class="n">PyPlot</span>
+<span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_sinai</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="c"># Plot disk:</span>
+<span class="n">plot_obstacle</span><span class="p">(</span><span class="n">bt</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+<span class="c"># Plot left wall:</span>
+<span class="n">plot_obstacle</span><span class="p">(</span><span class="n">bt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c"># Plot right wall with different settings:</span>
+<span class="n">plot_obstacle</span><span class="p">(</span><span class="n">bt</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="s">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="c"># Set limits for the purpose of the tutorial</span>
+<span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">);</span> <span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+</pre></div>
 
 
 <p>will plot something like this:</p>
 <p><img alt="Visualizing tutorial 1" src="http://i.imgur.com/lrDStnP.png" /></p>
 <p>If you want to quickly plot the entire billiard table without changing the settings, simply use the function  <code>plot_billiard(bt)</code>:</p>
-<pre class="codehilite"><code class="language-julia">bt = billiard_polygon(6, 1)
-a = Antidot([0.0,0.0], 0.5)
-push!(bt, a)
-plot_billiard(bt)</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_polygon</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">Antidot</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+<span class="n">plot_billiard</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
+</pre></div>
 
 
 <p>which will plot something like this:</p>
 <p><img alt="Visualizing tutorial 2" src="http://i.imgur.com/46AomXm.png" /></p>
-<p><code>plot_billiard()</code> also sets up the axis to have equal aspect ration and sets up the axis limits to be large enough to contain the entire billiard.</p>
+<p><code>plot_billiard()</code> also sets up the axis to have equal aspect ratio and sets up the axis limits to be just large enough to contain the entire billiard.</p>
 <p><a id='Plotting-particles-1'></a></p>
 <h2 id="plotting-particles">Plotting particles</h2>
 <p>Following the above example, we create and plot a particle using the function <code>plot_particle</code>:</p>
-<pre class="codehilite"><code class="language-julia">p = randominside(bt)
-plot_particle(p)
-# Plot one more particle with purple color. pentagon shape and bigger size (default is s=30):
-p2 = randominside(bt)
-plot_particle(p2; color=(0.5, 0, 0.8), marker=&quot;p&quot;, s=60.0)</code></pre>
+<div class="codehilite"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
+<span class="n">plot_particle</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="c"># Plot one more particle with purple color,</span>
+<span class="c"># pentagon shape and bigger size (default is s=30):</span>
+<span class="n">p2</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
+<span class="n">plot_particle</span><span class="p">(</span><span class="n">p2</span><span class="p">;</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s">&quot;p&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">60.0</span><span class="p">)</span>
+</pre></div>
 
 
 <p>which should give you something like this (notice that the particle position and direction are random):</p>
@@ -463,18 +467,19 @@ plot_particle(p2; color=(0.5, 0, 0.8), marker=&quot;p&quot;, s=60.0)</code></pre
 <h2 id="animating-the-motion-of-a-particle">Animating the motion of a particle</h2>
 <p>The function <code>animate_evolution</code> is provided to animate the evolution of a particle from collision to collision, using the default arguments. Its <a href="../../basic/library/#DynamicalBilliards.animate_evolution">documentation string</a> contains all the information necessary for its usage.</p>
 <p>Automatic output into an animated image (e.g. ".gif" format) is not yet supported. However, <code>animate_evolution</code> gives users the possibility to save each produce figure in order to merge as an animation using an external tool.</p>
-<p>Let's animate a particle inside a simple pentagon:</p>
-<pre class="codehilite"><code class="language-julia">bt = billiard_polygon(5, 1)
-a = Disk([0.0,0.0], 0.4)
-push!(bt, a)
-plot_billiard(bt)
+<p>Let's animate a particle inside a simple pentagon with magnetic field:</p>
+<div class="codehilite"><pre><span></span><span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_polygon</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">Disk</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="mf">0.4</span><span class="p">)</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+<span class="n">plot_billiard</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
 
-p = randominside(bt, 1.0)
-savedir = &quot;C:\\some_path\\anim1&quot;
-animate_evolution(p, bt, 50; savefigs = true, savename = savedir)</code></pre>
+<span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c"># second argument is magnetic field strength</span>
+<span class="n">savedir</span> <span class="o">=</span> <span class="s">&quot;C:</span><span class="se">\\</span><span class="s">some_path</span><span class="se">\\</span><span class="s">anim1&quot;</span>
+<span class="n">animate_evolution</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mi">50</span><span class="p">;</span> <span class="n">savefigs</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="n">savename</span> <span class="o">=</span> <span class="n">savedir</span><span class="p">)</span>
+</pre></div>
 
 
-<p>This code produced 50 ".png" images which were later mixed (using e.g. www.gifmaker.me) into a single ".gif" animation. The output figures have a dpi=60 and therefore take only a dozen kb of space. The animation produced should look like:</p>
+<p>This code produced 50 ".png" images which were later mixed (using e.g. <a href="../www.gifmaker.me">gifmaker</a> into a single ".gif" animation. The output figures have a dpi=60 and therefore take only a dozen kb of space. The animation produced should look like:</p>
 <p><img alt="Visualizing Animation 1" src="http://i.imgur.com/UyiW2N2.gif" /></p>
               
             </article>

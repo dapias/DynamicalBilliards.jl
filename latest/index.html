@@ -398,9 +398,10 @@
 </div>
 <p>If you want to use the latest features, compatible with the <a href="https://datseris.github.io/DynamicalBilliards.jl/latest/">latest documentation</a>, use <code>Pkg.checkout("DynamicalBilliards")</code>.</p>
 <p>After the first installation, it is advised to run the short tests to be sure that everything works as expected. This will only take about 2 minutes:</p>
-<pre class="codehilite"><code class="language-julia">using DynamicalBilliards
-test_options(print_info = true)
-Pkg.test(&quot;DynamicalBilliards&quot;)</code></pre>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
+<span class="n">test_options</span><span class="p">(</span><span class="n">print_info</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span>
+<span class="n">Pkg</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s">&quot;DynamicalBilliards&quot;</span><span class="p">)</span>
+</pre></div>
 
 
 <p>If you do not want to see what tests are done, do not use any keywords. If you use this package for scientific research, you should run the long tests at least once. To do this, pass the keyword argument <code>long_tests = true</code> to the <code>test_options</code> function. These tests take on average 20 minutes to complete.</p>
@@ -408,7 +409,7 @@ Pkg.test(&quot;DynamicalBilliards&quot;)</code></pre>
 <h2 id="usage">Usage</h2>
 <hr />
 <p>For a crash course on how to use <code>DynamicalBilliards.jl</code>, you should visit the <a href="./basic/basic_usage">Basic Usage</a> section.</p>
-<p>If however, you want to make the most out if, the following tutorials offer detailed descriptions:</p>
+<p>If however, you want to make the most out it, the following tutorials offer detailed descriptions:</p>
 <ul>
 <li><a href="./tutorials/billiard_table">How to define your custom Billiard Table</a></li>
 <li><a href="./tutorials/ray-splitting">Using Ray-Splitting billiards</a></li>
@@ -420,24 +421,25 @@ Pkg.test(&quot;DynamicalBilliards&quot;)</code></pre>
 <p><a id='Julia-Billiard-Animation-1'></a></p>
 <h2 id="julia-billiard-animation">Julia Billiard Animation</h2>
 <p>The animation of a particle inside a "Julia" billiard was generated with the code:</p>
-<pre class="codehilite"><code class="language-julia">using DynamicalBilliards
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
 
-bt = billiard_julia(plotit = true)
-p = randominside(bt)
+<span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_julia</span><span class="p">(</span><span class="n">plotit</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
 
-darkblue = (64/255, 99/255, 216/255)
-lightblue = (102/255, 130/255, 223/255)
-okwargs = Dict(:linewidth =&gt; 2.0, :color =&gt; lightblue)
-pkwargs = Dict(:color =&gt; darkblue, :s =&gt; 150.0)
+<span class="n">darkblue</span> <span class="o">=</span> <span class="p">(</span><span class="mi">64</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">99</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">216</span><span class="o">/</span><span class="mi">255</span><span class="p">)</span>
+<span class="n">lightblue</span> <span class="o">=</span> <span class="p">(</span><span class="mi">102</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">130</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">223</span><span class="o">/</span><span class="mi">255</span><span class="p">)</span>
+<span class="n">okwargs</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span><span class="o">:</span><span class="n">linewidth</span> <span class="o">=&gt;</span> <span class="mf">2.0</span><span class="p">,</span> <span class="o">:</span><span class="n">color</span> <span class="o">=&gt;</span> <span class="n">lightblue</span><span class="p">)</span>
+<span class="n">pkwargs</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span><span class="o">:</span><span class="n">color</span> <span class="o">=&gt;</span> <span class="n">darkblue</span><span class="p">,</span> <span class="o">:</span><span class="n">s</span> <span class="o">=&gt;</span> <span class="mf">150.0</span><span class="p">)</span>
 
-sname = &quot;C:\\****\\anim&quot;
+<span class="n">sname</span> <span class="o">=</span> <span class="s">&quot;C:</span><span class="se">\\</span><span class="s">****</span><span class="se">\\</span><span class="s">anim&quot;</span>
 
-animate_evolution(p, bt, 200; col_to_plot = 7,
-particle_kwargs = pkwargs, orbit_kwargs = okwargs,
-savefigs = true, savename = sname)
+<span class="n">animate_evolution</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mi">200</span><span class="p">;</span> <span class="n">col_to_plot</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span>
+<span class="n">particle_kwargs</span> <span class="o">=</span> <span class="n">pkwargs</span><span class="p">,</span> <span class="n">orbit_kwargs</span> <span class="o">=</span> <span class="n">okwargs</span><span class="p">,</span>
+<span class="n">savefigs</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="n">savename</span> <span class="o">=</span> <span class="n">sname</span><span class="p">)</span>
 
-# use gifmaker.me to merge all figures into one .gif
-# in a future upadte, automatic support will be added</code></pre>
+<span class="c"># use gifmaker.me to merge all figures into one .gif</span>
+<span class="c"># in a future upadte, automatic support will be added</span>
+</pre></div>
               
             </article>
           </div>
