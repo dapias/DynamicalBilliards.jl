@@ -425,16 +425,17 @@
 <div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
 <span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_lorentz</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span> <span class="c">#alias for billiard_sinai(setting = &quot;periodic&quot;)</span>
 <span class="n">mfp</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="k">for</span> <span class="n">i</span> <span class="kp">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">100</span>
+<span class="k">for</span> <span class="n">i</span> <span class="kp">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">1000</span>
   <span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
-  <span class="n">ct</span><span class="p">,</span> <span class="n">poss</span><span class="p">,</span> <span class="n">vels</span> <span class="o">=</span> <span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">)</span>
-  <span class="n">mfp</span> <span class="o">+=</span> <span class="n">mean</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">3</span><span class="o">:</span><span class="k">end</span><span class="p">])</span> <span class="c">#skip first two entries because they are not &quot;full&quot; collisions</span>
+  <span class="n">ct</span><span class="p">,</span> <span class="n">poss</span><span class="p">,</span> <span class="n">vels</span> <span class="o">=</span> <span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">10000.0</span><span class="p">)</span>
+  <span class="c">#skip first two entries because they are not &quot;full&quot; collisions:</span>
+  <span class="n">mfp</span> <span class="o">+=</span> <span class="n">mean</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">3</span><span class="o">:</span><span class="k">end</span><span class="p">])</span>
 <span class="k">end</span>
-<span class="n">mfp</span> <span class="o">/=</span> <span class="mi">100</span>
+<span class="n">mfp</span> <span class="o">/=</span> <span class="mi">1000</span>
 </pre></div>
 
 
-<p>gives the value of </p>
+<p>gives the value of <code>2.1899...</code> which is very close to the analytic result: $\frac{1-\pi r^2 }{2r} = 2.18584$ which you can find for example <a href="http://www.cmls.polytechnique.fr/perso/golse/Surveys/FGIcmp03.pdf">here</a></p>
               
             </article>
           </div>
