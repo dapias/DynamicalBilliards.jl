@@ -293,19 +293,6 @@
     Physics
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#velocity-measure" title="Velocity measure" class="md-nav__link">
-    Velocity measure
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
@@ -359,6 +346,17 @@
     
       <a href="../../basic/library/" title="Library" class="md-nav__link">
         Library
+      </a>
+    
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item">
+    
+      <a href="../../physics/" title="Physics" class="md-nav__link">
+        Physics
       </a>
     
   </li>
@@ -423,19 +421,6 @@
     Physics
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#velocity-measure" title="Velocity measure" class="md-nav__link">
-    Velocity measure
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
@@ -460,7 +445,7 @@
 <h2 id="ray-splitting-obstacles">Ray-Splitting Obstacles</h2>
 <p>First, an obstacle that supports ray-splitting is required to be present in your billiard table. The only new feature these obstacles have is an additional Boolean field called <code>where</code>. This field notes on which side of the obstacle the particle is currently propagating <em>(if you are wondering how a distance can change sign, see the tutorial on Defining your own Obstacles)</em>. The normal vector as well as the distance from boundary change sign depending on the value of <code>where</code>. The obstacles <code>Antidot</code> and <code>SplitterWall</code> are the equivalents of disk and wall for ray-splitting. To make your own defined obstacle support ray-splitting, visit this tutorial.</p>
 <blockquote>
-<p>There is a simple reason for having extra Types to support ray-splitting: non ray-splitting Types  always perform 2 less operations in their innermost loops, saving a bit of time. Also, ray-splitting obstacles are defined as <code>type</code> instead of as <code>immutable</code>.</p>
+<p>There is a simple reason for having extra Types to support ray-splitting: non ray-splitting Types always perform 2 less operations in their innermost loops, saving a bit of time. Also, ray-splitting obstacles are defined as <code>type</code> instead of as <code>immutable</code>.</p>
 </blockquote>
 <p>Let's add an <code>Antidot</code> to a billiard table:</p>
 <div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
@@ -474,14 +459,14 @@
 <h2 id="ray-splitting-functions">Ray-Splitting Functions</h2>
 <p>Secondly, for each obstacle in your billiard table that will perform ray-splitting, you have to define 3 functions. Notice that not every obstacle that supports ray-splitting actually has to perform it; it is up to the user. Those 3 functions are the following:</p>
 <ol>
-<li>T(φ, <code>where</code>, ω) : Takes as input the angle of incidence φ and returns the transmission probability Τ depending on  whether the particle is inside or outside the obstacle (<code>where</code>) and optionally depending on ω.  This function should be an even function with respect to φ.</li>
-<li>θ(φ, <code>where</code>, ω) : Takes as input the angle of incidence     φ and returns the the transmission (aka refraction)  angle θ  depending on whether the particle is inside or outside the obstacle (<code>where</code>) and optionally depending on ω.  This function should be an odd function with respect to φ.</li>
+<li>T(φ, <code>where</code>, ω) : Takes as input the angle of incidence φ and returns the transmission probability Τ depending on whether the particle is inside or outside the obstacle (<code>where</code>) and optionally depending on ω. This function should be an even function with respect to φ.</li>
+<li>θ(φ, <code>where</code>, ω) : Takes as input the angle of incidence     φ and returns the the transmission (aka refraction)  angle θ depending on whether the particle is inside or outside the obstacle (<code>where</code>) and optionally depending on ω. This function should be an odd function with respect to φ.</li>
 <li>ω_new(ω, <code>where</code>) : Angular velocity after transmission.</li>
 </ol>
 <p>The above three functions use the <strong>same convention</strong>: the argument <code>where</code> is the one the Obstacle has <strong>before transmission</strong>. For example, if a particle is outside a disk (let <code>where = true</code> here) and is transmitted inside the disk (<code>where</code> becomes <code>false</code> here), then all three functions will be given their second argument (the boolean one) as <code>true</code>!</p>
 <p><a id='Ray-Splitter-Dictionary-1'></a></p>
 <h2 id="ray-splitter-dictionary">Ray-Splitter Dictionary</h2>
-<p>To pass the information of the aforementioned functions into the main API (<code>evolve!()</code>) a dictionary is required, which we will call "raysplitter": <code>raysplitter::Dict{Int, Vector{Function}}</code>. The keys are integers and the values are vectors of functions.  This dictionary is a map of the obstacle index within the billiard table to the ray-splitting functions. For example, if we wanted to allocate ray-splitting functions for the 5th obstacle in our billiard table, which could be e.g. an <code>Antidot</code>, we would write something like:</p>
+<p>To pass the information of the aforementioned functions into the main API (<code>evolve!()</code>) a dictionary is required, which we will call "raysplitter": <code>raysplitter::Dict{Int, Vector{Function}}</code>. The keys are integers and the values are vectors of functions. This dictionary is a map of the obstacle index within the billiard table to the ray-splitting functions. For example, if we wanted to allocate ray-splitting functions for the 5th obstacle in our billiard table, which could be e.g. an <code>Antidot</code>, we would write something like:</p>
 <div class="codehilite"><pre><span></span><span class="n">sa</span> <span class="o">=</span> <span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">where</span> <span class="o">?</span> <span class="mi">2</span><span class="n">θ</span> <span class="o">:</span> <span class="mf">0.5</span><span class="n">θ</span>
 <span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">begin</span>
   <span class="k">if</span> <span class="n">where</span>
@@ -496,7 +481,7 @@
 
 
 <p>Notice the following two very important points: The functions <strong>must accept the specific number of arguments shown in the previous section</strong> even if some are not used. Also, the functions must be given <strong>in the specific order: 1. transmission probability, 2. refraction angle, 3. new ω</strong> in the vector passed to the dictionary.</p>
-<p>The next step is very simple: the <code>raysplitter</code> dictionary is directly passed into <code>evolve!()</code> as a fourth argument.  Using the billiard table we defined previously, where its 5th element is a ray-splitting <code>Antidot</code>, we now do:</p>
+<p>The next step is very simple: the <code>raysplitter</code> dictionary is directly passed into <code>evolve!()</code> as a fourth argument. Using the billiard table we defined previously, where its 5th element is a ray-splitting <code>Antidot</code>, we now do:</p>
 <div class="codehilite"><pre><span></span><span class="n">ω</span> <span class="o">=</span> <span class="mf">4.0</span>
 <span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span>
 <span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="n">raysplitter</span><span class="p">)</span><span class="o">...</span><span class="p">,</span> <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
@@ -514,16 +499,10 @@
 </pre></div>
 
 
-<p>to find out what you did wrong. Most likely, the index you supported was incorrect, i.e. the index could be <code>5</code> instead of <code>4</code>.</p>
+<p>to find out what you did wrong. Most likely, the index you supplied was incorrect, i.e. the index could be <code>5</code> instead of <code>4</code>.</p>
 <p><a id='Physics-1'></a></p>
 <h2 id="physics">Physics</h2>
-<p>The condition for transmission is simply: <code>T(φ, where, ω) &gt; rand()</code>. If it returns <code>true</code>, transmission (i.e. ray-splitting) will happen. Otherwise just specular reflection will take place.</p>
-<p>The three key functions given to the <code>raysplitter</code> dictionary must have some properties in order to have physical meaning, like for example that the scattering probability function is even towards φ. One of these properties is absolutely <strong>mandatory</strong> for this package to work properly. This is the property of total internal reflection, i.e. if the refraction angle is calculated to be greater/equal than π/2, no transmission can happen. <strong>This condition is not assured internally</strong> and thefore you must be sure that your transmission probability function satisfies it. In the above example, the function <code>T</code> makes sure to return 0 in that case.</p>
-<p>In order to test if the <code>raysplitter</code> dictionary you have defined has physical meaning, the function <code>isphysical()</code> is provided. Its <a href="../../basic/library/#DynamicalBilliards.isphysical">documentation string</a> has all the details one should know:</p>
-<p><a id='Velocity-measure-1'></a></p>
-<h3 id="velocity-measure">Velocity measure</h3>
-<p>The <code>MagneticParticle</code> is assumed to always have a velocity vector of measure 1. This simplyfies the formulas used internally to a significant amount. During ray-splitting, the particle may be in areas with different fields, resulting in different angular velocities (result of the "ω_new" function).</p>
-<p>Physically, in such a situation, the velocity measure of the particle will also change. This is not implemented internally by <code>DynamicalBilliards</code>  during the evolution of the particle. However it is very easy to change this after the particle has evolved.</p>
+<p>The condition for transmission is simply: <code>T(φ, where, ω) &gt; rand()</code>. If it returns <code>true</code>, transmission (i.e. ray-splitting) will happen. Otherwise just specular reflection will take place. A more detailed discussion is on the ray-splitting section of the <a href="../../physics#ray-splitting-functions">Physics</a> page.</p>
               
             </article>
           </div>
