@@ -289,8 +289,10 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
-      
     
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Physics
+      </label>
     
     <a href="./" title="Physics" class="md-nav__link md-nav__link--active">
       Physics
@@ -300,8 +302,39 @@
 <nav class="md-nav md-nav--secondary">
   
   
-    
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#implementation" title="Implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ray-splitting-functions" title="Ray-Splitting Functions" class="md-nav__link">
+    Ray-Splitting Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pinned-particles" title="Pinned Particles" class="md-nav__link">
+    Pinned Particles
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#velocity-measure" title="Velocity measure" class="md-nav__link">
+    Velocity measure
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
     
@@ -322,8 +355,39 @@
 <nav class="md-nav md-nav--secondary">
   
   
-    
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#implementation" title="Implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ray-splitting-functions" title="Ray-Splitting Functions" class="md-nav__link">
+    Ray-Splitting Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pinned-particles" title="Pinned Particles" class="md-nav__link">
+    Pinned Particles
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#velocity-measure" title="Velocity measure" class="md-nav__link">
+    Velocity measure
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -338,16 +402,41 @@
                
               
                 
-                <p>Introductory stuff.</p>
+                  <h1>Physics</h1>
+                
+                <p>This page briefly discusses physical aspects of billiard systems.</p>
 <p><a id='Implementation-1'></a></p>
-<h1 id="implementation">Implementation</h1>
+<h2 id="implementation">Implementation</h2>
+<p>Firstly one defines a billiard table and (if desired) the <a href="../tutorials/ray-splitting/#ray-splitter-dictionary">ray-splitting dictionary</a>. Then one creates a particle inside the defined billiard table. The algorithm followed for the propagation of a particle is the following:</p>
+<ol>
+<li>Calculate the <code>collisiontime()</code> for <strong>all</strong> obstacles in the billiard table.</li>
+<li>Choose the smallest time and <code>propagate!()</code> the particle for that amount of time. The obstacle corresponding to that minimum time is <code>colobst</code>.</li>
+<li>
+<p><code>resolvecollision!()</code> between the particle and <code>colobst</code>:</p>
+<ol>
+<li>Check whether there is transmission or not: <code>T(φ) &gt; rand()</code></li>
+<li><code>relocate!()</code> the particle accordingly so that it is on the correct side of the billiard table.</li>
+<li>For no transmission, perform <code>spcular!()</code> reflection or <code>periodicity!()</code> conditions.</li>
+<li>Otherwise, implement the ray-splitting algorithm.</li>
+<li>Continue the loop 1-3 for a given amount of time.</li>
+</ol>
+</li>
+</ol>
+<p>In the standard billiard case, one can always exclude the collision with the previous obstacle. However, in both magnetic or ray-splitting cases this is not true anymore. Therefore the same algorithm is applied on all 3 cases for the sake of simplicity.</p>
+<p>Notice that the <code>relocate!()</code> step is actually very important because it takes care that there is not particle "leakage": particles being outside the billiard table due to the finite precision of floating numbers.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The first step of the algorithm is very inefficient, since many of the obstacles (especially in ray-splitting) can be safely excluded from search. If you have better solutions on how to find the minimum collision time you are more than welcome to submit a Pull Request or open an issue to discuss about it.</p>
+</div>
 <p><a id='Ray-Splitting-Functions-1'></a></p>
-<h1 id="ray-splitting-functions">Ray-Splitting Functions</h1>
+<h2 id="ray-splitting-functions">Ray-Splitting Functions</h2>
 <p>The condition for transmission is simply: <code>T(φ, where, ω) &gt; rand()</code>. If it returns <code>true</code>, transmission (i.e. ray-splitting) will happen. As it has already been discussed in the <a href="../tutorials/ray-splitting">Ray-Splitting tutorial</a>, the condition of total internal reflection must be taken care by the user.</p>
 <p>The <a href="../tutorials/ray-splitting/#ray-splitting-functions">three key functions</a> given to the <code>ray-splitter</code> dictionary must have some properties in order to have physical meaning, like for example that the scattering probability function is even towards φ. One of these properties is absolutely <strong>mandatory</strong> for this package to work properly. This is the property of total internal reflection, i.e. if the refraction angle is calculated to be greater/equal than π/2, no transmission can happen. <strong>This condition is not assured internally</strong> and thefore you must be sure that your transmission probability function satisfies it. In the above example, the function <code>T</code> makes sure to return 0 in that case.</p>
 <p>In order to test if the <code>raysplitter</code> dictionary you have defined has physical meaning, the function <code>isphysical()</code> is provided. Its <a href="../basic/library/#DynamicalBilliards.isphysical">documentation string</a> has all the details one should know.</p>
+<p><a id='Pinned-Particles-1'></a></p>
+<h2 id="pinned-particles">Pinned Particles</h2>
 <p><a id='Velocity-measure-1'></a></p>
-<h1 id="velocity-measure">Velocity measure</h1>
+<h2 id="velocity-measure">Velocity measure</h2>
 <p>Both <code>Particle</code> and <code>MagneticParticle</code> are assumed to <strong>always</strong> have a velocity vector of measure 1 during evolution. This simplifies the formulas used internally to a significant amount.</p>
 <p>However, during ray-splitting, the a <code>MagneticParticle</code> may be in areas with different angular velocities (result of the <a href="../tutorials/ray-splitting/#ray-splitting-functions">ω_new</a> function). Physically, in such a situation, the velocity measure of the particle could also change. This change depends on the forces acting on the particle (e.g. magnetic field) as well as the relation of the momentum with the velocity (functional type of kinetic energy).</p>
 <p>In any case, such a change is not accounted for internally by <code>DynamicalBilliards</code>. However it is very easy to implement this by "re-normalizing" the angular velocities you use. Since the "code" velocity has measure one, the rotation radius is given by</p>
