@@ -464,7 +464,12 @@
 <p>The above three functions use the <strong>same convention</strong>: the argument <code>where</code> is the one the Obstacle has <strong>before transmission</strong>. For example, if a particle is outside a disk (let <code>where = true</code> here) and is transmitted inside the disk (<code>where</code> becomes <code>false</code> here), then all three functions will be given their second argument (the boolean one) as <code>true</code>!</p>
 <p><a id='Ray-Splitter-Dictionary-1'></a></p>
 <h2 id="ray-splitter-dictionary">Ray-Splitter Dictionary</h2>
-<p>To pass the information of the aforementioned functions into the main API (<code>evolve!()</code>) a dictionary is required, which we will call "raysplitter": <code>raysplitter::Dict{Int, Vector{Function}}</code>. The keys are integers and the values are vectors of functions. This dictionary is a map of the obstacle index within the billiard table to the ray-splitting functions. For example, if we wanted to allocate ray-splitting functions for the 5th obstacle in our billiard table, which could be e.g. an <code>Antidot</code>, we would write something like:</p>
+<p>To pass the information of the aforementioned functions into the main API (<code>evolve!()</code>) a dictionary is required:</p>
+<div class="codehilite"><pre><span></span><span class="n">raysplitter</span><span class="o">::</span><span class="kt">Dict</span><span class="p">{</span><span class="kt">Int</span><span class="p">,</span> <span class="kt">Vector</span><span class="p">{</span><span class="kt">Function</span><span class="p">}}</span>
+</pre></div>
+
+
+<p>This dictionary is a map of the obstacle index within the billiard table to the ray-splitting functions. For example, if we wanted to allocate ray-splitting functions for the 5th obstacle in our billiard table, which could be e.g. an <code>Antidot</code>, we would write something like:</p>
 <div class="codehilite"><pre><span></span><span class="n">sa</span> <span class="o">=</span> <span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">where</span> <span class="o">?</span> <span class="mi">2</span><span class="n">θ</span> <span class="o">:</span> <span class="mf">0.5</span><span class="n">θ</span>
 <span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">begin</span>
   <span class="k">if</span> <span class="n">where</span>
@@ -480,15 +485,20 @@
 
 <p>Notice the following two very important points: The functions <strong>must accept the specific number of arguments shown in the previous section</strong> even if some are not used. Also, the functions must be given <strong>in the specific order: 1. transmission probability, 2. refraction angle, 3. new ω</strong> in the vector passed to the dictionary.</p>
 <p>The next step is very simple: the <code>raysplitter</code> dictionary is directly passed into <code>evolve!()</code> as a fourth argument. Using the billiard table we defined previously, where its 5th element is a ray-splitting <code>Antidot</code>, we now do:</p>
-<div class="codehilite"><pre><span></span><span class="n">ω</span> <span class="o">=</span> <span class="mf">4.0</span>
+<div class="codehilite"><pre><span></span><span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_rectangle</span><span class="p">()</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">Antidot</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="mf">0.25</span><span class="p">)</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+<span class="n">ω</span> <span class="o">=</span> <span class="mf">1.25</span>
 <span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span>
-<span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="n">raysplitter</span><span class="p">)</span><span class="o">...</span><span class="p">,</span> <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">25.0</span><span class="p">,</span> <span class="n">raysplitter</span><span class="p">)</span><span class="o">...</span><span class="p">)</span>
 <span class="n">plot_billiard</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">)</span>
 </pre></div>
 
 
-<p>and everything works like a charm! A final difference to be noted is that in the case of ray-splitting with magnetic fields, the fourth value returned by <code>evolve!()</code> is not a number, but a vector of angular velocities <code>omegas</code>. The value <code>omegas[i]</code> is the angular velocity the particle has while propagating from state <code>pos[i], vel[i]</code> to state <code>pos[i+1], vel[i+1]</code>. The <code>construct()</code> function takes this into account.</p>
+<p>which should give a result similar to this:</p>
+<p><img alt="Ray-splitting billiard" src="http://i.imgur.com/UfGQfOm.png" /></p>
+<p>A final difference to be noted is that in the case of ray-splitting with magnetic fields, the fourth value returned by <code>evolve!()</code> is not a number, but a vector of angular velocities <code>omegas</code>. The value <code>omegas[i]</code> is the angular velocity the particle has while propagating from state <code>pos[i], vel[i]</code> to state <code>pos[i+1], vel[i+1]</code>. The <code>construct()</code> function takes this into account.</p>
 <p><a id='No-field-"where"-error-1'></a></p>
 <h3 id="no-field-where-error">No field "where" error</h3>
 <p>If you ever encounter the error <code>ERROR: type SomeObstacleType has no field where</code> this means that the index provided by your ray-splitting dictionary points to an object that does not support ray-splitting. Use the functions:</p>
