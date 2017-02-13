@@ -437,10 +437,10 @@
 <h2 id="pinned-particles">Pinned Particles</h2>
 <p>In the case of propagation with magnetic field, a particle may be "pinned": There are no possible collisions that take place and the particle will revolve in circles forever. This can only happen for specific initial conditions that are collision-less.</p>
 <p>In such event, the convention followed by <code>DynamicalBilliards.jl</code> is the following: <code>evolve!()</code> returns the expected output, however all returned vectors have only 2 entries. The collision times always have the entries <code>0.0, Inf</code>. All other returned vectors have the initial conditions, repeated once.</p>
-<p><code>evolve!()</code> can be given the optional keyword argument <code>warning = true</code> in the case of magnetic propagation, which throws a <code>warn()</code> message that a pinned particle was evolved. </p>
+<p><code>evolve!()</code> can be given the optional keyword argument <code>warning = true</code> in the case of magnetic propagation, which throws a <code>warn()</code> message that a pinned particle was evolved.</p>
 <div class="admonition warning">
 <p class="admonition-title">Using <code>construct()</code></p>
-<p>When using the syntax <code>construct(evolve!(p, bt, t)...)</code> be careful that you are sure that there aren't any pinned particles given to evolve. If there are any, construct will result in an error.</p>
+<p>When using the syntax <code>construct(evolve!(p, bt, t)...)</code> be sure that there aren't any pinned particles given to evolve. If there are any, construct will result in an error.</p>
 </div>
 <p><a id='Velocity-measure-1'></a></p>
 <h2 id="velocity-measure">Velocity measure</h2>

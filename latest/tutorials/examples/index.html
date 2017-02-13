@@ -297,6 +297,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#semi-periodic-billiard" title="Semi-Periodic Billiard" class="md-nav__link">
+    Semi-Periodic Billiard
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -359,6 +366,13 @@
         <li class="md-nav__item">
   <a href="#mean-free-path-of-the-lorentz-gas" title="Mean Free Path of the Lorentz Gas" class="md-nav__link">
     Mean Free Path of the Lorentz Gas
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#semi-periodic-billiard" title="Semi-Periodic Billiard" class="md-nav__link">
+    Semi-Periodic Billiard
   </a>
   
 </li>
@@ -451,6 +465,38 @@
 <p>gives the value of <code>2.1899...</code> which is very close to the analytic result:</p>
 <p>$\text{m.f.p.} =  \frac{1-\pi r^2 }{2r} \stackrel{r=0.2}{=} 2.18584$</p>
 <p>which you can find for example <a href="http://www.cmls.polytechnique.fr/perso/golse/Surveys/FGIcmp03.pdf">here</a>.</p>
+<p><a id='Semi-Periodic-Billiard-1'></a></p>
+<h2 id="semi-periodic-billiard">Semi-Periodic Billiard</h2>
+<p><code>DynamicalBilliards.jl</code> allows for your system to be periodic in only some specific directions. For example, the following code produces a billiard that is periodic on only the x-direction:</p>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
+<span class="n">o</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span> <span class="n">x</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="n">bt</span> <span class="o">=</span> <span class="n">Obstacle</span><span class="p">[]</span>
+
+<span class="n">sp</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="p">,</span><span class="n">o</span><span class="p">];</span> <span class="n">ep</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="p">,</span> <span class="n">y</span><span class="p">];</span> <span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">o</span><span class="p">]</span>
+<span class="n">leftw</span> <span class="o">=</span> <span class="n">PeriodicWall</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">ep</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="s">&quot;Left periodic boundary&quot;</span><span class="p">)</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">o</span><span class="p">];</span> <span class="n">ep</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">];</span> <span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">x</span><span class="p">,</span><span class="n">o</span><span class="p">]</span>
+<span class="n">rightw</span> <span class="o">=</span> <span class="n">PeriodicWall</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">ep</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="s">&quot;Right periodic boundary&quot;</span><span class="p">)</span>
+
+<span class="n">sp</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="p">,</span><span class="n">y</span><span class="p">];</span> <span class="n">ep</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">];</span> <span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="p">,</span><span class="o">-</span><span class="n">y</span><span class="p">]</span>
+<span class="n">topw2</span> <span class="o">=</span> <span class="n">FiniteWall</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">ep</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="s">&quot;Top wall&quot;</span><span class="p">)</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="p">,</span><span class="n">o</span><span class="p">];</span> <span class="n">ep</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">o</span><span class="p">];</span> <span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
+<span class="n">botw2</span> <span class="o">=</span> <span class="n">FiniteWall</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">ep</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="s">&quot;Bottom wall&quot;</span><span class="p">)</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">leftw</span><span class="p">,</span> <span class="n">rightw</span><span class="p">,</span> <span class="n">topw2</span><span class="p">,</span> <span class="n">botw2</span><span class="p">)</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="mf">0.25</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">Disk</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">r</span><span class="p">)</span>
+<span class="n">d2</span> <span class="o">=</span> <span class="n">Disk</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">r</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span><span class="o">...</span><span class="p">)</span>
+<span class="n">plot_billiard</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">)</span>
+<span class="n">plot_particle</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Result:</p>
+<p><img alt="Semi-Periodic Billiard" src="http://i.imgur.com/Dbxmq8y.png" /></p>
               
             </article>
           </div>
