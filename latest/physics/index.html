@@ -411,10 +411,10 @@
 <ol>
 <li>Calculate the <code>collisiontime()</code> for <strong>all</strong> obstacles in the billiard table.</li>
 <li>Choose the smallest time and <code>propagate!()</code> the particle for that amount of time. The obstacle corresponding to that minimum time is <code>colobst</code>.</li>
+<li><code>resolvecollision!()</code> between the particle and <code>colobst</code>:</li>
 <li>
-<p><code>resolvecollision!()</code> between the particle and <code>colobst</code>:</p>
+<p>Check whether there is transmission or not: <code>T(φ) &gt; rand()</code></p>
 <ol>
-<li>Check whether there is transmission or not: <code>T(φ) &gt; rand()</code></li>
 <li><code>relocate!()</code> the particle accordingly so that it is on the correct side of the billiard table.</li>
 <li>For no transmission, perform <code>spcular!()</code> reflection or <code>periodicity!()</code> conditions.</li>
 <li>Otherwise, implement the ray-splitting algorithm.</li>
@@ -435,6 +435,13 @@
 <p>In order to test if the <code>raysplitter</code> dictionary you have defined has physical meaning, the function <code>isphysical()</code> is provided. Its <a href="../basic/library/#DynamicalBilliards.isphysical">documentation string</a> has all the details one should know.</p>
 <p><a id='Pinned-Particles-1'></a></p>
 <h2 id="pinned-particles">Pinned Particles</h2>
+<p>In the case of propagation with magnetic field, a particle may be "pinned": There are no possible collisions that take place and the particle will revolve in circles forever. This can only happen for specific initial conditions that are collision-less.</p>
+<p>In such event, the convention followed by <code>DynamicalBilliards.jl</code> is the following: <code>evolve!()</code> returns the expected output, however all returned vectors have only 2 entries. The collision times always have the entries <code>0.0, Inf</code>. All other returned vectors have the initial conditions, repeated once.</p>
+<p><code>evolve!()</code> can be given the optional keyword argument <code>warning = true</code> in the case of magnetic propagation, which throws a <code>warn()</code> message that a pinned particle was evolved. </p>
+<div class="admonition warning">
+<p class="admonition-title">Using <code>construct()</code></p>
+<p>When using the syntax <code>construct(evolve!(p, bt, t)...)</code> be careful that you are sure that there aren't any pinned particles given to evolve. If there are any, construct will result in an error.</p>
+</div>
 <p><a id='Velocity-measure-1'></a></p>
 <h2 id="velocity-measure">Velocity measure</h2>
 <p>Both <code>Particle</code> and <code>MagneticParticle</code> are assumed to <strong>always</strong> have a velocity vector of measure 1 during evolution. This simplifies the formulas used internally to a significant amount.</p>
