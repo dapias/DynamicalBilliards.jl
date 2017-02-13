@@ -443,10 +443,8 @@
 <p>Ray-splitting is a semiclassical approach to the billiard system, giving a wave attribute to the ray traced by the particle. Upon collision a particle may propagate through an obstacle (transmission &amp; refraction) or be reflected. Following the mindset of this package, implementing a ray-splitting billiard requires only three very simple steps.</p>
 <p><a id='Ray-Splitting-Obstacles-1'></a></p>
 <h2 id="ray-splitting-obstacles">Ray-Splitting Obstacles</h2>
-<p>First, an obstacle that supports ray-splitting is required to be present in your billiard table. The only new feature these obstacles have is an additional Boolean field called <code>where</code>. This field notes on which side of the obstacle the particle is currently propagating <em>(if you are wondering how a distance can change sign, see the tutorial on Defining your own Obstacles)</em>. The normal vector as well as the distance from boundary change sign depending on the value of <code>where</code>. The obstacles <code>Antidot</code> and <code>SplitterWall</code> are the equivalents of disk and wall for ray-splitting. To make your own defined obstacle support ray-splitting, visit this tutorial.</p>
-<blockquote>
-<p>There is a simple reason for having extra Types to support ray-splitting: non ray-splitting Types always perform 2 less operations in their innermost loops, saving a bit of time. Also, ray-splitting obstacles are defined as <code>type</code> instead of as <code>immutable</code>.</p>
-</blockquote>
+<p>First, an obstacle that supports ray-splitting is required to be present in your billiard table. The only new feature these obstacles have is an additional Boolean field called <code>where</code>. This field notes on which side of the obstacle the particle is currently propagating.</p>
+<p>The normal vector as well as the distance from boundary change sign depending on the value of <code>where</code>. The obstacles <code>Antidot</code> and <code>SplitterWall</code> are the equivalents of disk and wall for ray-splitting.</p>
 <p>Let's add an <code>Antidot</code> to a billiard table:</p>
 <div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
 <span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_rectangle</span><span class="p">()</span>
@@ -457,10 +455,10 @@
 
 <p><a id='Ray-Splitting-Functions-1'></a></p>
 <h2 id="ray-splitting-functions">Ray-Splitting Functions</h2>
-<p>Secondly, for each obstacle in your billiard table that will perform ray-splitting, you have to define 3 functions. Notice that not every obstacle that supports ray-splitting actually has to perform it; it is up to the user. Those 3 functions are the following:</p>
+<p>Secondly, for each obstacle in your billiard table that you want to perform ray-splitting, you have to define 3 functions (φ = angle of incidence, ω = angular velocity <em>before</em> transmission):</p>
 <ol>
-<li>T(φ, <code>where</code>, ω) : Takes as input the angle of incidence φ and returns the transmission probability Τ depending on whether the particle is inside or outside the obstacle (<code>where</code>) and optionally depending on ω. This function should be an even function with respect to φ.</li>
-<li>θ(φ, <code>where</code>, ω) : Takes as input the angle of incidence     φ and returns the the transmission (aka refraction)  angle θ depending on whether the particle is inside or outside the obstacle (<code>where</code>) and optionally depending on ω. This function should be an odd function with respect to φ.</li>
+<li>T(φ, <code>where</code>, ω) : Transmission probability Τ depending on whether the particle is inside or outside the obstacle (<code>where</code>) and optionally depending on ω.</li>
+<li>θ(φ, <code>where</code>, ω) : Transmission (aka refraction) angle θ depending on whether the particle is inside or outside the obstacle (<code>where</code>) and optionally depending on ω.</li>
 <li>ω_new(ω, <code>where</code>) : Angular velocity after transmission.</li>
 </ol>
 <p>The above three functions use the <strong>same convention</strong>: the argument <code>where</code> is the one the Obstacle has <strong>before transmission</strong>. For example, if a particle is outside a disk (let <code>where = true</code> here) and is transmitted inside the disk (<code>where</code> becomes <code>false</code> here), then all three functions will be given their second argument (the boolean one) as <code>true</code>!</p>
