@@ -295,6 +295,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#periodic-billiards" title="Periodic Billiards" class="md-nav__link">
+    Periodic Billiards
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -403,6 +410,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#periodic-billiards" title="Periodic Billiards" class="md-nav__link">
+    Periodic Billiards
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -490,8 +504,32 @@
 </pre></div>
 
 
-<p>This code produced 50 ".png" images which were later mixed (using e.g. <a href="../www.gifmaker.me">gifmaker</a> into a single ".gif" animation. The output figures have a dpi=60 and therefore take only a dozen kb of space. The animation produced should look like:</p>
+<p>This code produced 50 ".png" images which were later mixed (using e.g. <a href="../www.gifmaker.me">gifmaker</a>) into a single ".gif" animation. The output figures have a dpi=60 and therefore take only a dozen kb of space. The animation produced should look like:</p>
 <p><img alt="Visualizing Animation 1" src="http://i.imgur.com/UyiW2N2.gif" /></p>
+<p><a id='Periodic-Billiards-1'></a></p>
+<h2 id="periodic-billiards">Periodic Billiards</h2>
+<p>In order to plot periodic billiards, you have need to call a different method of <a href="../../basic/library/#DynamicalBilliards.plot_billiard"><code>plot_billiard</code></a>, since now you also have to specify the limits of plotting. The methods provided are:</p>
+<div class="codehilite"><pre><span></span><span class="n">plot_billiard</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+<span class="n">plot_billiard</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">xt</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Float64</span><span class="p">},</span> <span class="n">yt</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Float64</span><span class="p">})</span>
+</pre></div>
+
+
+<p>The last one conveniently plots the combo of particle-trajectory and periodic-billiard taking care of all the details internally.</p>
+<p>For example, the following code</p>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
+<span class="n">r</span> <span class="o">=</span> <span class="mf">0.25</span>
+<span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_rectangle</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">;</span> <span class="n">setting</span> <span class="o">=</span> <span class="s">&quot;periodic&quot;</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">Disk</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">r</span><span class="p">)</span>
+<span class="n">d2</span> <span class="o">=</span> <span class="n">Disk</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">r</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
+<span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span><span class="o">...</span><span class="p">)</span>
+<span class="n">plot_billiard</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">)</span>
+<span class="n">plot_particle</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+
+
+<p>will produce something like this: <img alt="Periodic Billiard plot" src="http://i.imgur.com/rOpU7sl.png" /></p>
               
             </article>
           </div>
