@@ -304,6 +304,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#ray-splitting" title="Ray-Splitting" class="md-nav__link">
+    Ray-Splitting
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -377,6 +384,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#ray-splitting" title="Ray-Splitting" class="md-nav__link">
+    Ray-Splitting
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -397,6 +411,7 @@
                 <p>This section has some examples of usage of <code>DynamicalBilliards.jl</code>, with some brief comments.</p>
 <p><a id='Julia-logo-Billiard-1'></a></p>
 <h2 id="julia-logo-billiard">Julia-logo Billiard</h2>
+<p>The "Julia-logo" billiard, accessed by <code>billiard_julia()</code> simply wraps this code:</p>
 <div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span><span class="p">,</span> <span class="n">PyPlot</span>
 
 <span class="n">bt</span> <span class="o">=</span> <span class="n">Obstacle</span><span class="p">[]</span>
@@ -444,9 +459,8 @@
 </pre></div>
 
 
-<p>produces:</p>
+<p>and produces:</p>
 <p><img alt="Julia-logo billiard animation" src="http://i.imgur.com/EtKof48.gif" /></p>
-<p>The function <code>billiard_julia(plotit = true)</code> wraps this code, just for fun!</p>
 <p><a id='Mean-Free-Path-of-the-Lorentz-Gas-1'></a></p>
 <h2 id="mean-free-path-of-the-lorentz-gas">Mean Free Path of the Lorentz Gas</h2>
 <div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
@@ -497,6 +511,44 @@
 
 <p>Result:</p>
 <p><img alt="Semi-Periodic Billiard" src="http://i.imgur.com/Dbxmq8y.png" /></p>
+<p><a id='Ray-Splitting-1'></a></p>
+<h2 id="ray-splitting">Ray-Splitting</h2>
+<p>The following code produces an animation of a Ray-Splitting billiard:</p>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span><span class="p">,</span> <span class="n">PyPlot</span>
+
+<span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_rectangle</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">sw</span> <span class="o">=</span> <span class="n">SplitterWall</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">true</span><span class="p">)</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">sw</span><span class="p">)</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">Antidot</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="mf">0.3</span><span class="p">)</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">a1</span><span class="p">)</span>
+<span class="n">a2</span> <span class="o">=</span> <span class="n">Antidot</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="mf">0.2</span><span class="p">)</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
+
+<span class="n">sa</span> <span class="o">=</span> <span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">where</span> <span class="o">?</span> <span class="mf">1.25</span><span class="o">*</span><span class="n">θ</span> <span class="o">:</span> <span class="mf">0.8</span><span class="o">*</span><span class="n">θ</span>
+<span class="n">Tp</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">begin</span>
+  <span class="k">if</span> <span class="n">where</span>
+    <span class="n">abs</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">π</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mf">1.25</span> <span class="o">?</span> <span class="n">p</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">(</span><span class="nb">π</span><span class="o">/</span><span class="mi">8</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span> <span class="o">:</span> <span class="mf">0.0</span>
+  <span class="k">else</span>
+    <span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">(</span><span class="nb">π</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+<span class="n">newo</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bool</span> <span class="o">?</span> <span class="o">-</span><span class="mf">2.0</span><span class="n">x</span> <span class="o">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="n">x</span><span class="p">)</span>
+<span class="n">newo2</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bool</span> <span class="o">?</span> <span class="o">-</span><span class="n">x</span> <span class="o">:</span> <span class="o">-</span><span class="n">x</span><span class="p">)</span>
+<span class="n">rayspl</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span>
+<span class="mi">5</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">Tp</span><span class="p">(</span><span class="mf">0.9</span><span class="p">),</span> <span class="n">sa</span><span class="p">,</span> <span class="n">newo2</span><span class="p">),</span>
+<span class="mi">6</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">Tp</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">sa</span><span class="p">,</span> <span class="n">newo</span><span class="p">),</span>
+<span class="mi">7</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">Tp</span><span class="p">(</span><span class="mf">0.65</span><span class="p">),</span> <span class="n">sa</span><span class="p">,</span> <span class="n">newo</span><span class="p">))</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">plot_billiard</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
+
+<span class="n">savedir</span> <span class="o">=</span> <span class="s">&quot;C:</span><span class="se">\\</span><span class="s">***</span><span class="se">\\</span><span class="s">anim&quot;</span>
+<span class="n">animate_evolution</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">rayspl</span><span class="p">,</span> <span class="n">savefigs</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="n">savename</span> <span class="o">=</span> <span class="n">savedir</span><span class="p">)</span>
+</pre></div>
+
+
+<p>result:</p>
+<p><img alt="Ray-splitter animation" src="http://i.imgur.com/89s0fon.gif" /></p>
               
             </article>
           </div>
