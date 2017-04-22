@@ -461,7 +461,7 @@
 <p><a id='Julia-Billiard-Animation-1'></a></p>
 <h2 id="julia-billiard-animation">Julia Billiard Animation</h2>
 <p>The animation of a particle inside a "Julia" billiard was generated with the code:</p>
-<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span><span class="p">,</span> <span class="n">DynamicalBilliardsPlotting</span>
 
 <span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_julia</span><span class="p">(</span><span class="n">plotit</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span>
 <span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
