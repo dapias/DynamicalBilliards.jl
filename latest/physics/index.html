@@ -441,11 +441,15 @@
 <li>Calculate the <code>collisiontime()</code> for <strong>all</strong> obstacles in the billiard table.</li>
 <li>Choose the smallest time and <code>propagate!()</code> the particle for that amount of time. The obstacle corresponding to that minimum time is <code>colobst</code>.</li>
 <li><code>resolvecollision!()</code> between the particle and <code>colobst</code>:</li>
-<li>Check whether there is transmission or not: <code>T(φ) &gt; rand()</code>, and do:</li>
+<li>
+<p>Check whether there is transmission or not: <code>T(φ) &gt; rand()</code>, and do:</p>
+<ol>
 <li><code>relocate!()</code> the particle accordingly so that it is on the correct side of the billiard table.</li>
 <li>For no transmission, perform <code>specular!()</code> reflection or <code>periodicity!()</code> conditions.</li>
 <li>Otherwise, implement the ray-splitting algorithm (not discussed here).</li>
 <li>Continue the loop 1-3 for a given amount of time.</li>
+</ol>
+</li>
 </ol>
 <p>In the standard billiard case, one can always exclude the collision with the previous obstacle. However, in both magnetic or ray-splitting cases this is not true anymore. Therefore the same algorithm is applied on all 3 cases for the sake of simplicity.</p>
 <p>Notice that the <code>relocate!()</code> step is actually very important because it takes care that there is not particle "leakage": particles being outside the billiard table due to the finite precision of floating numbers.</p>
