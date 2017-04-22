@@ -299,8 +299,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#no-field-where-error" title="No field "where" error" class="md-nav__link">
-    No field "where" error
+  <a href="#no-field-pflag-error" title="No field pflag error" class="md-nav__link">
+    No field pflag error
   </a>
   
 </li>
@@ -441,8 +441,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#no-field-where-error" title="No field "where" error" class="md-nav__link">
-    No field "where" error
+  <a href="#no-field-pflag-error" title="No field pflag error" class="md-nav__link">
+    No field pflag error
   </a>
   
 </li>
@@ -488,8 +488,8 @@
 <p>Ray-splitting is a semi-classical approach to the billiard system, giving a wave attribute to the ray traced by the particle. Upon collision a particle may propagate through an obstacle (transmission &amp; refraction) or be reflected. Following the mindset of this package, implementing a ray-splitting billiard requires only three very simple steps.</p>
 <p><a id='Ray-Splitting-Obstacles-1'></a></p>
 <h2 id="ray-splitting-obstacles">Ray-Splitting Obstacles</h2>
-<p>First, an obstacle that supports ray-splitting is required to be present in your billiard table. The only new feature these obstacles have is an additional Boolean field called <code>where</code>. This field notes on which side of the obstacle the particle is currently propagating.</p>
-<p>The normal vector as well as the distance from boundary change sign depending on the value of <code>where</code>. The obstacles <code>Antidot</code> and <code>SplitterWall</code> are the equivalents of disk and wall for ray-splitting.</p>
+<p>First, an obstacle that supports ray-splitting is required to be present in your billiard table. The only new feature these obstacles have is an additional Boolean field called <code>pflag</code> (propagation flag). This field notes on which side of the obstacle the particle is currently propagating.</p>
+<p>The normal vector as well as the distance from boundary change sign depending on the value of <code>pflag</code>. The obstacles <code>Antidot</code> and <code>SplitterWall</code> are the equivalents of disk and wall for ray-splitting.</p>
 <p>Let's add an <code>Antidot</code> to a billiard table:</p>
 <div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
 <span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_rectangle</span><span class="p">()</span>
@@ -502,11 +502,11 @@
 <h2 id="ray-splitting-functions">Ray-Splitting Functions</h2>
 <p>Secondly, for each obstacle in your billiard table that you want to perform ray-splitting, you have to define 3 functions (φ = angle of incidence, ω = angular velocity <em>before</em> transmission):</p>
 <ol>
-<li>T(φ, <code>where</code>, ω) : Transmission probability Τ depending on whether the particle is inside or outside the obstacle (<code>where</code>) and optionally depending on ω.</li>
-<li>θ(φ, <code>where</code>, ω) : Transmission (aka refraction) angle θ depending on whether the particle is inside or outside the obstacle (<code>where</code>) and optionally depending on ω.</li>
-<li>ω_new(ω, <code>where</code>) : Angular velocity after transmission.</li>
+<li>T(φ, <code>pflag</code>, ω) : Transmission probability Τ depending on whether the particle is inside or outside the obstacle (<code>pflag</code>) and optionally depending on ω.</li>
+<li>θ(φ, <code>pflag</code>, ω) : Transmission (aka refraction) angle θ depending on whether the particle is inside or outside the obstacle (<code>pflag</code>) and optionally depending on ω.</li>
+<li>ω_new(ω, <code>pflag</code>) : Angular velocity after transmission.</li>
 </ol>
-<p>The above three functions use the <strong>same convention</strong>: the argument <code>where</code> is the one the Obstacle has <strong>before transmission</strong>. For example, if a particle is outside a disk (let <code>where = true</code> here) and is transmitted inside the disk (<code>where</code> becomes <code>false</code> here), then all three functions will be given their second argument (the Boolean one) as <code>true</code>!</p>
+<p>The above three functions use the <strong>same convention</strong>: the argument <code>pflag</code> is the one the Obstacle has <strong>before transmission</strong>. For example, if a particle is outside a disk (let <code>pflag = true</code> here) and is transmitted inside the disk (<code>pflag</code> becomes <code>false</code> here), then all three functions will be given their second argument (the Boolean one) as <code>true</code>!</p>
 <p><a id='Ray-Splitter-Dictionary-1'></a></p>
 <h2 id="ray-splitter-dictionary">Ray-Splitter Dictionary</h2>
 <p>To pass the information of the aforementioned functions into the main API a dictionary is required:</p>
@@ -516,9 +516,9 @@
 
 <p>This dictionary is a map of the <strong>obstacle index</strong> within the billiard table to a <strong>container of the ray-splitting functions</strong>. This container could be a <code>Vector</code> or a <code>Tuple</code> and the later is the suggested version.</p>
 <p>For example, if we wanted to allocate ray-splitting functions for the <strong>5th</strong> obstacle in our billiard table, which could be e.g. an <code>Antidot</code>, we would write something like:</p>
-<div class="codehilite"><pre><span></span><span class="n">sa</span> <span class="o">=</span> <span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">where</span> <span class="o">?</span> <span class="mi">2</span><span class="n">θ</span> <span class="o">:</span> <span class="mf">0.5</span><span class="n">θ</span>  <span class="c"># refraction (scatter) angle</span>
-<span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">begin</span>   <span class="c"># Transmission probability</span>
-  <span class="k">if</span> <span class="n">where</span>
+<div class="codehilite"><pre><span></span><span class="n">sa</span> <span class="o">=</span> <span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">pflag</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pflag</span> <span class="o">?</span> <span class="mi">2</span><span class="n">θ</span> <span class="o">:</span> <span class="mf">0.5</span><span class="n">θ</span>  <span class="c"># refraction (scatter) angle</span>
+<span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">pflag</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">begin</span>   <span class="c"># Transmission probability</span>
+  <span class="k">if</span> <span class="n">pflag</span>
     <span class="n">abs</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">π</span><span class="o">/</span><span class="mi">4</span> <span class="o">?</span> <span class="mf">0.5</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">(</span><span class="nb">π</span><span class="o">/</span><span class="mi">8</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span> <span class="o">:</span> <span class="mf">0.0</span>
   <span class="k">else</span>
     <span class="mf">0.75</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">(</span><span class="nb">π</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span>
@@ -541,6 +541,7 @@
 <span class="n">p</span> <span class="o">=</span> <span class="n">randominside</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">ω</span><span class="p">)</span>
 <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.05</span>
 <span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">25.0</span><span class="p">,</span> <span class="n">raysplitter</span><span class="p">)</span><span class="o">...</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+<span class="k">using</span> <span class="n">DynamicalBilliardsPlotting</span><span class="p">,</span> <span class="n">PyPlot</span>
 <span class="n">plot_billiard</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">)</span>
 </pre></div>
@@ -549,9 +550,9 @@
 <p>which should give a result similar to this:</p>
 <p><img alt="Ray-splitting billiard" src="http://i.imgur.com/UfGQfOm.png" /></p>
 <p>A final difference to be noted is that in the case of ray-splitting with magnetic fields, the fourth value returned by <code>evolve!()</code> is not a number, but a vector of angular velocities <code>omegas</code>. The value <code>omegas[i]</code> is the angular velocity the particle has while propagating from state <code>pos[i], vel[i]</code> to state <code>pos[i+1], vel[i+1]</code>. The <code>construct()</code> function takes this into account.</p>
-<p><a id='No-field-"where"-error-1'></a></p>
-<h3 id="no-field-where-error">No field "where" error</h3>
-<p>If you ever encounter the error <code>ERROR: type SomeObstacleType has no field where</code> this means that the index provided by your ray-splitting dictionary points to an object that does not support ray-splitting. Use the functions:</p>
+<p><a id='No-field-pflag-error-1'></a></p>
+<h3 id="no-field-pflag-error">No field <code>pflag</code> error</h3>
+<p>If you ever encounter the error <code>ERROR: type SomeObstacleType has no field pflag</code> this means that the index provided by your ray-splitting dictionary points to an object that does not support ray-splitting. Use the functions:</p>
 <div class="codehilite"><pre><span></span><span class="n">acceptable_raysplitter</span><span class="p">(</span><span class="n">raysplitter</span><span class="p">,</span> <span class="n">bt</span><span class="p">)</span>
 <span class="n">supports_raysplitting</span><span class="p">(</span><span class="n">obst</span><span class="o">::</span><span class="n">Obstacle</span><span class="p">)</span>
 </pre></div>
@@ -564,7 +565,7 @@
 <p><img alt="Ray-splitter animation" src="http://i.imgur.com/89s0fon.gif" /></p>
 <p><a id='Physics-1'></a></p>
 <h2 id="physics">Physics</h2>
-<p>The condition for transmission is simply: <code>T(φ, where, ω) &gt; rand()</code>. If it returns <code>true</code>, transmission (i.e. ray-splitting) will happen. Otherwise just specular reflection will take place. A more detailed discussion is on the ray-splitting section of the <a href="../../physics#ray-splitting-functions">Physics</a> page.</p>
+<p>The condition for transmission is simply: <code>T(φ, pflag, ω) &gt; rand()</code>. If it returns <code>true</code>, transmission (i.e. ray-splitting) will happen. Otherwise just specular reflection will take place. A more detailed discussion is on the ray-splitting section of the <a href="../../physics#ray-splitting-functions">Physics</a> page.</p>
                 
                   
                 

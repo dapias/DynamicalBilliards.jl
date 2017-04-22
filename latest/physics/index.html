@@ -441,8 +441,12 @@
 <li>Calculate the <code>collisiontime()</code> for <strong>all</strong> obstacles in the billiard table.</li>
 <li>Choose the smallest time and <code>propagate!()</code> the particle for that amount of time. The obstacle corresponding to that minimum time is <code>colobst</code>.</li>
 <li><code>resolvecollision!()</code> between the particle and <code>colobst</code>:</li>
-<li>Check whether there is transmission or not: <code>T(φ) &gt; rand()</code>, and do:      1. <code>relocate!()</code> the particle accordingly so that it is on the correct side of the billiard table.      2. For no transmission, perform <code>specular!()</code> reflection or <code>periodicity!()</code> conditions.      3. Otherwise, implement the ray-splitting algorithm.</li>
-<li>Continue the loop 1-3 for a given amount of time.</li>
+<li>
+<p>Check whether there is transmission or not: <code>T(φ) &gt; rand()</code>, and do:      1. <code>relocate!()</code> the particle accordingly so that it is on the correct side of the billiard table.      2. For no transmission, perform <code>specular!()</code> reflection or <code>periodicity!()</code> conditions.      3. Otherwise, implement the ray-splitting algorithm.</p>
+</li>
+<li>
+<p>Continue the loop 1-3 for a given amount of time.</p>
+</li>
 </ol>
 <p>In the standard billiard case, one can always exclude the collision with the previous obstacle. However, in both magnetic or ray-splitting cases this is not true anymore. Therefore the same algorithm is applied on all 3 cases for the sake of simplicity.</p>
 <p>Notice that the <code>relocate!()</code> step is actually very important because it takes care that there is not particle "leakage": particles being outside the billiard table due to the finite precision of floating numbers.</p>
@@ -456,12 +460,27 @@
 </div>
 <p><a id='Ray-Splitting-Functions-1'></a></p>
 <h2 id="ray-splitting-functions">Ray-Splitting Functions</h2>
-<p>If <code>T</code> is the transmission probability function, then the condition for transmission is simply: <code>T(φ, where, ω) &gt; rand()</code>. If it returns <code>true</code>, transmission (i.e. ray-splitting) will happen. As it has already been discussed in the <a href="../tutorials/ray-splitting">Ray-Splitting tutorial</a>, the condition of total internal reflection must be taken care of by the user.</p>
-<p>The <a href="../tutorials/ray-splitting/#ray-splitting-functions">three key functions</a> given to the <code>ray-splitter</code> dictionary must have some properties in order to have physical meaning, like for example that the scattering probability function is even towards φ. One of these properties is absolutely <strong>mandatory</strong> for this package to work properly. This is the property of total internal reflection, i.e. if the refraction angle is calculated to be greater/equal than π/2, no transmission can happen. <strong>This condition is not assured internally</strong> and thefore you must be sure that your transmission probability function satisfies it. In the above example, the function <code>T</code> makes sure to return 0 in that case.</p>
-<p>In order to test if the <code>raysplitter</code> dictionary you have defined has physical meaning, the function <code>isphysical()</code> is provided. Its <a href="../basic/library/#DynamicalBilliards.isphysical">documentation string</a> has all the details one should know.</p>
+<p>If <code>T</code> is the transmission probability function, then the condition for transmission is simply: <code>T(φ, pflag, ω) &gt; rand()</code>. If it returns <code>true</code>, transmission (i.e. ray-splitting) will happen. As it has already been discussed in the <a href="../tutorials/ray-splitting">Ray-Splitting tutorial</a>, the condition of total internal reflection must be taken care of by the user.</p>
+<p>The <a href="../tutorials/ray-splitting/#ray-splitting-functions">three key functions</a> given to the <code>ray-splitter</code> dictionary must have some properties in order to have physical meaning, like for example that the scattering probability function is even towards φ. One of these properties is absolutely <strong>mandatory</strong> for this package to work properly. This is the property of total internal reflection, i.e. if the refraction angle is calculated to be greater/equal than π/2, no transmission can happen. <strong>This condition is not assured internally</strong> and therefore you must be sure that your transmission probability function satisfies it. In the above example, the function <code>T</code> makes sure to return 0 in that case.</p>
+<p>In order to test if the <code>raysplitter</code> dictionary you have defined has physical meaning, the function <code>isphysical()</code> is provided:</p>
+<div class="codehilite"><pre><span></span>    <span class="n">isphysical</span><span class="p">(</span><span class="n">raysplitter</span><span class="o">::</span><span class="kt">Dict</span><span class="p">{</span><span class="kt">Int</span><span class="p">,</span> <span class="kt">Any</span><span class="p">};</span> <span class="n">only_mandatory</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Return <code>true</code> if the given ray-splitting dictionary has physically plausible properties.</p>
+<p>Specifically, check if (φ is the incidence angle, θ the refraction angle):</p>
+<ul>
+<li>Critical angle means total reflection: If θ(φ) ≥ π/2 then T(φ) = 0</li>
+<li>Transmission probability is even function: T(φ) ≈ T(-φ) at ω = 0</li>
+<li>Refraction angle is odd function: θ(φ) ≈ -θ(-φ) at ω = 0</li>
+<li>Ray reversal is true: θ(θ(φ, pflag, ω), !pflag, ω) ≈ φ</li>
+<li>Magnetic conservation is true: (ω_new(ω_new(ω, pflag), !pflag) ≈ ω</li>
+</ul>
+<p>The first property is mandatory and must hold for correct propagation. The above tests are done for all possible combinations of arguments.</p>
+<p>They keyword <code>only_mandatory</code> notes whether the rest of the properties should be tested or not.</p>
 <p><a id='Pinned-Particles-1'></a></p>
 <h2 id="pinned-particles">Pinned Particles</h2>
-<p>In the case of propagation with magnetic field, a particle may be "pinned": There are no possible collisions that take place and the particle will revolve in circles forever. This can only happen for specific initial conditions that are collision-less.</p>
+<p>In the case of propagation with magnetic field, a particle may be "pinned" (collision-less): There are no possible collisions that take place and the particle will revolve in circles forever. This can happen for specific initial conditions depending on your billiard table and the angular velocity ω.</p>
 <p>In such event, the convention followed by <code>DynamicalBilliards.jl</code> is the following: <code>evolve!()</code> returns the expected output, however all returned vectors have only 2 entries. The collision times always have the entries <code>0.0, Inf</code>. All other returned vectors have the initial conditions, repeated once.</p>
 <p><code>evolve!()</code> can be given the optional keyword argument <code>warning = true</code> in the case of magnetic propagation, which throws a <code>warn()</code> message that a pinned particle was evolved.</p>
 <div class="admonition warning">

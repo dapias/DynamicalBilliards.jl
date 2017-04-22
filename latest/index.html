@@ -425,26 +425,26 @@
 <p class="admonition-title">Logo billiard</p>
 <p>Checkout the <a href="#julia-billiard-animation">Julia billiard animation</a> code to see how to create the animated billiard of our logo.</p>
 </div>
-<p>A dynamical billiard is a system where a particle is propagating as a straight line from obstacle-to-obstacle, performing specular reflection at the boundary of the obstacles. Billiard systems have been used extensively in chaos and nonlinear dynamics and played an important role in the development of nonlinear science.</p>
-<p>The "standard" billiard described above can be extended in many ways. The <a href="https://en.wikipedia.org/wiki/Dynamical_billiards">wikipedia page</a> has many examples of different types of billiards. The types that are currently offered by this package, besides the standard one, are magnetic and ray-splitting billiards. In a magnetic billiard the particle's orbit is a circle (like electrons in a perpendicular magnetic field). In ray-splitting (aka semiclassical) billiards the particle may propagate <em>through</em> an obstacle, given some arbitrary transmission and refraction law.</p>
+<p>A dynamical billiard is a system where a particle is propagating as a straight line from obstacle to obstacle, performing specular reflection at the boundary of the obstacles. Billiard systems have been used extensively in mathematics, nonlinear dynamics and chaos and played an important role in the development of nonlinear science.</p>
+<p>The "standard" billiard described above can be extended in many ways. The <a href="https://en.wikipedia.org/wiki/Dynamical_billiards">wikipedia page</a> has many examples of different types of billiards. The types that are currently offered by this package, besides the standard one, are magnetic and ray-splitting billiards. In a magnetic billiard the particle's orbit is a circle (like electrons in a perpendicular magnetic field). In ray-splitting (a.k.a. semiclassical) billiards the particle may propagate <em>through</em> an obstacle, given some arbitrary transmission and refraction law.</p>
 <p>This package does not support finite-sized particles and, as a result, there is also no support for collision between particles.</p>
 <p><a id='Installation-1'></a></p>
 <h2 id="installation">Installation</h2>
 <hr />
 <p>This package is registered, simply use <code>Pkg.add("DynamicalBilliards")</code> to install it. The <a href="https://datseris.github.io/DynamicalBilliards.jl/stable/">stable documentation</a> accompanies the version installed with <code>Pkg.add()</code>.</p>
-<div class="admonition warning">
-<p class="admonition-title">PyPlot dependency</p>
-<p>This package has a dependency on <code>PyPlot</code> for its plotting features, because of its maturity, detailed documentation and vast library of features. If you are not sure about how to install PyPlot, simply run the commands: <code>ENV["PYTHON"]=""; Pkg.add("PyCall"); Pkg.add("PyPlot"); using PyPlot;</code></p>
+<div class="admonition note">
+<p class="admonition-title">Plotting</p>
 </div>
-<p>If you want to use the latest features, compatible with the <a href="https://datseris.github.io/DynamicalBilliards.jl/latest/">latest documentation</a>, use <code>Pkg.checkout("DynamicalBilliards")</code>.</p>
+<p>Plotting in <code>DynamicalBilliards</code> is done through a sister package, <a href="https://github.com/Datseris/DynamicalBilliardsPlotting.jl"><code>DynamicalBilliardsPlotting</code></a>. This enables the core package to not have any dependency on plotting packages. If you want to use the plotting features of <code>DynamicalBilliards</code>, simply run <code>Pkg.add("DynamicalBilliardsPlotting")</code>. Notice that you must be able to install <code>PyPlot</code> for plotting to work. If you are not sure about how to install PyPlot,   simply run the commands:   <code>ENV["PYTHON"]=""; Pkg.add("PyCall"); Pkg.add("PyPlot"); using PyPlot;</code></p>
+<p>If you want to use the latest features of <code>DynamicalBilliards</code>, compatible with the <a href="https://datseris.github.io/DynamicalBilliards.jl/latest/">latest documentation</a>, use <code>Pkg.checkout("DynamicalBilliards")</code>.</p>
 <p>After the first installation, it is advised to run the short tests to be sure that everything works as expected. This will only take about 2 minutes:</p>
 <div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
-<span class="n">test_options</span><span class="p">(</span><span class="n">print_info</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span>
+<span class="n">DynamicalBilliards</span><span class="o">.</span><span class="n">test_options</span><span class="p">(</span><span class="n">print_info</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span>
 <span class="n">Pkg</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s">&quot;DynamicalBilliards&quot;</span><span class="p">)</span>
 </pre></div>
 
 
-<p>If you do not want to see what tests are done, do not use any keywords. If you use this package for scientific research, you should run the long tests at least once. To do this, pass the keyword argument <code>long_tests = true</code> to the <code>test_options</code> function. These tests take on average 20 minutes to complete.</p>
+<p>If you do not want to see what tests are done, do not use any keywords. If you use this package for scientific research, you should run the long tests at least once. To do this, pass the keyword argument <code>long_tests = true</code> to the <code>test_options</code> function. These tests take on average 10 minutes to complete.</p>
 <p><a id='Usage-1'></a></p>
 <h2 id="usage">Usage</h2>
 <hr />
