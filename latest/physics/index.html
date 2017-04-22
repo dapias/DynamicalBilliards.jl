@@ -440,12 +440,12 @@
 <ol>
 <li>Calculate the <code>collisiontime()</code> for <strong>all</strong> obstacles in the billiard table.</li>
 <li>Choose the smallest time and <code>propagate!()</code> the particle for that amount of time. The obstacle corresponding to that minimum time is <code>colobst</code>.</li>
-<li><code>resolvecollision!()</code> between the particle and <code>colobst</code>:</li>
 <li>
-<p>Check whether there is transmission or not: <code>T(φ) &gt; rand()</code>, and do:</p>
+<p><code>resolvecollision!()</code> between the particle and <code>colobst</code>:</p>
 <ol>
+<li>Check whether there is transmission or not (only for ray-splitting): <code>T(φ) &gt; rand()</code></li>
 <li><code>relocate!()</code> the particle accordingly so that it is on the correct side of the billiard table.</li>
-<li>For no transmission, perform <code>specular!()</code> reflection or <code>periodicity!()</code> conditions.</li>
+<li>For no transmission (or no ray-splitting), perform <code>specular!()</code> reflection or <code>periodicity!()</code> conditions.</li>
 <li>Otherwise, implement the ray-splitting algorithm (not discussed here).</li>
 </ol>
 </li>
