@@ -447,8 +447,10 @@
 <li><code>relocate!()</code> the particle accordingly so that it is on the correct side of the billiard table.</li>
 <li>For no transmission, perform <code>specular!()</code> reflection or <code>periodicity!()</code> conditions.</li>
 <li>Otherwise, implement the ray-splitting algorithm (not discussed here).</li>
-<li>Continue the loop 1-3 for a given amount of time.</li>
 </ol>
+</li>
+<li>
+<p>Continue the loop 1-3 for a given amount of time.</p>
 </li>
 </ol>
 <p>In the standard billiard case, one can always exclude the collision with the previous obstacle. However, in both magnetic or ray-splitting cases this is not true anymore. Therefore the same algorithm is applied on all 3 cases for the sake of simplicity.</p>
