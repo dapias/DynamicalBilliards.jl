@@ -436,15 +436,15 @@
 <p class="admonition-title">Plotting</p>
 <p>Plotting in <code>DynamicalBilliards</code> is done through a sister package, <a href="https://github.com/Datseris/DynamicalBilliardsPlotting.jl"><code>DynamicalBilliardsPlotting</code></a>. This enables the core package to not have any dependency on plotting packages. If you want to use the plotting features of <code>DynamicalBilliards</code>, simply run <code>Pkg.add("DynamicalBilliardsPlotting")</code>. Notice that you must be able to install <code>PyPlot</code> for plotting to work. If you are not sure about how to install PyPlot, simply run the commands: <code>ENV["PYTHON"]=""; Pkg.add("PyCall"); Pkg.add("PyPlot"); using PyPlot;</code></p>
 </div>
-<p>If you want to use the latest features of <code>DynamicalBilliards</code>, compatible with the <a href="https://datseris.github.io/DynamicalBilliards.jl/latest/">latest documentation</a>, use <code>Pkg.checkout("DynamicalBilliards")</code>.</p>
+<p>The master branch of <code>DynamicalBilliards</code> is used for development purposes. It is not advised to use <code>Pkg.checkout("DynamicalBilliards")</code>, unless you want to contribute to the development of the package.</p>
 <p>After the first installation, it is advised to run the short tests to be sure that everything works as expected. This will only take about 2 minutes:</p>
 <div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
-<span class="n">DynamicalBilliards</span><span class="o">.</span><span class="n">test_options</span><span class="p">(</span><span class="n">print_info</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span>
+<span class="n">DynamicalBilliards</span><span class="o">.</span><span class="n">test_options</span><span class="p">(</span><span class="n">print_info</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="n">long_tests</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span>
 <span class="n">Pkg</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s">&quot;DynamicalBilliards&quot;</span><span class="p">)</span>
 </pre></div>
 
 
-<p>If you do not want to see what tests are done, do not use any keywords. If you use this package for scientific research, you should run the long tests at least once. To do this, pass the keyword argument <code>long_tests = true</code> to the <code>test_options</code> function. These tests take on average 10 minutes to complete.</p>
+<p>If you do not want to see what tests are done, use <code>print_info = false</code>. If you use this package for scientific research, you should run the long tests at least once. To do this, pass the keyword argument <code>long_tests = true</code> to the <code>test_options</code> function. These tests take on average 10-20 minutes to complete.</p>
 <p><a id='Usage-1'></a></p>
 <h2 id="usage">Usage</h2>
 <hr />
