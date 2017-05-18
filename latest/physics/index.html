@@ -15,7 +15,7 @@
       
         <link rel="shortcut icon" href="../assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.6.1">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.6.3">
     
     
       
@@ -26,7 +26,7 @@
       <script src="../assets/javascripts/modernizr-56ade86843.js"></script>
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-4d0d3f2fbf.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application-e2807e330f.css">
       
         <link rel="stylesheet" href="../assets/stylesheets/application-f78e5cb881.palette.css">
       
@@ -456,12 +456,12 @@
 <p>In the standard billiard case, one can always exclude the collision with the previous obstacle. However, in both magnetic or ray-splitting cases this is not true anymore. Therefore the same algorithm is applied on all 3 cases for the sake of simplicity.</p>
 <p>Notice that the <code>relocate!()</code> step is actually very important because it takes care that there is not particle "leakage": particles being outside the billiard table due to the finite precision of floating numbers.</p>
 <div class="admonition danger">
-<p class="admonition-title">Danger</p>
+<p class="admonition-title">Inefficiency </p>
 <p>The first step of the algorithm is <strong>very inefficient</strong> for large billiard tables, since many of the obstacles could be safely excluded from search. If you have better solutions on how to find the minimum collision time you are more than welcome to submit a Pull Request or open an issue to discuss about it. Unfortunately, in the present literature, such an algorithm exists only for the periodic Sinai billiard specifically.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Speed vs. Accuracy</p>
-<p><code>DynamicalBilliards.jl</code> was made under the consideration of extreme accuracy. There are numerous actions performed internally such that the particle propagation is as accurate as possible, and will not result in any kind of unexpected behavior, like for example particle leakage. Of course, this is a direct trade-off in the expense of speed.</p>
+<p><code>DynamicalBilliards.jl</code> was made under the consideration of as much accuracy as possible. There are numerous actions performed internally such that the particle propagation is accurate (bounded by <code>Float64</code> precision of course), and will not result in any kind of unexpected behavior, like for example particle leakage. Of course, this is a direct trade-off in the expense of speed.</p>
 </div>
 <p><a id='Ray-Splitting-Functions-1'></a></p>
 <h2 id="ray-splitting-functions">Ray-Splitting Functions</h2>
@@ -487,7 +487,7 @@
 <h2 id="pinned-particles">Pinned Particles</h2>
 <p>In the case of propagation with magnetic field, a particle may be "pinned" (collision-less): There are no possible collisions that take place and the particle will revolve in circles forever. This can happen for specific initial conditions depending on your billiard table and the angular velocity ω.</p>
 <p>In such event, the convention followed by <code>DynamicalBilliards.jl</code> is the following: <code>evolve!()</code> returns the expected output, however all returned vectors have only 2 entries. The collision times always have the entries <code>0.0, Inf</code>. All other returned vectors have the initial conditions, repeated once.</p>
-<p><code>evolve!()</code> can be given the optional keyword argument <code>warning = true</code> in the case of magnetic propagation, which throws a <code>warn()</code> message that a pinned particle was evolved.</p>
+<p><code>evolve!()</code> can be given an additional <code>true</code> optional argument in the case of magnetic propagation. If you are using ray-splitting it is the 5th argument, otherwise it is the 4th argument. This optional argument throws a <code>warn()</code> message whenever a pinned particle is evolved.</p>
 <div class="admonition warning">
 <p class="admonition-title">Using <code>construct()</code></p>
 <p>When using the syntax <code>construct(evolve!(p, bt, t)...)</code> be sure that there aren't any pinned particles given to evolve. If there are any, construct will result in an error.</p>
@@ -597,7 +597,7 @@
       
     </div>
     
-      <script src="../assets/javascripts/application-6b599127bc.js"></script>
+      <script src="../assets/javascripts/application-6b4ff16fa7.js"></script>
       <script>app.initialize({url:{base:".."}})</script>
       
         <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>

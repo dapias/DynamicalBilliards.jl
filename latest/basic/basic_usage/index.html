@@ -15,7 +15,7 @@
       
         <link rel="shortcut icon" href="../../assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.6.1">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.6.3">
     
     
       
@@ -26,7 +26,7 @@
       <script src="../../assets/javascripts/modernizr-56ade86843.js"></script>
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application-4d0d3f2fbf.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application-e2807e330f.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/application-f78e5cb881.palette.css">
       
@@ -476,11 +476,11 @@
 <h2 id="straight-propagation">Straight Propagation</h2>
 <hr />
 <p>The usage of this package revolves around a single function:</p>
-<div class="codehilite"><pre><span></span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="o">::</span><span class="n">AbstractParticle</span><span class="p">,</span> <span class="n">bt</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="n">Obstacle</span><span class="p">},</span> <span class="n">total_time</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="o">::</span><span class="n">AbstractParticle</span><span class="p">,</span> <span class="n">bt</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="n">Obstacle</span><span class="p">},</span> <span class="n">t</span><span class="o">::</span><span class="kt">Union</span><span class="p">{</span><span class="kt">Int</span><span class="p">,</span> <span class="kt">Float64</span><span class="p">})</span>
 </pre></div>
 
 
-<p>which evolves a particle <code>p</code> inside a billiard table <code>bt</code> for a given amount of time <code>total_time</code>, while taking care of all the details internally.</p>
+<p>which evolves a particle <code>p</code> inside a billiard table <code>bt</code>. If the given <code>t</code> is of type <code>Float64</code>, the evolution happens for <code>t</code> amount of time. If however <code>t</code> is of type <code>Int</code>, the evolution happens for <code>t</code> number of collisions (other types are not supported).</p>
 <p>The first step is to define the billiard table <code>bt</code>, which is the system the particle <code>p</code> will propagate in. A billiard table is simply a collection (<code>Vector</code>) of <code>Obstacle</code>s. The most convenient way is to use one of the pre-defined billiard tables offered by the package. For example, let's create a periodic Sinai billiard with disk radius of 0.3 and with one side of length 2 and one of length 1:</p>
 <div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span>
 <span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_sinai</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">;</span> <span class="n">setting</span> <span class="o">=</span> <span class="s">&quot;periodic&quot;</span><span class="p">)</span>
@@ -498,20 +498,24 @@
 </pre></div>
 
 
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The behavior of <code>evolve!</code> depends on the type of the third argument, which represents total amount. If it is <code>Float64</code>, it represents total amoount of time, but if it is <code>Int</code> it represents total amount of collisions.</p>
+</div>
 <p>The return values of the <code>evolve!()</code> function need some brief explaining: As noted by the "!" at the end of the function, it changes its argument <code>p</code>. Most importantly however, this function also returns the main output expected by a billiard system. This output is a tuple of three vectors:</p>
 <ul>
 <li><code>ct::Vector{Float64}</code> : Collision times.</li>
 <li><code>poss::Vector{SVector{2}}</code> : Positions during collisions.</li>
-<li><code>vels:: Vector{SVector{2}})</code> : Velocities <strong>exactly after</strong> the collisions (e.g. after reflection).</li>
+<li><code>vels::Vector{SVector{2}})</code> : Velocities <strong>exactly after</strong> the collisions (e.g. after reflection).</li>
 </ul>
-<p>The time <code>t[i]</code> is the time necessary to reach state <code>poss[i], vels[i]</code> starting from the state <code>poss[i-1], vels[i-1]</code>. That is why <code>t[1]</code> is always 0 since <code>poss[1], vels[1]</code> are the initial conditions.</p>
+<p>The time <code>ct[i]</code> is the time necessary to reach state <code>poss[i], vels[i]</code> starting from the state <code>poss[i-1], vels[i-1]</code>. That is why <code>ct[1]</code> is always 0 since <code>poss[1], vels[1]</code> are the initial conditions.</p>
 <p>If this output is not convenient for you, the function <code>construct(ct, poss, vels)</code> is provided, which constructs the (continuous) timeseries of the position and velocity, as well as the time-vector, when given the main output of <code>evolve!()</code>:</p>
 <div class="codehilite"><pre><span></span><span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span> <span class="n">poss</span><span class="p">,</span> <span class="n">vels</span><span class="p">)</span>
 </pre></div>
 
 
 <p>or, by taking advantage of the awesome ellipsis operator, you can do:</p>
-<div class="codehilite"><pre><span></span><span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">)</span><span class="o">...</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">vxt</span><span class="p">,</span> <span class="n">vyt</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">evolve!</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">)</span><span class="o">...</span><span class="p">)</span>
 </pre></div>
 
 
@@ -665,7 +669,7 @@
       
     </div>
     
-      <script src="../../assets/javascripts/application-6b599127bc.js"></script>
+      <script src="../../assets/javascripts/application-6b4ff16fa7.js"></script>
       <script>app.initialize({url:{base:"../.."}})</script>
       
         <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
