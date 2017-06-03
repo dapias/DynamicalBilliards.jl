@@ -15,7 +15,7 @@
       
         <link rel="shortcut icon" href="../../assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.6.3">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.1">
     
     
       
@@ -23,12 +23,12 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr-56ade86843.js"></script>
+      <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application-e2807e330f.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application-f98ca285f9.css">
       
-        <link rel="stylesheet" href="../../assets/stylesheets/application-f78e5cb881.palette.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-8817cfa535.palette.css">
       
     
     
@@ -104,7 +104,7 @@
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="result">
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
           <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
             Type to start searching
           </div>
@@ -296,18 +296,12 @@
     Plotting particles
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#color-conventions" title="Color conventions" class="md-nav__link">
     Color conventions
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -417,18 +411,12 @@
     Plotting particles
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#color-conventions" title="Color conventions" class="md-nav__link">
     Color conventions
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -465,11 +453,12 @@
                 
                   <h1>Visualizing</h1>
                 
-                <p>All plotting functionality of <code>DynamicalBilliards</code> is contained in the package <code>DynamicalBilliardsPlotting</code>, therefore the latter must be loaded via <code>using</code> before attempting to use the plotting functions. The functionality lies within a few well-defined functions that use the <code>PyPlot</code> package to plot aspects of the system on the current PyPlot figure. These functions are nicely grouped in this <a href="../../basic/library/#visualization">library section</a>.</p>
+                <p>All plotting functionality of <code>DynamicalBilliards</code> lies within a few well-defined functions that use the <code>PyPlot</code> package to plot aspects of the system on the current PyPlot figure. These functions are nicely grouped in this <a href="../../basic/library/#visualization">library section</a>.</p>
 <p><a id='Plotting-the-Billiard-Table-1'></a></p>
 <h2 id="plotting-the-billiard-table">Plotting the Billiard Table</h2>
 <p>The function <code>plot_obstacle(obst::Obstacle; kwargs...)</code> plots the given obstacle on the current PyPlot figure. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>). For example:</p>
-<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span><span class="p">,</span> <span class="n">DynamicalBilliardsPlotting</span><span class="p">,</span> <span class="n">PyPlot</span>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">DynamicalBilliards</span><span class="p">,</span> <span class="n">PyPlot</span>
+<span class="n">DynamicalBilliards</span><span class="o">.</span><span class="n">enableplotting</span><span class="p">()</span>
 <span class="n">bt</span> <span class="o">=</span> <span class="n">billiard_sinai</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
 <span class="c"># Plot disk:</span>
 <span class="n">plot_obstacle</span><span class="p">(</span><span class="n">bt</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
@@ -510,7 +499,7 @@
 <p>which should give you something like this (notice that the particle position and direction are random):</p>
 <p><img alt="Visualizing tutorial 3" src="http://i.imgur.com/8a4ajfA.png" /></p>
 <p><a id='Color-conventions-1'></a></p>
-<h3 id="color-conventions">Color conventions</h3>
+<h2 id="color-conventions">Color conventions</h2>
 <p>The default plotting settings have been chosen for maximum clarity and consistency. The color conventions followed are:</p>
 <ul>
 <li>Particles are black.</li>
@@ -561,6 +550,7 @@
 
 
 <p>will produce something like this: <img alt="Periodic Billiard plot" src="http://i.imgur.com/rOpU7sl.png" /></p>
+<p>Animations for periodic billiards are not supported yet.</p>
                 
                   
                 
@@ -638,7 +628,9 @@
       
     </div>
     
-      <script src="../../assets/javascripts/application-6b4ff16fa7.js"></script>
+      <script src="../../assets/javascripts/application-e3caa82af6.js"></script>
+      
+      
       <script>app.initialize({url:{base:"../.."}})</script>
       
         <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
