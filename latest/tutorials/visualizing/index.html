@@ -454,6 +454,7 @@
                   <h1>Visualizing</h1>
                 
                 <p>All plotting functionality of <code>DynamicalBilliards</code> lies within a few well-defined functions that use the <code>PyPlot</code> package to plot aspects of the system on the current PyPlot figure. These functions are nicely grouped in this <a href="../../basic/library/#visualization">library section</a>.</p>
+<p><em>Remember to use</em> <code>DynamicalBilliards.enableplotting()</code> <em>to bring the plotting functions into scope!</em></p>
 <p><a id='Plotting-the-Billiard-Table-1'></a></p>
 <h2 id="plotting-the-billiard-table">Plotting the Billiard Table</h2>
 <p>The function <code>plot_obstacle(obst::Obstacle; kwargs...)</code> plots the given obstacle on the current PyPlot figure. The <code>kwargs...</code> are keywords passed directly into <code>PyPlot</code>'s constructors (like e.g. <code>linewidth = 2.0</code>). For example:</p>
