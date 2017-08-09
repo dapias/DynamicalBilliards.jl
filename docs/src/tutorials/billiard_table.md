@@ -42,7 +42,7 @@ To make sure the billiard looks as you would expect, use the function `plot_bill
 ```julia
 plot_billiard(bt)
 ω = 0.5
-p = randominside(p, ω)
+p = randominside(bt, ω)
 xt, yt, vxt, vyt, t = construct(evolve!(p, bt, 100)...)
 ```
     
