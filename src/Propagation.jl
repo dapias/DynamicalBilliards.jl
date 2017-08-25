@@ -66,6 +66,24 @@ function specular!(p::AbstractParticle, o::Obstacle)
   p.vel = p.vel - 2*dot(n, p.vel)*n
 end
 
+function specular!(p::AbstractParticle, o::Disk, r::Vector)
+    n = normalvec(o, p.pos)
+    vel_temp = p.vel
+    ti = [-vel_temp[2], vel_temp[1]]
+    cosalpha = dot(n, p.vel)
+
+    r[1] -=  2.*dot(r[1],n)*n
+    r[2] -=  2.*dot(r[2],n)*n
+    
+    p.vel = p.vel - 2*dot(n, p.vel)*n
+    tf = [-p.vel[2], p.vel[1]]
+
+    r[3] = r[3] - 2.*dot(r[3],n)*n - 2./o.r*dot(r[1], ti)/cosalpha*abs(vel_temp[1])*tf
+
+    r[4] = r[4] - 2.*dot(r[4],n)*n - 2./o.r*dot(r[2], ti)/cosalpha*abs(vel_temp[2])*tf
+   
+end
+
 function specular!(p::AbstractParticle, r::RandomDisk)
     n = normalvec(r, p.pos)
     φ = atan2(n[2], n[1]) + 0.95(π*rand() - π/2) #this cannot be exactly π/2
@@ -108,6 +126,17 @@ function resolvecollision!(p::AbstractParticle, o::Obstacle)::Void
   end
   # Perform specular reflection:
   specular!(p, o)
+  return
+end
+
+function resolvecollision!(p::AbstractParticle, o::Obstacle, r::Vector)::Void
+  dist = distance(p, o)
+
+  if dist < 0.0
+    relocate!(p, o, dist)
+  end
+  # Perform specular reflection:
+  specular!(p, o, r)
   return
 end
 
@@ -324,6 +353,68 @@ function evolve!(p::Particle, bt::Vector{Obstacle}, t)
     end
   end#time loop
   return (rt, rpos, rvel)
+end
+
+
+
+
+function evolve!(p::Particle, bt::Vector{Obstacle}, t, delta::Vector)
+
+  if t <= 0
+    error("`evolve!()` cannot evolve backwards in time.")
+  end
+
+    rt = Float64[]
+    rpos = SVector{2,Float64}[]
+    rvel = SVector{2,Float64}[]
+    dvec = Vector{2,Float64}[]
+
+    push!(dvec,delta)
+  push!(rpos, p.pos)
+  push!(rvel, p.vel)
+  push!(rt, 0.0)
+
+  count = zero(t)
+
+  colobst_idx = 1
+  t_to_write = 0.0
+
+  while count < t
+    # Declare these because `bt` is of un-stable type!
+    tcol::Float64 = 0.0
+    tmin::Float64 = Inf
+
+    for i in eachindex(bt)
+      tcol = collisiontime(p, bt[i])
+      # Set minimum time:
+      if tcol < tmin
+        tmin = tcol
+        colobst_idx = i
+      end
+    end#obstacle loop
+
+      propagate!(p, tmin)
+      try
+          resolvecollision!(p, bt[colobst_idx], delta)
+      catch
+          resolvecollision!(p, bt[colobst_idx])
+      end
+      
+      t_to_write += tmin
+      
+      if typeof(bt[colobst_idx]) <: PeriodicWall
+          continue
+    else
+          push!(rpos, p.pos + p.current_cell)
+          push!(rvel, p.vel)
+          push!(rt, t_to_write)
+          push!(dvec,delta)
+          # set counter
+          count += increment_counter(t, t_to_write)
+          t_to_write = 0.0
+      end
+  end#time loop
+    return (rt, rpos, rvel, dvec)
 end
 
 """
