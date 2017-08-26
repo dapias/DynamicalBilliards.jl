@@ -130,7 +130,7 @@ function billiard_polygon(sides::Int, r::Real, center = [0,0]; setting = "standa
     T = FiniteWall
     wallname = "wall"
   elseif setting == "periodic"
-    if n!= 4 && n != 6
+    if sides!= 4 && sides!= 6
       error("Polygonal and periodic billiard can exist only for `n=4` or `n=6`")
     end
     T = PeriodicWall
@@ -148,11 +148,13 @@ function billiard_polygon(sides::Int, r::Real, center = [0,0]; setting = "standa
     # Normal vector must look at where the particle is coming from
     w = ending - starting
     if setting == "periodic"
-      normal = inr*normalize([-w[2], w[1]])
+        normal = inr*normalize([-w[2], w[1]])
+                wall = PeriodicWall(starting, ending, normal, wallname*" $i")
     else
-      normal = [-w[2], w[1]]
+        normal = [-w[2], w[1]]
+        wall = FiniteWall(starting, ending, normal, wallname*" $i")
     end
-    wall = FiniteWall(starting, ending, normal, wallname*" $i")
+
     push!(bt, wall)
   end
   return bt
