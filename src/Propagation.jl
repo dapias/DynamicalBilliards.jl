@@ -69,7 +69,7 @@ function specular!(p::AbstractParticle, o::Circular, r::Matrix)
     n = normalvec(o, p.pos)
     ##
     ti = [-p.vel[2],p.vel[1]]
-    cosa = dot(n, p.vel)
+    cosa = dot(n, -p.vel)
     ##
     p.vel = p.vel - 2*dot(n, p.vel)*n
     ##
@@ -398,12 +398,7 @@ function evolve!(p::Particle, bt::Vector{Obstacle}, t, r::Matrix)
         end#obstacle loop
 
         propagate!(p, tmin, r)
-####Considerar quitar esta parte
-        r = gramschmidt(r)
-        for j in 1:4
-          r[:,j] = r[:,j]/norm(r[:,j])
-        end
-#####################################
+
         try
             resolvecollision!(p, bt[colobst_idx], r)
             r = gramschmidt(r)
