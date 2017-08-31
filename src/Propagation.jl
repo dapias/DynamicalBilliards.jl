@@ -344,6 +344,13 @@ function evolve!(p::Particle, bt::Vector{Obstacle}, t)
             end
         end#obstacle loop
 
+        # set counter
+        count += increment_counter(t, tmin)
+        if count > t
+            count -= tmin
+            break
+        end
+
         propagate!(p, tmin)
         resolvecollision!(p, bt[colobst_idx])
 
@@ -355,11 +362,17 @@ function evolve!(p::Particle, bt::Vector{Obstacle}, t)
             push!(rpos, p.pos + p.current_cell)
             push!(rvel, p.vel)
             push!(rt, t_to_write)
-            # set counter
-            count += increment_counter(t, t_to_write)
             t_to_write = 0.0
         end
     end#time loop
+
+    tmin = t - count 
+    propagate!(p, tmin)
+    push!(rpos, p.pos + p.current_cell)
+    push!(rvel, p.vel)
+    push!(rt, t_to_write + tmin)
+    
+
     return (rt, rpos, rvel)
 end
 
@@ -425,6 +438,7 @@ function evolve!(p::Particle, bt::Vector{Obstacle}, t, r::Matrix)
             t_to_write = 0.0
         end
     end#time loop
+
 
     exps = zeros(4)
 
