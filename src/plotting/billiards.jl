@@ -1,5 +1,5 @@
 using PyPlot, StaticArrays
-export plot_billiard, billiard_julia
+export plot_billiard, billiard_julia, plot_triangular
 
 
 """
@@ -138,4 +138,72 @@ function billiard_julia(; plotit = true)
   end
 
   return bt
+end
+
+"""
+Draw a triangular periodic billiard with a hexagon as unit cell. The variable `space` passed is the space betweem the scatterrers
+"""
+
+function plot_triangular(bt, xmin, ymin, xmax, ymax, space) 
+    plot_billiard(bt)
+    disp1 = [0.0, space]
+    disp2 = [space*cos(pi/6), space*sin(pi./6)]
+    
+    PyPlot.xlim(xmin , xmax)
+    PyPlot.ylim(ymin , ymax)
+    PyPlot.gca()[:set_aspect]("equal")
+    
+    d = bt[find(x -> isa(x,Circular), bt)][1]
+    
+    j =0
+    while xmin < -j*space*cos(pi/6) + d.c[1]
+        d_temp = translation(d, -j*disp2)
+        plot_obstacle(d_temp)
+        i = 1
+        while ymin < -i*space + d_temp.c[2]
+            plot_obstacle(translation(d_temp, -i*disp1))
+            i +=1 
+        end
+        
+        k = 1
+        while ymax > k*space + d_temp.c[2]
+            plot_obstacle(translation(d_temp, k*disp1))
+            k +=1 
+        end
+        j +=1 
+    end
+    
+    
+    j = 1
+     while xmax > j*space*cos(pi/6)+ d.c[1]
+        d_temp = translation(d, j*disp2)
+        plot_obstacle(d_temp)
+        i = 1
+        while ymin < -i*space + d_temp.c[2]
+            plot_obstacle(translation(d_temp, -i*disp1))
+            i +=1 
+        end
+        
+        k = 1
+        while ymax > k*space + d_temp.c[2]
+            plot_obstacle(translation(d_temp, k*disp1))
+            k +=1 
+        end
+            j +=1 
+      end
+end
+
+function plot_triangular(bt, xt::Vector{Float64}, yt::Vector{Float64}; plot_orbit = true)
+  
+  space = norm(bt[1].sp - bt[1].ep)*cos(pi/6)*2
+    
+  xmin = floor(minimum(round.(xt,8)))  - space
+  xmax = ceil(maximum(round.(xt,8))) + space
+  ymin = floor(minimum(round.(yt,8))) - space
+  ymax = ceil(maximum(round.(yt,8))) +  space
+    
+  if plot_orbit
+    plot(xt, yt, color = "blue")
+  end
+    plot_triangular(bt, xmin, ymin, xmax, ymax, space)
 end
