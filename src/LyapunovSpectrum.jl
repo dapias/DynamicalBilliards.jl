@@ -56,16 +56,8 @@ function specular!(p::AbstractParticle, o::FiniteWall, offset::Matrix)
 end
 
 """
-    resolvecollision!(p::AbstractParticle, o::Circular, offset::Matrix)
-Resolve the collision between particle `p` and obstacle `o` of type *Circular*, updating the components of the offset vectors stored in the matrix `offset` as columns.
-
-"""
-
-<<<<<<< HEAD
-"""
     resolvecollision!(p::AbstractParticle, o::Obstacle, offset::Matrix)
-Resolve the collision between particle `p` and obstacle `o` of type *Circular*, updating the components of the offset vectors stored in the matrix `offset` as columns.
-
+Resolve the collision between particle `p` and a obstacle `o`, updating the components of the offset vectors stored in the matrix `offset` as columns.
 """
 function resolvecollision!(p::AbstractParticle, o::Union{Disk, FiniteWall}, offset::Matrix)::Void
     dist = distance(p, o)
