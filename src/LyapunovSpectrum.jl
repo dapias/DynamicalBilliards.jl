@@ -93,8 +93,13 @@ end
 
 Returns the finite time lyapunov exponents for a given initial condition of the particle `p` . The time `t` is asked to be of type Float64 .
 """
-function lyapunovspectrum(p::Particle, bt::Vector{Obstacle}, t::Float64)
+function lyapunovspectrum(p::Particle, bt::Vector{Obstacle}, t::Float64; displacement = false)
     offset = eye(4) #The unit vectors in the 4 directions
+
+    if displacement
+        rpos = SVector{2,Float64}[]
+        push!(rpos, p.pos)
+    end
 
     if t <= 0
         error("`evolve!()` cannot evolve backwards in time.")
@@ -157,7 +162,14 @@ function lyapunovspectrum(p::Particle, bt::Vector{Obstacle}, t::Float64)
 
     for k in 1:4
         exps[k] = sum(log.(norms[:,k]))/t
-   end
+    end
+
+    if displacement
+        push!(rpos, p.pos + p.current_cell)
+        return exps, rpos
+    end
+        
+        
     
     return exps
 end

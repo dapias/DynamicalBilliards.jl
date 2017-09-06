@@ -18,6 +18,7 @@ include("StandardBilliards.jl")
 include("RaySplitting.jl")
 include("FixedEvolution.jl")
 include("LyapunovSpectrum.jl")
+include("BirkhoffMapping.jl")
 
 ##########################################
 # Test Options                           #

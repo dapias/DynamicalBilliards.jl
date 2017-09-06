@@ -73,7 +73,6 @@ function displacement!(p::Particle, bt::Vector{Obstacle}, t)
     if t <= 0
         error("`evolve!()` cannot evolve backwards in time.")
     end
-    rt = Float64[]
     rpos = SVector{2,Float64}[]
     push!(rpos, p.pos)
 
