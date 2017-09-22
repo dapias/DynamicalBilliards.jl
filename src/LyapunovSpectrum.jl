@@ -1,5 +1,6 @@
 # ParticlesObstacles.jl must be loaded BEFORE this
-export lyapunovspectrum
+import Base.copy
+export lyapunovspectrum, copy
     
 ##Auxiliar Functions ##
 """
@@ -88,13 +89,22 @@ function propagate!(p::Particle, t::Real, offset::Matrix)
         offset[:,k] = temp
     end
 end
+
+
+function copy(p::Particle)
+    k = Particle(p.pos, p.vel, p.current_cell)
+end
+
     """
     lyapunovspectrum(p::AbstractParticle, bt::Vector{Obstacle}, t::Float64)
 
 Returns the finite time lyapunov exponents for a given initial condition of the particle `p` . The time `t` is asked to be of type Float64 .
 """
-function lyapunovspectrum(p::Particle, bt::Vector{Obstacle}, t::Float64; displacement = false)
+function lyapunovspectrum(particle::Particle, bt::Vector{Obstacle}, t::Float64; displacement = false)
+        
     offset = eye(4) #The unit vectors in the 4 directions
+
+    p = copy(particle)
 
     if displacement
         rpos = SVector{2,Float64}[]

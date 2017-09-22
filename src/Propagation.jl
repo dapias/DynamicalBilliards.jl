@@ -1,6 +1,6 @@
 # ParticlesObstacles.jl must be loaded BEFORE this
 export resolvecollision!, collisiontime, propagate!, evolve!, construct, specular!,
-periodicity!
+periodicity!, cross2D
 
 ####################################################
 ## Mathetical/Convenience Functions

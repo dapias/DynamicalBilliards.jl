@@ -17,8 +17,10 @@ include("Propagation.jl")
 include("StandardBilliards.jl")
 include("RaySplitting.jl")
 include("FixedEvolution.jl")
+include("MonteCarlo.jl")
 include("LyapunovSpectrum.jl")
 include("BirkhoffMapping.jl")
+include("ShiftProposal.jl")
 
 ##########################################
 # Test Options                           #
