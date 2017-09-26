@@ -29,32 +29,7 @@ Approximate arccos(1 - x) for x very close to 0.
 ## Resolve Collisions
 ####################################################
 """
-```julia
-relocate!(p::AbstractParticle, o::Obstacle, distance)
-```
-Relocate the particle `p` with respect to the obstacle `o` along the direction of
-the normal vector of `o`, so that it is on the correct side of the obstacle.
-Internally takes care of problems of finite accuracy of `Float64`.
-"""
-function relocate!(p::AbstractParticle, o::Obstacle, dist::Float64)::Void
-  n = normalvec(o, p.pos)
-  ex = Int(floor(exponent(dist)*0.3010299956639812))
-  if ex < -15
-    p.pos -= 10^(-ex - 15)*2*dist*n
-  else
-    p.pos -= 2*dist*n
-  end
-  newdist = distance(p, o)
-  if sign(newdist) == sign(dist)
-    error("New distance should have opposite sign from old!")
-  end
-  return
-end
-
-"""
-```julia
-specular!(p::AbstractParticle, o::Obstacle)
-```
+    specular!(p::AbstractParticle, o::Obstacle)
 Perform specular reflection based on the normal vector of the Obstacle.
 In the case where the given obstacle is a `RandomObstacle`, the specular reflection
 randomizes the velocity instead (within -π/2+ε to π/2-ε of the normal vector).
@@ -92,9 +67,7 @@ end
 """
     resolvecollision!(p::AbstractParticle, o::Obstacle)
 Resolve the collision between particle `p` and obstacle `o`, depending on the
-type of `o`. `resolvecollision!()` takes special care so that the particle is always
-inside the correct side of the billiard table, in order to avoid particle leakage.
-
+type of `o` (do `specular!` or `periodicity!`).
     resolvecollision!(p, o, T::Function, θ::Function, new_ω::Function)
 This is the ray-splitting implementation. The three functions given are drawn from
 the ray-splitting dictionary that is passed directly to `evolve!()`. For a calculated
@@ -168,11 +141,9 @@ end
     propagate!(p::AbstractParticle, t)
 Propagate the particle `p` for given time `t`, changing appropriately the the
 `p.pos` and `p.vel` fields.
-
 For a `Particle` the propagation is a straight line
 (i.e. velocity vector is constant). For a `MagneticParticle` the propagation
 is circular motion with cyclic frequency `p.omega` and radius `1/p.omega`.
-
     propagate!(p, position, t)
 Do the same, but take advantage of the already calculated `position` that the
 particle should end up at.
@@ -192,7 +163,6 @@ function propagate!(p::Particle{T}, newpos::SVector{2,T}, t::Real) where {T}
 end
 
 """
-```julia
     propagate_pos(pos, p::Particle{T}, t::Real) where {T}
 Perform a "fake" propagation, i.e. propagate a position as if it was the particle's
 position.
@@ -207,8 +177,7 @@ end
     collisiontime(p::AbstractParticle, o::Obstacle)
 Calculate the collision time (time-until-collision) between given
 particle and obstacle. Returns `Inf` if the collision is not possible *or* if the
-collision happens backwards in time
-
+collision happens backwards in time.
 In the case of magnetic propagation, there are always two possible collisions.
 The function internally decides which of the two will occur first, based on the
 sign of the angular velocity of the magnetic particle.
@@ -265,7 +234,7 @@ function collisiontime(p::Particle{T}, d::Antidot{T})::T where {T}
 end
 
 """
-  next_collision(p, bt) -> (tmin, index)
+    next_collision(p, bt) -> (tmin, index)
 Return the minimum collision time out of all `collisiontime(p, obst)` for `obst ∈ bt`,
 as well as the `index` of the corresponding obstacle.
 """
@@ -318,22 +287,18 @@ evolve for as many collisions as `t`.
 Return the states of the particle between collisions.
 The evolution takes into account the particle's Type.
 E.g. if `typeof(p) <: MagneticParticle` then magnetic evolution will take place.
-
 ### Return
 As noted by the "!" at the end of the function, the call changes
 `p` (particle). Most importantly however, this function also returns the main output
 expected by a billiard system. This output is a tuple of 3 (or 4) vectors:
-
 * `ct::Vector{T}` : Collision times.
 * `poss::Vector{SVector{2,T}}` : Positions during collisions.
 * `vels::Vector{SVector{2,T}})` : Velocities **exactly after** the collisions.
 * `ω`, either `T` or `Vector{T}` : Angular velocity/ies.
-
 In the case of straight propagation, only the first 3 are returned.
 In the case of magnetic propagation, the 4th value is returned as well.
 This is either the angular velocity of the particle, or in the case of
 ray-splitting it is a vector of the angular velocities at each time step.
-
 The time `ct[i]` is the time necessary to reach state `poss[i+1], vels[i+1]` starting
 from the state `poss[i], vels[i]`. That is why `ct[1]` is always 0 since
 `poss[1], vels[1]` are the initial conditions. The angular velocity `ω[i]` is the one
@@ -341,6 +306,7 @@ the particle has while propagating from state `poss[i], vels[i]` to `i+1`.
 Notice that at any point, the velocity vector `vels[i]` is the one obtained **after**
 the specular reflection of the (i-1)th collision.
 The function `construct` takes that into account.
+### Ray-splitting billiards
 To implement ray-splitting, the `evolve!()` function is supplemented with a
 fourth argument, `ray_splitter::Dict{Int, Any}`, which maps integers
 to some kind of Function container (Tuple or Vector). The functions in this
@@ -398,10 +364,8 @@ Given the main output of this package (see `evolve!()` function) construct the
 timeseries of the position and velocity, as well as the time vector.
 In case of not given ω (or ω == 0), straight construction takes place.
 In case of ω != 0 or ω::Vector magnetic construction takes place.
-
 The additional optional argument of `dt` (only valid for Magnetic construction)
 is the timestep with which the timeseries are constructed.
-
 ### Return
 A tuple of the following:
 * xt::Vector{T} : x position time-series

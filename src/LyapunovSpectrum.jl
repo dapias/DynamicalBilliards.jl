@@ -1,5 +1,6 @@
 # ParticlesObstacles.jl must be loaded BEFORE this
-export lyapunovspectrum
+export lyapunovspectrum #commented out because not yet updated
+
 ##Auxiliar Functions ##
 """
 ```julia
@@ -42,6 +43,7 @@ function specular!(p::AbstractParticle, o::Disk, offset::Matrix)
     end
 end
 
+
 function specular!(p::AbstractParticle, o::FiniteWall, offset::Matrix)
     n = normalvec(o, p.pos)
     specular!(p, o)
@@ -55,16 +57,17 @@ function specular!(p::AbstractParticle, o::FiniteWall, offset::Matrix)
     end
 end
 """
-        resolvecollision!(p::AbstractParticle, o::Union{Disk, FiniteWall}, offset::Matrix)
-Resolve the collision between particle `p` and obstacle `o` of type *Circular*, updating the components of the offset vectors stored in the matrix `offset` as columns.
+    resolvecollision!(p::AbstractParticle, o::Union{Disk, FiniteWall}, offset::Matrix)
+Resolve the collision between particle `p` and obstacle `o` of type *Circular*,
+updating the components of the offset vectors stored in the matrix `offset` as columns.
 """
 function resolvecollision!(p::AbstractParticle, o::Union{Disk, FiniteWall}, offset::Matrix)::Void
     specular!(p, o, offset)
     return
 end
 
-resolvecollision!(p::AbstractParticle, o::PeriodicWall, offset::Matrix)::Void = 
-    resolvecollision!(p, o)
+resolvecollision!(p::AbstractParticle, o::PeriodicWall, offset::Matrix)::Void =
+resolvecollision!(p, o)
 
 """
 ```julia
@@ -90,7 +93,7 @@ end
 ```
 Propagate the particle's position for time `t` (corrected) and update the components of the `offset` matrix
 """
-function relocate!(p::Particle{T}, o::Obstacle{T}, tmin, offset::Matrix{T})::T where {T}
+function relocate!(p::Particle{T}, o::Obstacle{T}, tmin::T, offset::Matrix{T})::T where {T}
     tmin = relocate!(p, o, tmin)
     for k in 1:4
         x = offset[:,k]
@@ -109,6 +112,22 @@ Returns the finite time lyapunov exponents for a given initial condition of the 
 """
 function lyapunovspectrum(p::Particle{T}, bt::Vector{Obstacle{T}}, t::T) where {T<:AbstractFloat}
     offset = eye(T, 4) #The unit vectors in the 4 directions
+
+    if t <= 0
+        error("`evolve!()` cannot evolve backwards in time.")
+    end
+
+    count = zero(T)
+    norms = ones(T, 1,4)#Where the norms of the offset vectors will be stored
+
+    while count < t
+        # Declare these because `bt` is of un-stable type!
+        tmin::T, i::Int = next_collision(p, bt)
+        
+        # set counter
+        if count +  increment_counter(t, tmin) > t
+            break
+        end
         ###
         tmin = relocate!(p, bt[i], tmin, offset)
         resolvecollision!(p, bt[i], offset)
