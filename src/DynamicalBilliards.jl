@@ -20,6 +20,11 @@ include("Propagation.jl")
 include("RaySplitting.jl")
 include("StandardBilliards.jl")
 include("LyapunovSpectrum.jl")
+##For Monte Carlo simulations
+include("BirkhoffMapping.jl")
+include("Observables.jl")
+include("Proposals.jl")
+include("MonteCarlo.jl")
 
 ##########################################
 # Test Options                           #

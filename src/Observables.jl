@@ -1,3 +1,5 @@
+export lyapunovmaximum, distance
+
 import Base.copy 
 function copy(p::Particle{T}) where {T<:AbstractFloat}
     pos = copy(p.pos)
