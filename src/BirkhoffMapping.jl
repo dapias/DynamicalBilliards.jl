@@ -1,6 +1,11 @@
+import randominside
+
 export randominside, birkhoff_visual, particle_from_coordinates, coordinates_from_particle
 
-function rotation(theta::Float64, vec::SVector{2,Float64})
+"""
+Rotates a given vector `vec` by an angle `theta`
+"""
+function rotation(theta::T, vec::Union{Vector{T}, SVector{2,T}}) where {T <: AbstractFloat}
     q = similar(vec)
     q[1] = cos(theta)*vec[1] - sin(theta)*vec[2]
     q[2] = sin(theta)*vec[1] + cos(theta)*vec[2]
@@ -9,8 +14,7 @@ end
 """
 Returns the tuple `(p, s, phi)` being `p` of type `Particle` located randomly in the boundary of the unit cell with Birkhoff coordinates `s`, `phi`.
 """
-function randominside(n::Int, bt::Vector{Obstacle}; sides = false)
-
+function randominside(bt::Vector{<:Obstacle}, n::Int64; sides = false)
     R = norm(bt[1].ep - bt[1].sp)
     s_max = R*n
     s_0 = rand()*s_max
@@ -18,23 +22,24 @@ function randominside(n::Int, bt::Vector{Obstacle}; sides = false)
     real_d = s_0 - (side-1.)*R
     dist = (bt[side].ep - bt[side].sp)
     dist /= norm(dist)
-    xp, yp = bt[side].sp + dist*real_d
+    coord = bt[side].sp + dist*real_d
 
     sinphi = rand()*2-1.
 
     phi0 = asin(sinphi)
     vel0 = bt[side].normal/norm(bt[side].normal) ##Take this as the vector to be rotated
-    vel = rotation(phi0, vel0)
+    vel = SVector{2, Float64}(rotation(phi0, vel0))
 
     current_cell = zeros(vel)
 
     if sides
-        return  Particle([xp, yp], vel, current_cell), s_0, sinphi, side
+        return  Particle(coord, vel, current_cell), s_0/s_max, sinphi, side
     end
 
-    Particle([xp, yp], vel, current_cell), s_0, sinphi
+    Particle(coord, vel, current_cell), s_0/s_max, sinphi
 
 end
+
 
 function particle_from_coordinates(c::Vector, n::Int, bt::Vector{Obstacle})
     R = norm(bt[1].ep - bt[1].sp)
