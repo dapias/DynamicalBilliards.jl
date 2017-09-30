@@ -23,7 +23,7 @@ include("LyapunovSpectrum.jl")
 ##For Monte Carlo simulations
 include("BirkhoffMapping.jl")
 include("Observables.jl")
-include("Proposals.jl")
+include("MCtypes.jl")
 include("MonteCarlo.jl")
 
 ##########################################
