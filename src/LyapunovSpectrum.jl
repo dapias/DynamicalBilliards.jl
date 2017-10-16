@@ -153,7 +153,7 @@ function lyapunovspectrum!(p::Particle{T}, bt::Vector{Obstacle{T}}, t::T) where 
         offset[:,j] = offset[:,j]/norm(offset[:,j])
     end
 
-    exps = zeros(4)
+    exps = zeros(T, 4)
 
     for k in 1:4
         exps[k] = sum(log.(norms[:,k]))/t
