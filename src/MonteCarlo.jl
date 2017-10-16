@@ -85,7 +85,7 @@ end
 """
 Performs a classical Markov Chain Monte Carlos simulation, with simmetric proposal distributions (Neighborhood and Shift)
 """
-function classicalMCMC(t::T, N::Int64, bt::Vector{<:Obstacle{T}}, n::Int64, beta::T, sigma::T, tshift::T) where {T<: AbstractFloat}
+function classicalMCMC(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T, sigma::T, tshift::T) where {T<: AbstractFloat}
     birk_coord = zeros(N,3)
     ###initialize
     init  = randominside(bt, n)
@@ -118,7 +118,7 @@ end
 """
 Performs a simulation based on a uniform sampling using Birkhoff coordinates
 """
-function uniform_sampling_simulation(t::T, N::Int64, bt::Vector{<:Obstacle{T}}, n::Int64; lyapunov= false) where {T<: AbstractFloat}
+function uniform_sampling_simulation(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int; lyapunov= false) where {T<: AbstractFloat}
     if lyapunov
         birk_coord = zeros(N,4)
     else
@@ -154,7 +154,7 @@ end
 """
 Function that implements the algorithm set up in the article *Importance Sampling of Rare Events in Chaotic Systems*
 """
-function chaoticMCMC(t::T, N::Int64, bt::Vector{<:Obstacle{T}}, n::Int64, beta::T, tshift::T, lambda_L::T) where {T<: AbstractFloat}
+function chaoticMCMC(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T, tshift::T, lambda_L::T) where {T<: AbstractFloat}
     birk_coord = zeros(N,3)
     ###initialize
     init  = randominside(bt, n)

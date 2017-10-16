@@ -8,7 +8,7 @@ struct InitialCondition{T<:AbstractFloat}
     particle::Particle{T}
     s::T
     sinphi::T
-    index::Int64
+    index::Int
 end
 """
 Rotates a given vector `vec` by an angle `theta`
@@ -23,7 +23,7 @@ end
 """
 Returns the tuple `(p, s, phi)` being `p` of type `Particle` located randomly in the boundary of the unit cell with Birkhoff coordinates `s`, `phi`. If sides is true it also returns the side of the cell where the particle is located
 """
-function randominside(bt::Vector{<:Obstacle{T}}, n::Int64) where {T<:AbstractFloat}
+function randominside(bt::Vector{<:Obstacle{T}}, n::Int) where {T<:AbstractFloat}
     R = norm(bt[1].ep - bt[1].sp)
     s_max = R*n
     s_0 = rand()*s_max
@@ -74,7 +74,7 @@ end
 """
 Given a particle and the side where it is located, it returns the birkhoff coordinates.
 """
-function coordinates_from_particle(p::Particle{T}, n::Int64, bt::Vector{<:Obstacle{T}}, side::Int64) where {T<:AbstractFloat}
+function coordinates_from_particle(p::Particle{T}, n::Int, bt::Vector{<:Obstacle{T}}, side::Int) where {T<:AbstractFloat}
     R = norm(bt[1].ep - bt[1].sp) #To do: avoid computing this always
     coord = p.pos + p.current_cell
     s = norm(coord - bt[side].sp) + (side-1)*R

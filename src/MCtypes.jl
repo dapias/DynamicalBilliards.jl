@@ -48,14 +48,14 @@ end
 """
 Function that is passed to the type `UniformProposal`
 """
-function uniform_proposal(p::Particle{T}, n::Int64, bt::Vector{<:Obstacle{T}}) where {T <: AbstractFloat}
+function uniform_proposal(p::Particle{T}, n::Int, bt::Vector{<:Obstacle{T}}) where {T <: AbstractFloat}
     randominside(bt, n)
 end
 
 """
 Function that is passed to the type `NeighborhoodProposal`
 """
-function neigborhood_proposal(p::Particle{T}, n::Int64, bt::Vector{<:Obstacle{T}}, sigma::T, index::Int64) where {T <: AbstractFloat}
+function neigborhood_proposal(p::Particle{T}, n::Int, bt::Vector{<:Obstacle{T}}, sigma::T, index::Int) where {T <: AbstractFloat}
     
     delta_theta = rand()*(2pi)
     rprime = abs(randn()*sigma)
@@ -79,7 +79,7 @@ end
 """
 Function that evolves a particle until it reaches a periodic wall. It returns the index associated with the periodic image of the side that the particle reaches (where the motion would continue)
 """
-function evolution_to_periodicwall!(p::Particle{T}, bt::Vector{<:Obstacle{T}}, n::Int64) where {T<: AbstractFloat}
+function evolution_to_periodicwall!(p::Particle{T}, bt::Vector{<:Obstacle{T}}, n::Int) where {T<: AbstractFloat}
     i = 1
     while true
         tmin::T, i::Int = next_collision(p, bt)
@@ -96,7 +96,7 @@ end
 """
 Function that is passed to the type `ShiftProposal`
 """
-function shift_proposal(particle::Particle{T}, sides::Int64, bt::Vector{<:Obstacle{T}}, tshift::T, index::Int64) where {T <: AbstractFloat}
+function shift_proposal(particle::Particle{T}, sides::Int, bt::Vector{<:Obstacle{T}}, tshift::T, index::Int) where {T <: AbstractFloat}
     p = copy(particle)
     if tshift < 0.0  ##Invert the direction of the velocity
         #and put the particle on its periodic image
