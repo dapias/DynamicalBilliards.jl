@@ -1,4 +1,4 @@
-export classicalMCMC, uniform_sampling_simulation, chaoticMCMC, t_star, lambda_tstar, sigma_local
+export classicalMCMC, uniform_sampling_simulation, chaoticMCMC, t_star, lambda_tstar, sigma_local, classical_importance_sampling
 
 
 """
@@ -184,4 +184,32 @@ function chaoticMCMC(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T, t
     
     birk_coord
 end
-
+"""
+Classical Importance Sampling
+"""
+function classical_importance_sampling(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T) where {T<: AbstractFloat}
+    birk_coord = zeros(N,3)
+    ###initialize
+    init  = randominside(bt, n)
+    birk_coord[1, 1:2] = [init.s, init.sinphi]
+    dist = distance(init.particle, bt, t)
+    birk_coord[1, 3] = dist    
+    ####################
+    ##Needed types
+    obs = x::Particle -> distance(x, bt, t)
+    ################
+    for i in 2:N
+        dist = obs(init.particle)
+        init2 = randominside(bt, n)
+        dist2 = obs(init2.particle)
+        acceptance = exp(-beta*(dist2 - dist))
+        r = rand()
+        if r < acceptance  #If r is less than a the motion is accepted
+            init = init2
+            dist = dist2
+        end
+        birk_coord[i, :] = [init.s,init.sinphi, dist]
+    end
+    
+    birk_coord
+end
