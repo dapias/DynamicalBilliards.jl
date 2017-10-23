@@ -85,7 +85,7 @@ end
 """
 Performs a classical Markov Chain Monte Carlos simulation, with simmetric proposal distributions (Neighborhood and Shift)
 """
-function classicalMCMC(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T, sigma::T, tshift::T) where {T<: AbstractFloat}
+function symmetricMCMC(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T, sigma::T, tshift::T) where {T<: AbstractFloat}
     birk_coord = zeros(N,3)
     ###initialize
     init  = randominside(bt, n)
@@ -116,9 +116,9 @@ function classicalMCMC(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T,
     birk_coord
 end
 """
-Performs a simulation based on a uniform sampling using Birkhoff coordinates
+Performs a simulation based on a uniform sampling of the initial set using Birkhoff coordinates
 """
-function uniform_sampling_simulation(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int; lyapunov= false) where {T<: AbstractFloat}
+function directsampling(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int; lyapunov= false) where {T<: AbstractFloat}
     if lyapunov
         birk_coord = zeros(N,4)
     else
@@ -185,9 +185,9 @@ function chaoticMCMC(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T, t
     birk_coord
 end
 """
-Classical Importance Sampling
+Classical Importance Sampling using a uniform proposal
 """
-function classical_importance_sampling(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T) where {T<: AbstractFloat}
+function uniformMCMC(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T) where {T<: AbstractFloat}
     birk_coord = zeros(N,3)
     ###initialize
     init  = randominside(bt, n)
@@ -198,8 +198,8 @@ function classical_importance_sampling(t::T, N::Int, bt::Vector{<:Obstacle{T}}, 
     ##Needed types
     obs = x::Particle -> distance(x, bt, t)
     ################
+    dist = obs(init.particle)
     for i in 2:N
-        dist = obs(init.particle)
         init2 = randominside(bt, n)
         dist2 = obs(init2.particle)
         acceptance = exp(-beta*(dist2 - dist))
