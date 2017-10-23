@@ -1,4 +1,4 @@
-export classicalMCMC, uniform_sampling_simulation, chaoticMCMC, t_star, lambda_tstar, sigma_local, classical_importance_sampling
+export  chaoticMCMC, t_star, lambda_tstar, sigma_local, symmetricMCMC, uniformMCMC, directsampling
 
 
 """
