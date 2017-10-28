@@ -89,8 +89,12 @@ function evolution_to_periodicwall!(p::Particle{T}, bt::Vector{<:Obstacle{T}}, n
             break
         end
     end
-    
-    index = i >= 4 ? mod(i + div(n,2), n) : i + div(n,2)
+    if n == 6
+        index = i >= 4 ? mod(i + div(n,2), n) : i + div(n,2)
+    elseif n==4
+        index = i >= 3 ? mod(i + div(n,2), n) : i + div(n,2)
+    end
+        
 end
 
 """
@@ -125,7 +129,11 @@ function shift_proposal(particle::Particle{T}, sides::Int, bt::Vector{<:Obstacle
     if tshift < 0.0
         new_particle.vel = -new_particle.vel
         new_particle.pos += bt[new_index].normal
-        new_index = new_index >= 4 ? mod(new_index + div(sides,2), sides) : new_index + div(sides,2)
+        if sides == 6
+            new_index = new_index >= 4 ? mod(new_index + div(sides,2), sides) : new_index + div(sides,2)
+        elseif sides == 4
+            new_index = new_index >= 3 ? mod(new_index + div(sides,2), sides) : new_index + div(sides,2)
+        end
     end
     s, sinphi = coordinates_from_particle(new_particle, sides, bt, new_index)
     
