@@ -118,7 +118,7 @@ end
 """
 Performs a simulation based on a uniform sampling of the initial set using Birkhoff coordinates
 """
-function directsampling(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int; lyapunov= false) where {T<: AbstractFloat}
+function directsampling(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int; lyapunov= false, observable=distance) where {T<: AbstractFloat}
     if lyapunov
         birk_coord = zeros(N,4)
     else
@@ -127,14 +127,14 @@ function directsampling(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int; lyapuno
     ###initialize
     init  = randominside(bt, n)
     birk_coord[1, 1:2] = [init.s, init.sinphi]
-    dist = distance(init.particle, bt, t)
+    dist = observable(init.particle, bt, t)
     birk_coord[1, 3] = dist
     if lyapunov
         birk_coord[1,4] = lyapunovmaximum(init.particle, bt, t)
     end
     ####################
     ##Needed types
-    obs = x::Particle -> distance(x, bt, t)
+    obs = x::Particle -> observable(x, bt, t)
     lyap = x::Particle -> lyapunovmaximum(x, bt,t)
     uniform  = UniformProposal(x::Particle -> uniform_proposal(x, n, bt))
     ################
