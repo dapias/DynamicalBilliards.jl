@@ -98,7 +98,7 @@ function symmetricMCMC(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T,
     canonical = CanonicalDistribution(beta, obs)
     shift1 = ShiftProposal(tshift, x::InitialCondition -> shift_proposal(x.particle, n, bt, tshift, x.index))
     shift2 = ShiftProposal(-tshift, x::InitialCondition -> shift_proposal(x.particle, n, bt, -tshift, x.index))
-    neighborhood = NeighborhoodProposal(sigma, x::InitialCondition -> neigborhood_proposal(x.particle, n, bt, sigma, x.index) )    
+    neighborhood = NeighborhoodProposal(sigma, x::InitialCondition -> neigborhood_proposal(x, n, bt, sigma) )    
     ################
     for i in 2:N
         random_proposal = rand()
@@ -176,7 +176,7 @@ function chaoticMCMC(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T, t
             prop_dist = shift2
         else
             sigma = sigma_local(init.particle, bt, t, beta, lambda_L)
-            prop_dist = NeighborhoodProposal(sigma, x::InitialCondition -> neigborhood_proposal(x.particle, n, bt, sigma, x.index) )
+            prop_dist = NeighborhoodProposal(sigma, x::InitialCondition -> neigborhood_proposal(x, n, bt, sigma) )
         end
         init, dist = acceptance(init, bt, prop_dist, canonical, symmetric = false, lambda_mean = lambda_L, time = t)
          birk_coord[i, :] = [init.s, init.sinphi, dist]

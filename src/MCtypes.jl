@@ -55,19 +55,19 @@ end
 """
 Function that is passed to the type `NeighborhoodProposal`
 """
-function neigborhood_proposal(p::Particle{T}, n::Int, bt::Vector{<:Obstacle{T}}, sigma::T, index::Int) where {T <: AbstractFloat}
+function neigborhood_proposal(init::InitialCondition, n::Int, bt::Vector{<:Obstacle{T}}, sigma::T) where {T <: AbstractFloat}
     
     delta_theta = rand()*(2pi)
     rprime = abs(randn()*sigma)
 
-    s, sinphi = coordinates_from_particle(p, n, bt, index)
+#    s, sinphi = coordinates_from_particle(p, n, bt, index)
     
-    s_new = cos(delta_theta)*rprime + s
+    s_new = cos(delta_theta)*rprime + init.s
     s_new = mod(s_new, 1.0)
-    sinphi_new = sin(delta_theta)*rprime + sinphi
+    sinphi_new = sin(delta_theta)*rprime + init.sinphi
 
     if abs(sinphi_new) > 1.0
-        return InitialCondition(p, s, sinphi, index)
+        return init
     end
 
     p = particle_from_coordinates([s_new, sinphi_new], n, bt)
