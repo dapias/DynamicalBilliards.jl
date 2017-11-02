@@ -1,4 +1,4 @@
-export  chaoticMCMC, t_star, lambda_tstar, sigma_local, symmetricMCMC, uniformMCMC, directsampling
+export  chaoticMCMC, t_star, lambda_tstar, sigma_local, symmetricMCMC, uniformMCMC, directsampling, ratio_proposals, acceptance
 
 
 """
@@ -7,6 +7,15 @@ Equation 54, Leitao, Lopes, Altmann
 function t_star(p::Particle{T}, bt::Vector{<:Obstacle{T}}, beta::T, to::T, lambda_L::T; a = 0.5) where {T <: AbstractFloat}
     lambda_to = lyapunovmaximum(p, bt, to) 
     tstar = to - abs((a-1.)/beta * 1/(lambda_L - lambda_to))
+    if tstar < 0.0
+        return T(0.0)
+    end
+    tstar
+end
+
+function t_star(p::Particle{T}, bt::Vector{<:Obstacle{T}}, beta::T, to::T, D::T, observable::Function; a = 0.5) where {T <: AbstractFloat}
+    y_to = observable(p)
+    tstar = to - abs((a-1.)/(2*D*beta) * 1/(1 - y_to^2.))
     if tstar < 0.0
         return T(0.0)
     end
@@ -30,6 +39,12 @@ function sigma_local(p::Particle{T}, bt::Vector{<:Obstacle{T}}, t::T, beta::T, l
     l_tstar = lambda_tstar(p, bt, tstar)
     sigma = Delta*exp(-l_tstar*tstar)
 end
+
+function sigma_local(p::Particle{T}, bt::Vector{<:Obstacle{T}}, t::T, beta::T, D::T, observable::Function; Delta = T(1.0))  where {T <: AbstractFloat}
+    tstar =  t_star(p, bt, beta, t, D, observable)
+    l_tstar = lambda_tstar(p, bt, tstar)
+    sigma = Delta*exp(-l_tstar*tstar)
+end
 """
 Compute the distance between two points on the set of initial conditions
 """
@@ -41,10 +56,18 @@ Compute the factor g(x' --> x)/g(x --> x')
 """
 function ratio_proposals(prop::NeighborhoodProposal, init1::InitialCondition{T}, init2::InitialCondition{T}, bt::Vector{<:Obstacle{T}}, t::T, beta::T, lambda_L::T) where {T<:AbstractFloat}
     d  = distance(init1, init2)
-    sigma2 = prop.parameter  
-    sigma1 = sigma_local(init2.particle, bt, t, beta, lambda_L)
-    expo = -d^2/2*(1./sigma1^2. - 1./sigma2^2.)
-    return exp(expo)*sigma2/sigma1
+    sigma1 = prop.parameter  
+    sigma2 = sigma_local(init2.particle, bt, t, beta, lambda_L)
+    expo = -d^2/2*(1./sigma2^2. - 1./sigma1^2.)
+    return exp(expo)*sigma1/sigma2
+end
+
+function ratio_proposals(prop::NeighborhoodProposal, init1::InitialCondition{T}, init2::InitialCondition{T}, bt::Vector{<:Obstacle{T}}, t::T, beta::T, D::T, obs::Function) where {T<:AbstractFloat}
+    d  = distance(init1, init2)
+    sigma1 = prop.parameter  
+    sigma2 = sigma_local(init2.particle, bt, t, beta, D, obs)
+    expo = -d^2/2*(1./sigma2^2. - 1./sigma1^2.)
+    return exp(expo)*sigma1/sigma2
 end
 
 function ratio_proposals(prop::ShiftProposal, init1::InitialCondition{T}, init2::InitialCondition{T}, bt::Vector{<:Obstacle{T}}, t::T, beta::T, lambda_L::T) where {T<:AbstractFloat}
@@ -120,9 +143,9 @@ Performs a simulation based on a uniform sampling of the initial set using Birkh
 """
 function directsampling(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int; lyapunov= false, observable=distance) where {T<: AbstractFloat}
     if lyapunov
-        birk_coord = zeros(N,4)
+        birk_coord = zeros(T,N,4)
     else
-        birk_coord = zeros(N,3)
+        birk_coord = zeros(T, N,3)
     end       
     ###initialize
     init  = randominside(bt, n)
