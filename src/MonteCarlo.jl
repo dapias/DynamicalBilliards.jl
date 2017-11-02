@@ -73,6 +73,10 @@ end
 function ratio_proposals(prop::ShiftProposal, init1::InitialCondition{T}, init2::InitialCondition{T}, bt::Vector{<:Obstacle{T}}, t::T, beta::T, lambda_L::T) where {T<:AbstractFloat}
     return  T(1.0)
 end
+
+function ratio_proposals(prop::ShiftProposal, init1::InitialCondition{T}, init2::InitialCondition{T}, bt::Vector{<:Obstacle{T}}, t::T, beta::T, D::T, obs::Function) where {T<:AbstractFloat}
+    return  T(1.0)
+end
 """
 Return the particle, its birkhoff coordinates together with the index associated with the side where the particle is located and the value of the observable
 """
