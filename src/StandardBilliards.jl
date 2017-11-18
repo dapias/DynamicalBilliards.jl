@@ -1,6 +1,10 @@
-export billiard_rectangle, billiard_sinai, billiard_polygon, billiard_lorentz,
-billiard_raysplitting_showcase, billiard_hexagonal_sinai
+using StaticArrays
 
+export billiard_rectangle, billiard_sinai, billiard_polygon, billiard_lorentz,
+billiard_raysplitting_showcase, billiard_hexagonal_sinai, billiard_bunimovich,
+billiard_mushroom, billiard_bunimovich
+
+const SV = SVector{2}
 ####################################################
 ## Famous/Standard Billiards
 ####################################################
@@ -18,19 +22,19 @@ Return a vector of obstacles that defines a rectangle billiard of size (`x`, `y`
 """
 function billiard_rectangle(x=1.0, y=1.0; setting::String = "standard")
 
-    x, y = promote(x,y)
     x = convert(AbstractFloat, x)
+    x, y = promote(x,y)
     bt = Obstacle{typeof(x)}[]
     o = typeof(x)(0.0)
     if setting == "standard"
         sp = [o,o]; ep = [o, y]; n = [x,o]
-        leftw2 = FiniteWall(sp, ep, n, "Left wall")
+        leftw2 = InfiniteWall(sp, ep, n, "Left wall")
         sp = [x,o]; ep = [x, y]; n = [-x,o]
-        rightw2 = FiniteWall(sp, ep, n, "Right wall")
+        rightw2 = InfiniteWall(sp, ep, n, "Right wall")
         sp = [o,y]; ep = [x, y]; n = [o,-y]
-        topw2 = FiniteWall(sp, ep, n, "Top wall")
+        topw2 = InfiniteWall(sp, ep, n, "Top wall")
         sp = [o,o]; ep = [x, o]; n = [o,y]
-        botw2 = FiniteWall(sp, ep, n, "Bottom wall")
+        botw2 = InfiniteWall(sp, ep, n, "Bottom wall")
         push!(bt, leftw2, rightw2, topw2, botw2)
     elseif setting == "periodic"
         sp = [o,o]; ep = [o, y]; n = [x,o]
@@ -124,7 +128,7 @@ function billiard_polygon(sides::Int, r::Real, center = [0,0]; setting = "standa
     verteces = [S[r*cos(2π*i/sides), r*sin(2π*i/sides)] + center for i in 1:sides]
 
     if setting == "standard"
-        T = FiniteWall
+        T = InfiniteWall
         wallname = "wall"
     elseif setting == "periodic"
         if sides != 4 && sides != 6
@@ -149,7 +153,7 @@ function billiard_polygon(sides::Int, r::Real, center = [0,0]; setting = "standa
             wall = PeriodicWall(starting, ending, normal, wallname*" $i")
         else
             normal = [-w[2], w[1]]
-            wall = FiniteWall(starting, ending, normal, wallname*" $i")
+            wall = InfiniteWall(starting, ending, normal, wallname*" $i")
         end
         push!(bt, wall)
     end
@@ -211,3 +215,106 @@ function billiard_raysplitting_showcase(x=2.0, y=1.0, r1=0.3, r2=0.2)
 
     return bt, rayspl
 end
+
+function billiard_square_mushroom(sl = 1.0, sw = 0.2, cr =1.0)
+
+
+    leftcorn = SV(-sw/2, 0)
+    rightcorn = SV(sw/2, 0)
+    upleftcorn = SV(-sw/2, sl)
+    uprightcorn = SV(sw/2, sl)
+
+    S = typeof(convert(AbstractFloat, sl))
+    bt = Obstacle{S}[]
+
+    stembot = FiniteWall(leftcorn, rightcorn, SV(0, sw), true, "Stem bottom")
+    stemleft = FiniteWall(leftcorn, upleftcorn, SV(sw, 0), false, "Stem left")
+    stemright = FiniteWall(rightcorn, uprightcorn, SV(-sw, 0), false, "Stem right")
+
+    push!(bt, stembot, stemleft, stemright)
+
+    farleft = SV(-cr, sl)
+    farright = SV(cr, sl)
+    upfarleft = SV(-cr, sl+cr)
+    upfarright = SV(cr, sl+cr)
+
+    capbotleft = FiniteWall(upleftcorn, farleft, SV(0, sw), false)
+    capleft = FiniteWall(farleft, upfarleft, SV(sw, 0), false)
+    toptop = FiniteWall(upfarleft, upfarright, SV(0, -sw), false)
+    capright = FiniteWall(farright, upfarright, SV(-sw, 0))
+    capbotright = FiniteWall(uprightcorn, farright, SV(0, sw), false)
+
+    push!(bt, capbotleft, capleft, toptop, capright, capbotright)
+
+    return bt
+end
+
+"""
+    billiard_mushroom(stem_length = 1.0, stem_width=0.2, cap_radious=1.0,
+    stem_location = 0.0)
+Create a mushroom billiard. The center of the cap (which is Semicircle) is always
+at [0, stem_length]. The bottom-most `Wall` is a `Door` (see [`escapetime`](@ref)).
+"""
+function billiard_mushroom(stem_length = 1.0, stem_width=0.2, cap_radious=1.0,
+    stem_location = 0.0)
+
+    stloc = stem_location
+    sl = stem_length; sw = stem_width; cr = cap_radious
+
+    abs(stloc) + sw/2 > cr && error("Stem is outside the mushroom cap!")
+
+    leftcorn = SV(-sw/2 + stloc, 0)
+    rightcorn = SV(sw/2 + stloc, 0)
+    upleftcorn = SV(-sw/2 + stloc, sl)
+    uprightcorn = SV(sw/2 + stloc, sl)
+
+    S = typeof(convert(AbstractFloat, sl))
+    bt = Obstacle{S}[]
+
+    stembot = FiniteWall(leftcorn, rightcorn, SV(0, sw), true, "Stem bottom")
+    stemleft = FiniteWall(leftcorn, upleftcorn, SV(sw, 0), false, "Stem left")
+    stemright = FiniteWall(rightcorn, uprightcorn, SV(-sw, 0), false, "Stem right")
+
+    push!(bt, stembot, stemleft, stemright)
+
+    farleft = SV(-cr, sl)
+    farright = SV(cr, sl)
+
+    capbotleft = FiniteWall(
+    upleftcorn, farleft, SV(0, sw), false, "Cap bottom left")
+    capbotright = FiniteWall(
+    uprightcorn, farright, SV(0, sw), false, "Cap bottom right")
+
+    cap = Semicircle([0.0, sl], cap_radious, [0.0, -1.0], "Mushroom cap")
+
+    push!(bt, capbotleft, capbotright, cap)
+
+    return bt
+end
+
+"""
+    billiard_bunimovich(l=1.0, w=1.0)
+Return a vector of `Obstacle`s that define a Buminovich billiard, also called a
+stadium. The length is considered *without* the attached semicircles, meaning that the
+full length of the billiard is `l + w`. The left and right edges of the stadium
+are [`Semicircle`](@ref)s.
+"""
+function billiard_bunimovich(l=1.0, w=1.0)
+
+    l = convert(AbstractFloat, l)
+    l, w = promote(l,w)
+    bt = Obstacle{typeof(l)}[]
+    o = typeof(l)(0.0)
+    bw = InfiniteWall([o,o], [l,o], [o,  w], "Bottom wall")
+    tw = InfiniteWall([o,w], [l,w], [o, -w], "Top wall")
+    leftc = Semicircle([o, w/2], w/2, [l, o], "Left semicircle")
+    rightc = Semicircle([l, w/2], w/2, [-l, o], "Right semicircle")
+    push!(bt, bw, tw, leftc, rightc)
+    return bt
+end
+
+"""
+    billiard_stadium
+Alias for [`billiard_bunimovich`](@ref).
+"""
+billiard_stadium = billiard_bunimovich

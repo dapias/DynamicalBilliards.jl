@@ -26,7 +26,7 @@ tim = time()
     end#type loop
 end#testset
 @testset "Type Stability: Hexagon" begin
-    Floats = [Float16, Float32, Float64]#, BigFloat]
+    Floats = [Float16, Float32, Float64, BigFloat]
     r = 0.75; x = y = 1.0
     @testset "Type: $(T), ω = $(ω)" for T ∈ Floats, ω ∈ [0, 0.2]
         bt = billiard_hexagonal_sinai(T(0.4), T(0.6), setting="periodic")
@@ -49,7 +49,7 @@ end#testset
 end#testset
 if printinfo
     println("Results:")
-    println("+ billiard_sinai() and billiard_polygon conserve types")
+    println("+ billiard_sinai() and billiard_polygon() conserve types")
     println("+ randominside() returns correct types for ω=0 and ω=1")
     println("+ evolve!() conserves type for all the combinations of the above.")
     println("+ evolve!() works for Random sinai and Hexagonal periodic billiard.")
@@ -57,37 +57,42 @@ end
 return
 end#function
 
+function escape_times(partnum=500; printinfo=true)
+    tim = time()
+    bt = billiard_mushroom()
+    @testset "Straight Escape Time" begin
+        port = 0
+        for i in 1:partnum
+            p = randominside(bt)
 
-function lyapunov_spectrum(partnum=500; printinfo = true)
-tim = time()
-@testset "Lyapunov Spectrum (straight)" begin
+            et = escapetime(p, bt, warning=false)
+            @test typeof(et)==Float64
+            if et == Inf
+                port +=1
+            end
+        end#particle loop
+        @test port < partnum
+    end
+    @testset "Magnetic Escape Time" begin
+        port = 0
+        for i in 1:partnum
+            p = randominside(bt, 0.1)
 
-    l = 2.0
-    r = 1.0
-    sides = 6
-    printinfo && println("...for n = $(sides) sides, l_polygon = $l and r_disk = $r  ")
-    bt =  bt = billiard_polygon(6,l; setting = "periodic")
-    disc = Disk([0., 0.], r)
-    push!(bt, disc)
-    tt=10000.0
-
-    @testset "partnum $i" for i in 1:partnum
-        p = randominside(bt)
-        exps = lyapunovspectrum(p, bt, tt)
-        error_level = 1e-2
-        sumpair = exps[1] + exps[4]
-
-        @test abs(sumpair) < error_level
-        @test abs(exps[2]) < error_level
-        @test abs(exps[3]) < error_level
-    end#particle loop
-end
-if printinfo
-    println("\\nResults:")
-    println("+ lyapunovspectrum() call works for a hexagonal lorentz gas.")
-    println("+ λ1 + λ4 ≈ 0.")
-    println("+ λ2 ≈ λ3 ≈ 0.")
-    println("+ Required time: $(round(time()-tim, 3)) sec.")
-end
-return
+            et = escapetime(p, bt, warning=false)
+            @test typeof(et)==Float64
+            if et == Inf
+                port +=1
+            end
+        end#particle loop
+        @test port < partnum
+    end
+    if printinfo
+        println("Results:")
+        println("+ escapetime works for Particle and MagneticParticle")
+        println("  and understands Doors.")
+        println("+ The escape time is always finite.")
+        println("+ randominside() works for billiard_mushroom()!")
+        println("+ Required time: $(round(time()-tim, 3)) sec.")
+    end
+    return
 end

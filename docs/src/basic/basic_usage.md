@@ -127,6 +127,40 @@ For more information and instructions on defining the "ray_splitter" dictionary 
 
 ---
 
+## Escape Times
+Escape time measures the time that a particle requires to escape a billiard table.
+This can be calculated with the function [`escapetime`](@ref). The function requires
+the billiard table to have at least one [`FiniteWall`](@ref) object with field
+`isdoor=true`.
+
+The way the function works is very simple: a particle is evolved until it collides with a `FiniteWall` that has a field `isdoor=true`. This is considered as the particle escaping the billiard, pretending like this `FiniteWall` is an open `Door`.
+
+Let's set up an example:
+```julia
+using DynamicalBilliards
+DynamicalBilliards.enableplotting()
+bt = billiard_mushroom() # By default this billiard has a Door
+plot_billiard(bt)
+```
+![Mushroom billiard](https://i.imgur.com/zQgWg2a.png)
+You can see that a `Door` has cyan-black alternating colors.
+
+To get the escape time:
+```julia
+p = randominside(bt, 0.5) # works with Straight and Magnetic !
+t = escapetime(p, bt)
+```
+Depending on the `p`, `t` could also be `Inf`, if the particle did not escape
+within the maximum amount of iterations. You can increase those with a third argument:
+```julia
+p = randominside(bt, 0.5) # works with Straight and Magnetic !
+t = escapetime(p, bt, 10000000, warning = true)
+```
+Now, a warning message will be thrown if the particle does not escape within the given
+amount of maximum iterations. (The returned value is still `Inf` if that happens)
+
+
+---
 ## Visualizing
 
 The functions `plot_obstacle(obst::Obstacle; kwargs...)`, `plot_billiard(bt::Vector{Obstacle})` and `plot_particle(p::AbstractParticle; kwargs...)` are provided in order to plot the respective elements **on the current PyPlot figure**. The `kwargs...` are keywords passed directly into `PyPlot`'s constructors (like e.g. `linewidth = 2.0`).
@@ -143,7 +177,7 @@ bt = billiard_rectangle(1.5, 1.0)
 d1 = Disk([0.45, 0.6], 0.3, "Upper-left Disk")
 d2 = Disk([1.1, 0.3], 0.15, "Lower-right Disk")
 d3 = Disk([1.2, 0.8], 0.1, "Small Disk")
-w1 = FiniteWall([0.0, 0.4], [0.6,0.0], [0.4,0.6], "Diagonal")
+w1 = InfiniteWall([0.0, 0.4], [0.6,0.0], [0.4,0.6], "Diagonal")
 push!(bt, d1, d2, d3, w1)
 ω = 2.0
 p = randominside(bt, ω)
