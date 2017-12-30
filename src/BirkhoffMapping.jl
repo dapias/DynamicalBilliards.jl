@@ -26,12 +26,14 @@ Returns the tuple `(p, s, phi)` being `p` of type `Particle` located randomly in
 function randominside(bt::Vector{<:Obstacle{T}}, n::Int) where {T<:AbstractFloat}
     R = norm(bt[1].ep - bt[1].sp)
     s_max = R*n
-    s_0 = rand()*s_max
-    side = ceil(Int, s_0*n/s_max)
-    real_d = s_0 - (side-1.)*R
-    dist = (bt[side].ep - bt[side].sp)
-    dist /= norm(dist)
-    coord = bt[side].sp + dist*real_d
+    side = rand(1:n)
+
+    d_to_wall = R*rand()
+    s_0 = (R*(side-1) + d_to_wall)/s_max
+
+    vector_wall = (bt[side].ep - bt[side].sp)
+    vector_wall /= norm(vector_wall)
+    coord = bt[side].sp + vector_wall*d_to_wall
 
     sinphi = T(rand()*2-1.)
 

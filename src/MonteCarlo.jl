@@ -1,32 +1,23 @@
 export  chaoticMCMC, t_star, lambda_tstar, sigma_local, symmetricMCMC, uniformMCMC, directsampling, ratio_proposals, acceptance, newMCMC
 
 
-"""
-Equation 54, Leitao, Lopes, Altmann
-"""
-function t_star(p::Particle{T}, bt::Vector{<:Obstacle{T}}, beta::T, to::T, lambda_L::T; a = 0.5) where {T <: AbstractFloat}
-    lambda_to = lyapunovmaximum(p, bt, to) 
-    tstar = to - abs((a-1.)/beta * 1/(lambda_L - lambda_to))
+function t_star(p::Particle{T}, bt::Vector{<:Obstacle{T}}, beta::T, to::T, D::T, observable::Function; a = 0.5) where {T <: AbstractFloat}
+    y = observable(p)
+    tstar = to - abs((a-1.)/(2*D*beta) * 1/(1 - y^2.))
     if tstar < 0.0
         return T(0.0)
     end
     tstar
 end
 
-function t_star(p::Particle{T}, bt::Vector{<:Obstacle{T}}, beta::T, to::T, D::T, observable::Function; a = 0.5) where {T <: AbstractFloat}
-    y = observable(p)
-    tstar = to - abs((a-1.)/(2*D*beta) * 1/(1 - y^2.))
-#    A = abs((1-a)/(2*D*beta))
-#    num = -A + to + A*y^2 - 2*to*y^2 + 3*to*y^4 - 2*sqrt(-A^2*y^4 + A*to*y^4 - A*to*y^6 + to^2*y^8)
-    #    den = 1 - 2*y^2 + 5*y^4
-#    num = -2A + 2to + 2A*y^2 - 4to*y^2 + 3*to*y^4 - sqrt(-4*A^2*y^4 + 4*A*to*y^4 - 4*A*to*y^6 + to^2*y^8)
-#    den = 2*(1 - 2y^2 + 2y^4)
-#    tstar = num/den
+function t_star(p::Particle{T}, bt::Vector{<:Obstacle{T}}, beta::T, to::T, D::T, ysq::T; a = 0.5) where {T <: AbstractFloat}
+    tstar = to - abs((a-1.)/(2*D*beta) * 1/(1 - ysq))
     if tstar < 0.0
         return T(0.0)
     end
     tstar
 end
+
 """
 Lyapunov exponent at time tstar
 """
@@ -46,20 +37,6 @@ function sigma_local(p::Particle{T}, bt::Vector{<:Obstacle{T}}, t::T, beta::T, l
     sigma = Delta*exp(-l_tstar*tstar)
 end
 
-function sigma_local(p::Particle{T}, bt::Vector{<:Obstacle{T}}, t::T, beta::T, D::T, ysq::T; Delta = T(1.0))  where {T <: AbstractFloat}
-    tstar =  t_star(p, bt, beta, t, D, ysq)
-    l_tstar = T(2.10)
-    sigma = Delta*exp(-l_tstar*tstar)
-end
-
-function t_star(p::Particle{T}, bt::Vector{<:Obstacle{T}}, beta::T, to::T, D::T, ysq::T; a = 0.5) where {T <: AbstractFloat}
-    tstar = to - abs((a-1.)/(2*D*beta) * 1/(1 - ysq))
-    if tstar < 0.0
-        return T(0.0)
-    end
-    tstar
-end
-
 function sigma_local(p::Particle{T}, bt::Vector{<:Obstacle{T}}, t::T, beta::T, D::T, observable::Function; Delta = T(1.0))  where {T <: AbstractFloat}
     tstar =  t_star(p, bt, beta, t, D, observable)
 #    l_tstar = lambda_tstar(p, bt, tstar)
@@ -68,6 +45,11 @@ function sigma_local(p::Particle{T}, bt::Vector{<:Obstacle{T}}, t::T, beta::T, D
 end
 
 
+function sigma_local(p::Particle{T}, bt::Vector{<:Obstacle{T}}, t::T, beta::T, D::T, ysq::T; Delta = T(1.0))  where {T <: AbstractFloat}
+    tstar =  t_star(p, bt, beta, t, D, ysq)
+    l_tstar = T(2.10)
+    sigma = Delta*exp(-l_tstar*tstar)
+end
 
 """
 Compute the distance between two points on the set of initial conditions
@@ -283,7 +265,7 @@ end
 
 
 function newMCMC(t::T, N::Int, bt::Vector{<:Obstacle{T}}, n::Int, beta::T, tshift::T, D::T) where {T<: AbstractFloat}
-    birk_coord = zeros(N,3)
+    birk_coord = zeros(T, N,3)
     ###initialize
     obs = x::Particle -> distance(x, bt, t)/sqrt(2*D*t)
     init  = randominside(bt, n)

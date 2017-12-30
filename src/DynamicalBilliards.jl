@@ -24,7 +24,8 @@ include("LyapunovSpectrum.jl")
 include("BirkhoffMapping.jl")
 include("Observables.jl")
 include("MCtypes.jl")
-include("MonteCarlo.jl")
+#include("MonteCarlo.jl")
+include("MC.jl")
 
 ##########################################
 # Test Options                           #

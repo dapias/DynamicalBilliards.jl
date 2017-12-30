@@ -57,39 +57,8 @@ Function that is passed to the type `NeighborhoodProposal`
 """
 function neigborhood_proposal(init::InitialCondition, n::Int, bt::Vector{<:Obstacle{T}}, sigma::T) where {T <: AbstractFloat}
 
-    if sigma >= T(1.0)
-        return randominside(bt, n)
-    end
-    
     delta_theta = rand()*(2pi)
     rprime = abs(randn()*sigma)
-
-#    s, sinphi = coordinates_from_particle(p, n, bt, index)
-    
-    s_new = cos(delta_theta)*rprime + init.s
-    s_new = mod(s_new, 1.0)
-    sinphi_new = sin(delta_theta)*rprime + init.sinphi
-
-    if abs(sinphi_new) > 1.0
-        return init
-    end
-
-    p = particle_from_coordinates([s_new, sinphi_new], n, bt)
-    side = ceil(Int, s_new*n)
-
-    return InitialCondition(p, s_new, sinphi_new, side)
-end
-
-
-function rayleigh_proposal(init::InitialCondition, n::Int, bt::Vector{<:Obstacle{T}}, sigma::T) where {T <: AbstractFloat}
-
-    if sigma >= T(1.0)
-        return randominside(bt, n)
-    end
-    
-    delta_theta = rand()*(2pi)
-    ra = Rayleigh(sigma)
-    rprime = rand(ra)
 
 #    s, sinphi = coordinates_from_particle(p, n, bt, index)
     

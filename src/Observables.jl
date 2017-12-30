@@ -30,7 +30,7 @@ function distance(particle::Particle{T}, bt::Vector{<:Obstacle{T}}, t::T) where 
         #####
         tmin = relocate!(p, bt[i], tmin)
         resolvecollision!(p, bt[i])
-        count += DynamicalBilliards.increment_counter(t, tmin)
+        count += increment_counter(t, tmin)
     end#time loop
 
     tmin = t - count 
